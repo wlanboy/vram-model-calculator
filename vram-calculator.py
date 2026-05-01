@@ -53,8 +53,10 @@ def calculate_vram_matrix():
         layers = to_int(data.get("n_layers"))
         embd = to_int(data.get("n_embd"))
         heads = to_int(data.get("n_heads"))
-        # SSM-Modelle (LFM2, Nemotron-H) haben n_kv_heads=0 → kein KV-Cache
-        kv_heads = to_int(data.get("n_kv_heads"))
+        # SSM-Modelle (LFM2, Nemotron-H) haben n_kv_heads=null → kein klassischer KV-Cache
+        raw_kv = data.get("n_kv_heads")
+        is_ssm = raw_kv is None
+        kv_heads = to_int(raw_kv)
         base_size = data.get("file_size_gb", 0)
 
         if layers == 0 or embd == 0: continue
@@ -72,10 +74,9 @@ def calculate_vram_matrix():
         print("-" * len(header))
 
         for uc_name, ctx in USECASES.items():
-            # KV-Cache: bei SSM-Modellen (kv_heads=0) entfällt der KV-Cache
             head_dim = embd // (heads if heads > 0 else 1)
             kv_dim = kv_heads * head_dim
-            kv_vram = (2 * layers * kv_dim * ctx * 2) / (1024**3) if kv_heads > 0 else 0.0
+            kv_vram = (2 * layers * kv_dim * ctx * 2) / (1024**3) if not is_ssm and kv_heads > 0 else 0.0
             
             total = base_size + kv_vram
             
@@ -84,7 +85,8 @@ def calculate_vram_matrix():
                 icon = get_color(total, limit)
                 status_row.append(f"{icon} {total:>5.1f}G")
             
-            print(f"{uc_name:<12} | {kv_vram:>8.2f}GB | " + " | ".join(status_row))
+            kv_label = "     SSM" if is_ssm else f"{kv_vram:>8.2f}"
+            print(f"{uc_name:<12} | {kv_label}GB | " + " | ".join(status_row))
 
 if __name__ == "__main__":
     calculate_vram_matrix()
