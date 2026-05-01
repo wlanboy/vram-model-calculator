@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VRAM Calculator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<h1>VRAM Calculator</h1>
+<p class="subtitle">VRAM Calculator</p>
+
+<div class="controls">
+  <div class="control-group">
+    <label for="ctx-select">Kontext</label>
+    <select id="ctx-select"></select>
+  </div>
+  <div class="control-group">
+    <label for="arch-select">Architektur</label>
+    <select id="arch-select"></select>
+  </div>
+  <div class="control-group">
+    <label for="quant-select">Quantisierung</label>
+    <select id="quant-select"></select>
+  </div>
+  <div class="control-group">
+    <label for="search">Suche</label>
+    <input type="search" id="search" placeholder="Modellname...">
+  </div>
+  <div class="control-group">
+    <label>Rote ausblenden</label>
+    <div class="check-row">
+      <label class="check-label"><input type="checkbox" data-hide-gb="6">  6 GB</label>
+      <label class="check-label"><input type="checkbox" data-hide-gb="12"> 12 GB</label>
+      <label class="check-label"><input type="checkbox" data-hide-gb="16"> 16 GB</label>
+      <label class="check-label"><input type="checkbox" data-hide-gb="24"> 24 GB</label>
+    </div>
+  </div>
+</div>
+
+<div class="table-wrap">
+<table id="model-table">
+<thead><tr>
+  <th class="sortable" data-col="name">Modell</th>
+  <th class="sortable" data-col="arch">Arch</th>
+  <th class="sortable" data-col="quant">Quant</th>
+  <th class="sortable" data-col="size">Größe</th>
+  <th class="sortable" data-col="kv">KV-Cache</th>
+  <th class="sortable" data-col="total">VRAM Total</th>
+  <th class="fit-cell">6 GB</th><th class="fit-cell">12 GB</th><th class="fit-cell">16 GB</th><th class="fit-cell">24 GB</th>
+</tr></thead>
+<tbody id="model-tbody"></tbody>
+</table>
+</div>
+
+<p id="row-count" class="row-count"></p>
+
+</div>
+<script src="filter.js"></script>
+</body>
+</html>
