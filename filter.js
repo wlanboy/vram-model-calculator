@@ -38,19 +38,20 @@
         const layers  = data.n_layers    || 0;
         const embd    = data.n_embd      || 0;
         const heads   = data.n_heads     || 1;
-        const kvHeads = data.n_kv_heads  || 0;
+        const kvHeads = data.n_kv_heads;   // null = SSM/Hybrid (kein KV-Cache)
         const base    = data.file_size_gb || 0;
+        const isSSM   = kvHeads === null || kvHeads === 0;
         const vram    = {};
 
         for (const [name, ctx] of Object.entries(CTX_TOKENS)) {
             let kv = 0;
-            if (kvHeads > 0 && layers > 0 && embd > 0) {
+            if (!isSSM && kvHeads > 0 && layers > 0 && embd > 0) {
                 const headDim = Math.floor(embd / (heads || 1));
                 kv = (2 * layers * kvHeads * headDim * ctx * 2) / (1024 ** 3);
             }
             vram[name] = { kv, total: base + kv };
         }
-        return vram;
+        return { vram, isSSM };
     }
 
     function buildModels(raw) {
@@ -60,6 +61,7 @@
             const moe = (data.n_experts && data.n_experts_used)
                 ? data.n_experts_used + "/" + data.n_experts
                 : null;
+            const { vram, isSSM } = calcVram(data);
             result.push({
                 key,
                 name:       data.name || key,
@@ -68,7 +70,8 @@
                 size_gb:    data.file_size_gb || 0,
                 n_ctx_orig: data.n_ctx_orig || null,
                 moe,
-                vram:       calcVram(data),
+                isSSM,
+                vram,
             });
         }
         return result;
@@ -157,7 +160,7 @@
                 "<td><span class='badge badge-arch'>" + m.arch + "</span>" + moe + "</td>",
                 "<td>" + (m.quant || "—") + "</td>",
                 '<td class="col-mono col-muted">' + m.size_gb.toFixed(2) + " GB</td>",
-                '<td class="col-mono">' + v.kv.toFixed(2)    + " GB</td>",
+                '<td class="col-mono">' + (m.isSSM ? '<span class="badge badge-arch">SSM</span>' : v.kv.toFixed(2) + " GB") + "</td>",
                 '<td class="col-mono">' + v.total.toFixed(2) + " GB</td>",
                 gpuCells,
                 "</tr>",
