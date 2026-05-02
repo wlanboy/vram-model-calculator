@@ -43,6 +43,9 @@ FILE_TYPE_MAP.setdefault(33, "TQ2_0")
 FILE_TYPE_MAP.setdefault(38, "MXFP4")
 
 
+_HEX_RE = re.compile(r'^[0-9a-fA-F]+$')
+
+
 def clean_name(name):
     """Bereinigt general.name: entfernt Vendor-Prefix, -GGUF-Suffix und Quant-Artefakte."""
     if not name:
@@ -54,6 +57,26 @@ def clean_name(name):
     # Quant-Bezeichnungen im Namen entfernen (z.B. " BF16", " F16", " Q4_K_M")
     name = re.sub(r'\s+(BF16|F16|F32|Q\d+[_K0-9A-Z]*)$', '', name)
     return name.strip()
+
+
+def _is_unreliable_name(name):
+    """True wenn der Name ein Hash oder eine nichtssagende Abkürzung ist."""
+    if not name:
+        return True
+    if len(name) <= 2:
+        return True
+    if _HEX_RE.match(name) and len(name) >= 16:
+        return True
+    return False
+
+
+def _name_from_path(file_path):
+    """Leitet den Modellnamen aus dem übergeordneten Verzeichnis ab."""
+    parts = os.path.normpath(file_path).split(os.sep)
+    candidate = parts[-2] if len(parts) >= 2 else os.path.splitext(parts[-1])[0]
+    candidate = re.sub(r'[-_]GGUF$', '', candidate, flags=re.IGNORECASE)
+    candidate = re.sub(r'[-_](Q\d+|IQ\d+|F16|F32|BF16).*$', '', candidate, flags=re.IGNORECASE)
+    return candidate or None
 
 
 def get_str(reader, key):
@@ -168,9 +191,10 @@ def get_shard_info(path):
 
 
 def get_mmproj_params(reader, file_path, file_size_bytes):
+    raw_name = clean_name(get_str(reader, "general.name"))
     params = {
         "type": "mmproj",
-        "name": clean_name(get_str(reader, "general.name")),
+        "name": _name_from_path(file_path) if _is_unreliable_name(raw_name) else raw_name,
         "image_size": get_safe_int(reader, "clip.vision.image_size"),
         "patch_size": get_safe_int(reader, "clip.vision.patch_size"),
         "n_embd": get_safe_int(reader, "clip.vision.embedding_length"),
@@ -198,9 +222,10 @@ def get_model_params(file_path, file_size_bytes=None):
     general_type = get_str(reader, "general.type")
 
     if general_type == "adapter":
+        raw_name = clean_name(get_str(reader, "general.name"))
         return {
             "type": "adapter",
-            "name": clean_name(get_str(reader, "general.name")),
+            "name": _name_from_path(file_path) if _is_unreliable_name(raw_name) else raw_name,
             "file_size_bytes": file_size_bytes,
             "file_size_gb": round(file_size_bytes / (1024**3), 3),
         }
@@ -258,10 +283,13 @@ def get_model_params(file_path, file_size_bytes=None):
         # 0 means "same as n_heads" in llama.cpp convention
         n_kv_heads = n_heads if (raw_kv is not None and raw_kv == 0) else raw_kv
 
+    raw_name = clean_name(get_str(reader, "general.name"))
+    name = _name_from_path(file_path) if _is_unreliable_name(raw_name) else raw_name
+
     params = {
         "type": "llm",
         "arch": arch,
-        "name": clean_name(get_str(reader, "general.name")),
+        "name": name,
         "size_label": get_str(reader, "general.size_label"),
         "parameter_count": get_safe_int(reader, "general.parameter_count"),
         "quant": quant,
