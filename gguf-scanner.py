@@ -13,6 +13,8 @@ CACHE_FILE = "models_cache.json"
 METADATA_DUMP_FILE = "model-metadata.txt"
 CACHE_VERSION = 2
 
+SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
+
 # Pure SSM architectures with no attention layers (n_kv_heads not applicable)
 SSM_ARCHS = {"mamba", "mamba2", "rwkv", "rwkv6", "rwkv7"}
 
@@ -157,6 +159,14 @@ def dump_all_fields(reader, file_path):
                 f.write(f"  {key}: <read error: {e}>\n")
 
 
+def get_shard_info(path):
+    """Returns (shard_index, total_shards) or None if not a shard file."""
+    m = SHARD_RE.search(os.path.basename(path))
+    if m:
+        return int(m.group(1)), int(m.group(2))
+    return None
+
+
 def get_mmproj_params(reader, file_path, file_size_bytes):
     params = {
         "type": "mmproj",
@@ -180,11 +190,22 @@ def get_mmproj_params(reader, file_path, file_size_bytes):
     return params
 
 
-def get_model_params(file_path):
+def get_model_params(file_path, file_size_bytes=None):
     reader = GGUFReader(file_path)
-    file_size_bytes = os.path.getsize(file_path)
+    if file_size_bytes is None:
+        file_size_bytes = os.path.getsize(file_path)
 
-    if os.path.basename(file_path).startswith("mmproj-"):
+    general_type = get_str(reader, "general.type")
+
+    if general_type == "adapter":
+        return {
+            "type": "adapter",
+            "name": clean_name(get_str(reader, "general.name")),
+            "file_size_bytes": file_size_bytes,
+            "file_size_gb": round(file_size_bytes / (1024**3), 3),
+        }
+
+    if os.path.basename(file_path).startswith("mmproj-") or general_type == "projector":
         return get_mmproj_params(reader, file_path, file_size_bytes)
 
     arch = get_str(reader, "general.architecture")
@@ -241,6 +262,8 @@ def get_model_params(file_path):
         "type": "llm",
         "arch": arch,
         "name": clean_name(get_str(reader, "general.name")),
+        "size_label": get_str(reader, "general.size_label"),
+        "parameter_count": get_safe_int(reader, "general.parameter_count"),
         "quant": quant,
         "n_layers": n_layers,
         "n_embd": n_embd,
@@ -309,7 +332,27 @@ def update_cache(base_dir):
             if f.endswith(".gguf"):
                 all_files.append(os.path.join(root, f))
 
-    new_files = [f for f in all_files if needs_scan(f, base_dir, cache)]
+    # Group shard files: only process first shard, aggregate total size
+    shard_groups = {}  # base_path -> sorted list of (shard_idx, path)
+    non_shard_files = []
+    for path in all_files:
+        info = get_shard_info(path)
+        if info:
+            base = SHARD_RE.sub('.gguf', path)
+            shard_groups.setdefault(base, []).append((info[0], path))
+        else:
+            non_shard_files.append(path)
+
+    shard_meta = {}  # first_shard_path -> (total_size_bytes, num_shards)
+    representative_files = list(non_shard_files)
+    for base, shards in shard_groups.items():
+        shards.sort(key=lambda x: x[0])
+        first_path = shards[0][1]
+        total_size = sum(os.path.getsize(p) for _, p in shards)
+        shard_meta[first_path] = (total_size, len(shards))
+        representative_files.append(first_path)
+
+    new_files = [f for f in representative_files if needs_scan(f, base_dir, cache)]
 
     if not new_files:
         print("✅ Alles aktuell. Keine neuen oder geänderten GGUF-Dateien gefunden.")
@@ -324,7 +367,12 @@ def update_cache(base_dir):
     for path in tqdm(new_files, desc="GGUF Scan", unit="file", colour="green"):
         rel = os.path.relpath(path, base_dir)
         try:
-            params = get_model_params(path)
+            if path in shard_meta:
+                total_size, num_shards = shard_meta[path]
+                params = get_model_params(path, file_size_bytes=total_size)
+                params["num_shards"] = num_shards
+            else:
+                params = get_model_params(path)
             params["rel_path"] = rel
             cache[rel] = params
         except Exception as e:
