@@ -4,6 +4,8 @@ Beantwortet eine einfache Frage: **Passt dieses GGUF-Modell in meine GPU?**
 
 Das Tool scannt lokale GGUF-Dateien, liest deren Metadaten aus und berechnet den VRAM-Bedarf für verschiedene Kontextlängen — vom kurzen Chat-Einsatz bis hin zu langen Coding-Agent-Läufen. Das Ergebnis lässt sich sowohl im Terminal als auch als interaktive Webseite anzeigen.
 
+https://wlanboy.github.io/vram-model-calculator/
+
 ---
 
 ## Tutorial: von Null zum Ergebnis
