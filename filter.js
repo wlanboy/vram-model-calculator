@@ -18,7 +18,7 @@
         "Agent (1M)":   1000000,
     };
 
-    const TOTAL_COLS = 6 + GPU_LIMITS.length;
+    const TOTAL_COLS = 7 + GPU_LIMITS.length;
 
     let models = [];
 
@@ -79,6 +79,12 @@
 
     // ── Helpers ──────────────────────────────────────────────
 
+    function fmtCtx(tokens) {
+        if (!tokens) return "—";
+        if (tokens >= 1000000) return (tokens / 1000000) + "M";
+        return Math.round(tokens / 1000) + "k";
+    }
+
     function fitClass(total, limitGb) {
         if (total <= limitGb * 0.85) return "fit-good";
         if (total <= limitGb)        return "fit-tight";
@@ -106,6 +112,7 @@
             case "quant": return model.quant || "";
             case "size":  return model.size_gb;
             case "kv":    return v.kv;
+            case "ctx":   return model.n_ctx_orig || 0;
             case "total": return v.total;
             default:      return model.name.toLowerCase();
         }
@@ -151,7 +158,19 @@
             const gpuCells = GPU_LIMITS.map(function (g) {
                 const cls  = fitClass(v.total, g.gb);
                 const icon = fitIcon(v.total, g.gb);
-                return '<td class="fit-cell ' + cls + '">' + icon + "</td>";
+                let parallelHtml = "";
+                if (cls !== "fit-none") {
+                    if (m.isSSM) {
+                        parallelHtml = '<span class="parallel-count">∞×</span>';
+                    } else if (v.kv > 0) {
+                        const remaining = g.gb - m.size_gb;
+                        const parallel = remaining > 0 ? Math.floor(remaining / v.kv) : 0;
+                        if (parallel > 0) {
+                            parallelHtml = '<span class="parallel-count">' + parallel + "×</span>";
+                        }
+                    }
+                }
+                return '<td class="fit-cell ' + cls + '">' + icon + (parallelHtml ? "<br>" + parallelHtml : "") + "</td>";
             }).join("");
 
             return [
@@ -161,6 +180,7 @@
                 "<td>" + (m.quant || "—") + "</td>",
                 '<td class="col-mono col-muted">' + m.size_gb.toFixed(2) + " GB</td>",
                 '<td class="col-mono">' + (m.isSSM ? '<span class="badge badge-arch">SSM</span>' : v.kv.toFixed(2) + " GB") + "</td>",
+                '<td class="col-mono col-muted">' + fmtCtx(m.n_ctx_orig) + "</td>",
                 '<td class="col-mono">' + v.total.toFixed(2) + " GB</td>",
                 gpuCells,
                 "</tr>",
