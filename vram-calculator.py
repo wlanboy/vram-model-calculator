@@ -22,18 +22,25 @@ USECASES = {
 
 def to_int(val):
     """Konvertiert ASCII-Steuerzeichen oder Strings sicher in Integer."""
-    if val is None: return 0
-    if isinstance(val, int): return val
+    if val is None:
+        return 0
+    if isinstance(val, int):
+        return val
     if isinstance(val, str):
-        if len(val) == 1: return ord(val) # Wandelt z.B. '(' in 40 um
-        try: return int(val)
-        except: return 0
+        if len(val) == 1:
+            return ord(val)  # Wandelt z.B. '(' in 40 um
+        try:
+            return int(val)
+        except ValueError:
+            return 0
     return 0
 
 def get_color(total, limit):
-    if total <= limit * 0.85: return "\033[92m🟢\033[0m" # Grün
-    if total <= limit: return "\033[93m🟡\033[0m"        # Gelb
-    return "\033[91m🔴\033[0m"                           # Rot
+    if total <= limit * 0.85:
+        return "\033[92m🟢\033[0m"  # Grün
+    if total <= limit:
+        return "\033[93m🟡\033[0m"  # Gelb
+    return "\033[91m🔴\033[0m"      # Rot
 
 def calculate_vram_matrix():
     if not os.path.exists(CACHE_FILE):
@@ -59,7 +66,8 @@ def calculate_vram_matrix():
         kv_heads = to_int(raw_kv)
         base_size = data.get("file_size_gb", 0)
 
-        if layers == 0 or embd == 0: continue
+        if layers == 0 or embd == 0:
+            continue
 
         arch = data.get("arch", "unknown")
         n_experts = data.get("n_experts")
