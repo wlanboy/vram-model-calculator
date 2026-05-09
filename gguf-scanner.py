@@ -51,7 +51,11 @@ def clean_name(name):
     if not name:
         return name
     if '_' in name:
-        name = name.split('_', 1)[1]
+        prefix, rest = name.split('_', 1)
+        # Only strip vendor prefix when the part after '_' starts with an uppercase letter
+        # (e.g. "test_Llama-3-8B" → "Llama-3-8B"), but leave "Llama_3_8B" intact.
+        if rest and rest[0].isupper() and ' ' not in prefix:
+            name = rest
     # -GGUF-Suffix entfernen
     name = re.sub(r'[-_]GGUF$', '', name, flags=re.IGNORECASE)
     # Quant-Bezeichnungen im Namen entfernen (z.B. " BF16", " F16", " Q4_K_M")
