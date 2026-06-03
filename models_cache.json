@@ -504,7 +504,7 @@
         "type": "llm",
         "arch": "llama",
         "name": "Codestral-22B-v0.1",
-        "size_label": null,
+        "size_label": "22B",
         "parameter_count": null,
         "quant": "Q4_K_M",
         "n_layers": 56,
