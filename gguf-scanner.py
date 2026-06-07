@@ -11,7 +11,6 @@ from gguf import GGUFReader
 
 CACHE_FILE = "models_cache.json"
 METADATA_DUMP_FILE = "model-metadata.txt"
-CACHE_VERSION = 2
 
 SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
 
@@ -328,90 +327,129 @@ def get_model_params(file_path, file_size_bytes=None):
     return params
 
 
-def needs_scan(path, base_dir, cache):
-    rel = os.path.relpath(path, base_dir)
-    if rel not in cache:
+def _migrate_key(key):
+    """Strip org/user prefix from cache key if not already starting with a GGUF model folder."""
+    parts = key.split('/')
+    if len(parts) >= 2 and not parts[0].upper().endswith('-GGUF'):
+        return '/'.join(parts[1:])
+    return key
+
+
+def _migrate_cache(cache):
+    """Normalize old-format keys with org prefix to model-relative keys, removing duplicates."""
+    migrated = {}
+    changed = 0
+    for key, entry in cache.items():
+        new_key = _migrate_key(key)
+        if new_key != key:
+            changed += 1
+            if isinstance(entry, dict):
+                entry = dict(entry)
+                entry['rel_path'] = new_key
+        if new_key not in migrated:
+            migrated[new_key] = entry
+    removed = len(cache) - len(migrated)
+    if changed:
+        print(f"♻️ {changed} Einträge migriert, {removed} Duplikate entfernt.")
+    return migrated
+
+
+def needs_scan(rel_key, abs_path, cache):
+    if rel_key not in cache:
         return True
-    entry = cache[rel]
-    if entry.get("file_size_bytes") != os.path.getsize(path):
+    entry = cache[rel_key]
+    if entry.get("file_size_bytes") != os.path.getsize(abs_path):
         return True
-    # Re-scan entries that previously had missing fields
     return entry.get("has_missing_fields", False)
 
 
-def update_cache(base_dir):
+def update_cache(base_dirs):
+    if isinstance(base_dirs, str):
+        base_dirs = [base_dirs]
+
+    base_dirs = [os.path.abspath(d) for d in base_dirs]
+
     cache = {}
-    errors = []
+    file_version = 0
 
     if os.path.exists(CACHE_FILE):
         try:
             with open(CACHE_FILE, 'r') as f:
                 loaded = json.load(f)
-            if loaded.get("_version") == CACHE_VERSION:
-                cache = {k: v for k, v in loaded.items() if k != "_version"}
-            else:
-                print("♻️ Cache-Version veraltet, wird neu aufgebaut...")
+            file_version = loaded.get("_version", 0)
+            raw = {k: v for k, v in loaded.items() if k != "_version"}
+            cache = _migrate_cache(raw)
         except Exception as e:
             print(f"⚠️ Cache-Datei korrupt, erstelle neu. ({e})")
 
-    if not os.path.exists(base_dir):
-        print(f"❌ Pfad nicht gefunden: {base_dir}")
-        return {}
+    # Collect (abs_path, base_dir) pairs
+    all_pairs = []
+    for base_dir in base_dirs:
+        if not os.path.exists(base_dir):
+            print(f"❌ Pfad nicht gefunden: {base_dir}")
+            continue
+        print(f"📂 Scanne: {base_dir}")
+        for root, _, files in os.walk(base_dir):
+            for f in files:
+                if f.endswith(".gguf"):
+                    all_pairs.append((os.path.join(root, f), base_dir))
 
-    all_files = []
-    for root, _, files in os.walk(base_dir):
-        for f in files:
-            if f.endswith(".gguf"):
-                all_files.append(os.path.join(root, f))
+    if not all_pairs:
+        print("❌ Keine GGUF-Dateien in den angegebenen Verzeichnissen gefunden.")
+        return cache
 
     # Group shard files: only process first shard, aggregate total size
-    shard_groups = {}  # base_path -> sorted list of (shard_idx, path)
-    non_shard_files = []
-    for path in all_files:
-        info = get_shard_info(path)
+    shard_groups = {}  # base_path -> sorted list of (shard_idx, abs_path, base_dir)
+    non_shard_pairs = []
+    for abs_path, base_dir in all_pairs:
+        info = get_shard_info(abs_path)
         if info:
-            base = SHARD_RE.sub('.gguf', path)
-            shard_groups.setdefault(base, []).append((info[0], path))
+            base = SHARD_RE.sub('.gguf', abs_path)
+            shard_groups.setdefault(base, []).append((info[0], abs_path, base_dir))
         else:
-            non_shard_files.append(path)
+            non_shard_pairs.append((abs_path, base_dir))
 
-    shard_meta = {}  # first_shard_path -> (total_size_bytes, num_shards)
-    representative_files = list(non_shard_files)
+    shard_meta = {}  # first_shard_abs_path -> (total_size_bytes, num_shards)
+    representative_pairs = list(non_shard_pairs)
     for base, shards in shard_groups.items():
         shards.sort(key=lambda x: x[0])
-        first_path = shards[0][1]
-        total_size = sum(os.path.getsize(p) for _, p in shards)
+        first_path, first_base = shards[0][1], shards[0][2]
+        total_size = sum(os.path.getsize(p) for _, p, _ in shards)
         shard_meta[first_path] = (total_size, len(shards))
-        representative_files.append(first_path)
+        representative_pairs.append((first_path, first_base))
 
-    new_files = [f for f in representative_files if needs_scan(f, base_dir, cache)]
+    new_pairs = [
+        (p, bd) for p, bd in representative_pairs
+        if needs_scan(_migrate_key(os.path.relpath(p, bd)), p, cache)
+    ]
 
-    if not new_files:
+    if not new_pairs:
         print("✅ Alles aktuell. Keine neuen oder geänderten GGUF-Dateien gefunden.")
         return cache
 
-    print(f"🔍 {len(new_files)} Modelle werden analysiert...")
+    print(f"🔍 {len(new_pairs)} Modelle werden analysiert...")
 
-    # Clear the dump file for this run
+    errors = []
     if os.path.exists(METADATA_DUMP_FILE):
         open(METADATA_DUMP_FILE, 'w').close()
 
-    for path in tqdm(new_files, desc="GGUF Scan", unit="file", colour="green"):
-        rel = os.path.relpath(path, base_dir)
+    for abs_path, base_dir in tqdm(new_pairs, desc="GGUF Scan", unit="file", colour="green"):
+        rel = _migrate_key(os.path.relpath(abs_path, base_dir))
         try:
-            if path in shard_meta:
-                total_size, num_shards = shard_meta[path]
-                params = get_model_params(path, file_size_bytes=total_size)
+            if abs_path in shard_meta:
+                total_size, num_shards = shard_meta[abs_path]
+                params = get_model_params(abs_path, file_size_bytes=total_size)
                 params["num_shards"] = num_shards
             else:
-                params = get_model_params(path)
+                params = get_model_params(abs_path)
             params["rel_path"] = rel
             cache[rel] = params
         except Exception as e:
             errors.append(f"Datei: {rel} | Grund: {e}")
 
+    new_version = file_version + 1
     with open(CACHE_FILE, 'w') as f:
-        json.dump({"_version": CACHE_VERSION, **cache}, f, indent=4)
+        json.dump({"_version": new_version, **cache}, f, indent=4)
 
     if errors:
         print("\n⚠️ SCAN-FEHLER:")
@@ -422,10 +460,10 @@ def update_cache(base_dir):
     if dump_count:
         print(f"\n📄 {dump_count} Modell(e) mit fehlenden Feldern → Details in '{METADATA_DUMP_FILE}'")
 
-    print(f"\n💾 Cache gespeichert unter '{CACHE_FILE}' ({len(cache)} Einträge).")
+    print(f"\n💾 Cache v{new_version} gespeichert unter '{CACHE_FILE}' ({len(cache)} Einträge).")
     return cache
 
 
 if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else "."
-    update_cache(target)
+    targets = sys.argv[1:] if len(sys.argv) > 1 else ["."]
+    update_cache(targets)
