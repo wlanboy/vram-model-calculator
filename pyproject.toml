@@ -1,13 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "models"
+name = "vram-model-calculator"
 version = "0.1.0"
-description = "GGUF scanner and calculator"
+description = "GGUF model scanner and VRAM calculator for local LLMs"
 readme = "README.md"
 requires-python = ">=3.11"
+license = {text = "MIT"}
+classifiers = ["Private :: Do Not Upload"]
 dependencies = [
     "gguf>=0.18.0",
     "tqdm>=4.67.3",
 ]
+
+[project.scripts]
+gguf-scanner = "vram_model_calculator.gguf_scanner:main"
+vram-calculator = "vram_model_calculator.vram_calculator:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["vram_model_calculator"]
 
 [dependency-groups]
 dev = [
