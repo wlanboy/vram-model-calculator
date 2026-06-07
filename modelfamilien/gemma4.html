@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemma 4 – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>Gemma 4</h1>
+  <p class="subtitle">Google DeepMind · Trainings-Cutoff Januar 2025 · 140+ Sprachen · 262k Vokabular</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">gemma4</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Multimodal</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Hybrid Attention</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Gemma 4 E2B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Effektive Parameter</span><span class="spec-value">2,3 B</span></div>
+    <div class="spec-row"><span class="spec-label">Gesamt (+ Embeddings)</span><span class="spec-value">5,1 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">35</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">512 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~150 M</span></div>
+    <div class="spec-row"><span class="spec-label">Audio-Encoder</span><span class="spec-value">~300 M</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">PLE (Per-Layer Emb.)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Gemma 4 E4B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Effektive Parameter</span><span class="spec-value">4,5 B</span></div>
+    <div class="spec-row"><span class="spec-label">Gesamt (+ Embeddings)</span><span class="spec-value">8 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">42</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">512 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~150 M</span></div>
+    <div class="spec-row"><span class="spec-label">Audio-Encoder</span><span class="spec-value">~300 M</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">PLE (Per-Layer Emb.)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="spec-card-title">Gemma 4 26B A4B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">3,8 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">25,2 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">30</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">1.024 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~550 M</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Gemma 4 31B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">30,7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">60</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">1.024 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~550 M</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (Q4-Quantisierung)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. Intel Arc Pro B60</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">Gemma 4 E2B <span class="col-muted">(5,1 B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~3–4 GB</td>
+    <td class="fit-detail fit-good"><strong>Perfekt</strong><span>Läuft voll im VRAM, ~2 GB Puffer für Basis-Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Viel Platz für langen Kontext und Bilder</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Massig Reserven für parallele Anfragen</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Platz für parallel laufende Agenten</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~12–15 Tok/Sek · Modell passt komplett in RAM, ~12 GB frei</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Gemma 4 E4B <span class="col-muted">(8 B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~5–6 GB</td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt gerade so; kaum Platz für Bild-/Audio-Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Ausreichend Puffer für Kontext und Bilder</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Riesiger Kontext-Puffer frei</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Riesiger Kontext-Puffer frei</span></td>
+    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~8–10 Tok/Sek · Belegt fast halben RAM; träge bei Bildern</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Gemma 4 12B <span class="col-muted">(Unified)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~7–9 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM läuft über; Absturz oder extremer Einbruch</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für Multimodalität</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Beste Balance aus Intelligenz, Audio &amp; Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Beste Balance aus Intelligenz, Audio &amp; Kontext</span></td>
+    <td class="fit-detail fit-tight"><strong>Sehr träge / Limit</strong><span>~4–6 Tok/Sek · Belegt inkl. System fast den gesamten RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Gemma 4 26B A4B <span class="col-muted">(MoE)</span></td>
+    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td class="col-mono">~14–16 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für Chat-Verlauf</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Hohe Logik-Intelligenz, genug Platz für Chat-Verlauf</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM komplett → System fängt an zu swappen</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Gemma 4 31B <span class="col-muted">(Dense)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~18–21 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM reicht bei Weitem nicht aus</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp (Limit)</strong><span>Modell passt, aber bei langen Texten/Bildern droht Überlauf</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM/RAM reicht bei Weitem nicht aus</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Modalitäten &amp; Fähigkeiten</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Bild</th>
+  <th class="cap-cell">Audio</th>
+  <th class="cap-cell">Video</th>
+  <th class="cap-cell">Thinking</th>
+  <th class="cap-cell">Function Calling</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Sprachen</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Gemma 4 E2B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">35+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Gemma 4 E4B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">35+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Gemma 4 12B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">35+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Gemma 4 26B A4B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">256k</td>
+    <td class="col-mono col-muted">35+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Gemma 4 31B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">256k</td>
+    <td class="col-mono col-muted">35+</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Quantisierungen</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Format</th>
+  <th>Variante</th>
+  <th style="white-space:nowrap">Gewichte</th>
+  <th>Hinweis</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q2_K_XL</td>
+    <td class="col-mono">10,5 GB</td>
+    <td class="col-muted">Kleinstes nutzbares GGUF</td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q3_K_M</td>
+    <td class="col-mono">12,5 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q4_K_M</td>
+    <td class="col-mono">16,9 GB</td>
+    <td class="col-muted">Empfohlen für 24-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q5_K_M</td>
+    <td class="col-mono">21,2 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">26,9 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">50,5 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">E2B</td>
+    <td>QAT W4A16 (offiziell)</td>
+    <td class="col-mono">-qat-w4a16-ct</td>
+    <td class="col-mono">7,3 GB</td>
+    <td class="col-muted">−26 % ggü. BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">E4B</td>
+    <td>QAT W4A16 (offiziell)</td>
+    <td class="col-mono">-qat-w4a16-ct</td>
+    <td class="col-mono">9,8 GB</td>
+    <td class="col-muted">−36 % ggü. BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">12B</td>
+    <td>QAT W4A16 (offiziell)</td>
+    <td class="col-mono">-qat-w4a16-ct</td>
+    <td class="col-mono">8,3 GB</td>
+    <td class="col-muted">−64 % ggü. BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">31B</td>
+    <td>QAT W4A16 (offiziell)</td>
+    <td class="col-mono">-qat-w4a16-ct</td>
+    <td class="col-mono">19,8 GB</td>
+    <td class="col-muted">−66 % ggü. BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">E4B</td>
+    <td>Mobile QAT (int2/4/8)</td>
+    <td class="col-mono">-mobile</td>
+    <td class="col-mono">3,7 GB</td>
+    <td class="col-muted">4,1× kleiner als BF16 · +1,5× Durchsatz</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Kontextabhängiger VRAM-Bedarf (Gemma 4 31B, Q4)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Kontextlänge</th>
+  <th>KV-Cache/Token (BF16)</th>
+  <th>KV-Cache/Token (Q4)</th>
+  <th style="white-space:nowrap">Gesamt VRAM ca.</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-mono">4 K Token</td>
+    <td class="col-mono">~0,85 MB</td>
+    <td class="col-mono">~0,038 MB</td>
+    <td class="col-mono">~20 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">64 K Token</td>
+    <td class="col-mono">~0,85 MB</td>
+    <td class="col-mono">~0,038 MB</td>
+    <td class="col-mono">~25 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">256 K Token</td>
+    <td class="col-mono">~0,85 MB</td>
+    <td class="col-mono">~0,038 MB</td>
+    <td class="col-mono">~40 GB</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Deployment</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Ollama</span>
+      <span class="spec-card-title">Einfachste Option</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">26B-A4B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run gemma4:26b</span></div>
+    <div class="spec-row"><span class="spec-label">31B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run gemma4:31b</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">LM Studio</span>
+      <span class="spec-card-title">Day-0-Support</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Alle 4 Varianten</span><span class="spec-value">GUI-gestützt, GGUF direkt wählbar</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">llama.cpp</span>
+      <span class="spec-card-title">KV-Optimierung</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">KV-Quantisierung</span><span class="spec-value col-mono" style="font-size:0.8rem">--cache-type-k q4_0 --cache-type-v q4_0</span></div>
+    <div class="spec-row"><span class="spec-label">31B Tipp</span><span class="spec-value col-mono" style="font-size:0.8rem">-np 1  ← spart ~11 GB VRAM</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Single-GPU (E4B)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve google/gemma-4-E4B-it --max-model-len 131072</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Multi-GPU (31B, 2× A100/H100)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Tensor Parallel</span><span class="spec-value col-mono" style="font-size:0.8rem">--tensor-parallel-size 2</span></div>
+    <div class="spec-row"><span class="spec-label">GPU-Auslastung</span><span class="spec-value col-mono" style="font-size:0.8rem">--gpu-memory-utilization 0.90</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextlimit</span><span class="spec-value col-mono" style="font-size:0.8rem">--max-model-len 32768</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Tool Use &amp; Thinking</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value col-mono" style="font-size:0.8rem">--enable-auto-tool-choice --tool-call-parser gemma4</span></div>
+    <div class="spec-row"><span class="spec-label">Thinking Mode</span><span class="spec-value col-mono" style="font-size:0.8rem">--reasoning-parser gemma4</span></div>
+    <div class="spec-row"><span class="spec-label">Chat-Template</span><span class="spec-value col-mono" style="font-size:0.8rem">--chat-template ...gemma4.jinja</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">KV-Cache &amp; Vision</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">fp8 KV-Cache</span><span class="spec-value col-mono" style="font-size:0.8rem">--kv-cache-dtype fp8 (−50 %)</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Tokens</span><span class="spec-value">70 / 140 / 280* / 560 / 1120</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Flag</span><span class="spec-value col-mono" style="font-size:0.8rem">--mm-processor-kwargs '{"max_soft_tokens":560}'</span></div>
+    <div class="spec-row"><span class="spec-label">Bild-Limit</span><span class="spec-value col-mono" style="font-size:0.8rem">--limit-mm-per-prompt '{"image":4}'</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Speculative Decoding</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">E2B / E4B</span><span class="spec-value">2–4 Spec-Tokens</span></div>
+    <div class="spec-row"><span class="spec-label">12B / 26B-A4B / 31B</span><span class="spec-value">4–8 Spec-Tokens</span></div>
+    <div class="spec-row"><span class="spec-label">Flag</span><span class="spec-value col-mono" style="font-size:0.8rem;word-break:break-all">--speculative-config '{"model":"...-assistant","num_speculative_tokens":4}'</span></div>
+  </div>
+
+</div>
+
+<div class="note-box">
+  <strong>Hinweise:</strong><br>
+  · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem Kontextfenster steigt der Bedarf deutlich (bis zu +50 %).<br>
+  · E2B und E4B nutzen <em>Per-Layer Embeddings (PLE)</em> — ein Großteil der Parameter steckt in Embeddings; die effektive Rechenlast ist wesentlich kleiner als die Gesamtparameter suggerieren.<br>
+  · 26B A4B: MoE mit 1 geteiltem Experten + 8 gerouteten Experten pro Layer (de facto 9 FFN-Blöcke aktiv). GGUF-Metadaten zählen nur die 8 gerouteten; VRAM kann minimal unterschätzt werden.<br>
+  · Video wird über einzelne Einzel-Frames unterstützt, kein nativer Video-Stream.<br>
+  · Gemma 4 12B ist in der offiziellen Modellkarte (Stand Juni 2025) nicht enthalten; Spezifikationen können abweichen.<br>
+  · Alle Modelle teilen dasselbe Vokabular (262k Token) und die Hybrid-Attention-Architektur (lokales Sliding-Window + globale Attention).<br>
+  · KV-Cache der 31B ist 2–3× größer als bei vergleichbaren Modellen: ~0,85 MB/Token (BF16), ~0,038 MB/Token mit Q4-KV-Quantisierung.<br>
+  · QAT W4A16-Checkpoints sind offizielle Google-Quantisierungen — Qualitätsverlust geringer als bei nachträglicher GGUF-Quantisierung.<br>
+  · Vision-Token-Budget (Standard: 280 Tokens/Bild): Für OCR und Texterkennung empfehlen sich 560–1120 Tokens pro Bild.<br>
+  · vLLM unterstützt neben NVIDIA CUDA auch AMD ROCm (MI300X/MI325X/MI350X/MI355X), Google Cloud TPUs und Intel Xeon 6 CPUs.<br>
+  · Lizenz: Apache 2.0 — keine proprietären Nutzungsbeschränkungen.
+</div>
+
+</div>
+</body>
+</html>
