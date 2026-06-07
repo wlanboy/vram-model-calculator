@@ -181,7 +181,7 @@ def get_mmproj_params(reader, file_path, file_size_bytes):
         "patch_size": get_safe_int(reader, "clip.vision.patch_size"),
         "n_embd": get_safe_int(reader, "clip.vision.embedding_length"),
         "n_ff": get_safe_int(reader, "clip.vision.feed_forward_length"),
-        "n_layers": get_safe_int(reader, "clip.vision.block_count"),
+        "n_layers": get_nonneg_int(reader, "clip.vision.block_count"),
         "projection_dim": get_safe_int(reader, "clip.vision.projection_dim"),
         "has_llava_projector": get_safe_int(reader, "clip.has_llava_projector"),
         "file_size_bytes": file_size_bytes,
