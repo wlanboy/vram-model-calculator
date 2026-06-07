@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phi-4 – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>Phi-4</h1>
+  <p class="subtitle">Microsoft Research · Dense · Dezember 2024 – Mai 2025 · Lizenz: MIT</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">phi4</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Multimodal</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Reasoning / CoT</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">MIT-Lizenz</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Phi-4-mini 3.8B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">3,8 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">32</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">200.064</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">GQA</span></div>
+    <div class="spec-row"><span class="spec-label">Function Calling</span><span class="spec-value">Ja</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Februar 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/Phi-4-mini-instruct</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Phi-4-mini-reasoning 3.8B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">3,8 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">32</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">200.064</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Chain-of-Thought Fine-Tune</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Phi-4-mini</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Mai 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/Phi-4-mini-reasoning</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Phi-4-multimodal 5.6B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">5,6 B</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
+    <div class="spec-row"><span class="spec-label">Speech WER</span><span class="spec-value">6,14 % (OpenASR #1)</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">SigLIP-basiert</span></div>
+    <div class="spec-row"><span class="spec-label">Audio-Encoder</span><span class="spec-value">Whisper-basiert</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Februar 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/Phi-4-multimodal-instruct</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Phi-4 14B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">14 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">5.120</span></div>
+    <div class="spec-row"><span class="spec-label">Attention Heads</span><span class="spec-value">40 (GQA: 10 KV)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">16k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">100.352</span></div>
+    <div class="spec-row"><span class="spec-label">MMLU</span><span class="spec-value">84,8 %</span></div>
+    <div class="spec-row"><span class="spec-label">HumanEval</span><span class="spec-value">82,6 %</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Dezember 2024</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/phi-4</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Phi-4-reasoning 14B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">14 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">16k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Extended CoT Thinking</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Phi-4 14B</span></div>
+    <div class="spec-row"><span class="spec-label">Training</span><span class="spec-value">SFT + RLVR auf Reasoning-Daten</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Mai 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/Phi-4-reasoning</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (Q4-Quantisierung)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. Intel Arc Pro B60</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">Phi-4-mini <span class="col-muted">(3.8B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~2,5 GB</td>
+    <td class="fit-detail fit-good"><strong>Perfekt</strong><span>Läuft problemlos; ~3,5 GB Puffer für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Massig Platz für 128k-Kontext und parallele Anfragen</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Ideal für Agenten mit langem Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-leicht</strong><span>Mehrere Instanzen gleichzeitig möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>~15–20 Tok/Sek · Modell passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Phi-4-mini-reasoning <span class="col-muted">(3.8B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~2,5 GB</td>
+    <td class="fit-detail fit-good"><strong>Perfekt</strong><span>Ausreichend Puffer für lange CoT-Ausgaben</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Viel Platz für Reasoning-Ketten</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Ideal für Reasoning-Aufgaben</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-leicht</strong><span>Mehrere Instanzen gleichzeitig möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>~15–20 Tok/Sek · CoT-Ausgaben vollständig im RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Phi-4-multimodal <span class="col-muted">(5.6B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~3,5–4,5 GB</td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Nur Text passt; Vision- und Audio-Encoder sprengen VRAM</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Text + Bild gut nutzbar; Audio mit leichtem Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Alle Modalitäten problemlos; viel Kontext-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Alle Modalitäten, parallele Anfragen möglich</span></td>
+    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~8–10 Tok/Sek · Audio-Encoder lastet RAM stark aus</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Phi-4 <span class="col-muted">(14B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~8–9 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein; Modell passt nicht</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Optimale Balance aus Leistung und Ressourcen</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Puffer für Kontext und parallele Anfragen</span></td>
+    <td class="fit-detail fit-tight"><strong>Träge / Limit</strong><span>~4–6 Tok/Sek · Belegt fast gesamten RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Phi-4-reasoning <span class="col-muted">(14B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~8–9 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein; Modell passt nicht</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; CoT-Ausgaben können Kontext-VRAM aufbrauchen</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Empfohlen: genug Puffer für lange Reasoning-Ketten</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Selbst sehr lange CoT-Ketten problemlos</span></td>
+    <td class="fit-detail fit-tight"><strong>Träge / Limit</strong><span>~4–6 Tok/Sek · Lange CoT-Ausgaben sehr langsam</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Fähigkeiten &amp; Modalitäten</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Bild</th>
+  <th class="cap-cell">Audio</th>
+  <th class="cap-cell">Reasoning</th>
+  <th class="cap-cell">Function Calling</th>
+  <th class="cap-cell">Code</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Sprachen</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Phi-4-mini</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-part" title="Standard Reasoning">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">23+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-mini-reasoning</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="eingeschränkt">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">23+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-multimodal</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Standard Reasoning">~</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">23+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-part" title="Standard Reasoning">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">16k</td>
+    <td class="col-mono col-muted">23+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="eingeschränkt">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">16k</td>
+    <td class="col-mono col-muted">23+</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Quantisierungen</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Format</th>
+  <th>Variante</th>
+  <th style="white-space:nowrap">Gewichte</th>
+  <th>Hinweis</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Phi-4-mini 3.8B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~2,5 GB</td>
+    <td class="col-muted">Empfehlung für Consumer-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-mini 3.8B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~3,8 GB</td>
+    <td class="col-muted">Nahezu verlustfrei</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-mini 3.8B</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~7,6 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-multimodal 5.6B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~3,5 GB</td>
+    <td class="col-muted">+ Vision-/Audio-Encoder im VRAM</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-multimodal 5.6B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~5,6 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-multimodal 5.6B</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~11,2 GB</td>
+    <td class="col-muted">Volles Gewicht (ohne Encoder-Overhead)</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4 14B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q2_K</td>
+    <td class="col-mono">~5 GB</td>
+    <td class="col-muted">Kleinstes nutzbares GGUF; Qualitätsverlust spürbar</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4 14B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~8–9 GB</td>
+    <td class="col-muted">Empfehlung für 16-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4 14B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~14 GB</td>
+    <td class="col-muted">Nahezu verlustfrei; 16-GB-GPU Grenzbereich</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4 14B</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~28 GB</td>
+    <td class="col-muted">Volles Gewicht; braucht 2× 16-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning 14B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~8–9 GB</td>
+    <td class="col-muted">Empfehlung; CoT-Ausgaben brauchen Kontext-VRAM</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning 14B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~14 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning 14B</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~28 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Deployment</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Ollama</span>
+      <span class="spec-card-title">Einfachste Option</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Phi-4-mini</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run phi4-mini</span></div>
+    <div class="spec-row"><span class="spec-label">Phi-4 14B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run phi4</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">LM Studio</span>
+      <span class="spec-card-title">GUI-Support</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Alle Varianten</span><span class="spec-value">GGUF direkt aus HuggingFace</span></div>
+    <div class="spec-row"><span class="spec-label">Multimodal</span><span class="spec-value">Phi-4-multimodal erfordert aktuelles LM Studio</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">llama.cpp</span>
+      <span class="spec-card-title">Direkte GGUF-Nutzung</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">KV-Quantisierung</span><span class="spec-value col-mono" style="font-size:0.8rem">--cache-type-k q4_0</span></div>
+    <div class="spec-row"><span class="spec-label">128k Kontext (mini)</span><span class="spec-value col-mono" style="font-size:0.8rem">--ctx-size 131072</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Phi-4-mini (16 GB GPU)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve microsoft/Phi-4-mini-instruct</span></div>
+    <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value col-mono" style="font-size:0.8rem">--enable-auto-tool-choice</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Phi-4 14B (24 GB GPU)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve microsoft/phi-4</span></div>
+    <div class="spec-row"><span class="spec-label">Kontext</span><span class="spec-value col-mono" style="font-size:0.8rem">--max-model-len 16384</span></div>
+    <div class="spec-row"><span class="spec-label">fp8 KV-Cache</span><span class="spec-value col-mono" style="font-size:0.8rem">--kv-cache-dtype fp8 (−50 %)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">transformers</span>
+      <span class="spec-card-title">Multimodal-Nutzung</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Modell laden</span><span class="spec-value col-mono" style="font-size:0.8rem">AutoModelForCausalLM.from_pretrained(...)</span></div>
+    <div class="spec-row"><span class="spec-label">Processor</span><span class="spec-value col-mono" style="font-size:0.8rem">AutoProcessor.from_pretrained(...)</span></div>
+    <div class="spec-row"><span class="spec-label">Audio-Input</span><span class="spec-value">wav, 16kHz Mono empfohlen</span></div>
+  </div>
+
+</div>
+
+<div class="note-box">
+  <strong>Hinweise:</strong><br>
+  · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem 128k-Kontext (Phi-4-mini) steigt der Bedarf erheblich.<br>
+  · Phi-4-multimodal: Vision- und Audio-Encoder belegen zusätzlich ~0,5–1,5 GB VRAM — bei 6-GB-GPUs ist Multimodalität daher kaum nutzbar.<br>
+  · Phi-4 und Phi-4-reasoning teilen dieselbe Architektur — VRAM-Bedarf ist identisch. Der Unterschied liegt ausschließlich im Fine-Tuning.<br>
+  · Phi-4-reasoning gibt vor Antworten intern eine &lt;think&gt;…&lt;/think&gt;-Kette aus, die Token verbraucht und Latenzen erhöht. Bei 16k-Kontext kann diese bei komplexen Aufgaben den Großteil des Kontexts belegen.<br>
+  · Phi-4-mini hat trotz nur 3,8B Parameter ein sehr großes Vokabular (200.064 Token), das Embedding-Gewichte kostet; der effektive Rechenvorteil ist daher etwas kleiner als die Parameterzahl suggeriert.<br>
+  · Phi-4-mini-reasoning ist für kompakte Reasoning-Aufgaben (Mathe, Logik, STEM) optimiert und schlägt deutlich größere Modelle auf speziellen Benchmarks.<br>
+  · Alle Phi-4-Modelle stehen unter der MIT-Lizenz — kommerzielle Nutzung ohne Einschränkungen.<br>
+  · Ollama-Support: phi4-mini und phi4 sind direkt über den Ollama-Modell-Hub verfügbar; Multimodal und Reasoning-Varianten erfordern manuelle GGUF-Integration.
+</div>
+
+</div>
+</body>
+</html>
