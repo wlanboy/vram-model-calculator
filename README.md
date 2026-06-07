@@ -40,7 +40,8 @@ Zeige auf das Verzeichnis, in dem deine `.gguf`-Dateien liegen (LM Studio legt s
 gguf-scanner ~/LMStudio/models/
 
 # Direkt aus dem Repo (Option B)
-python gguf-scanner.py ~/LMStudio/models/
+uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
+uv run -m vram_model_calculator.gguf_scanner ~/.lmstudio/models/
 ```
 
 Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen — nur neue oder geänderte Dateien werden verarbeitet.
@@ -58,7 +59,7 @@ GGUF Scan: 100%|████████████| 5/5 [00:03<00:00]
 vram-calculator
 
 # Direkt aus dem Repo (Option B)
-python vram-calculator.py
+uv run -m vram_model_calculator.vram_calculator
 ```
 
 Gibt für jedes Modell eine Tabelle aus, die zeigt, wie viel VRAM für jeden Anwendungsfall benötigt wird und ob es in die konfigurierten GPUs passt:
@@ -94,10 +95,10 @@ Scannt ein Verzeichnis rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-M
 **Aufruf:**
 
 ```bash
-python gguf-scanner.py <pfad>
+uv run -m vram_model_calculator.gguf_scanner <pfad>
 # Beispiele:
-python gguf-scanner.py ~/LMStudio/models/
-python gguf-scanner.py .
+uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
+uv run -m vram_model_calculator.gguf_scanner .
 ```
 
 **Was der Scanner liest:**
@@ -130,7 +131,7 @@ Liest `models_cache.json` und gibt für jedes LLM-Modell eine VRAM-Matrix im Ter
 **Aufruf:**
 
 ```bash
-python vram-calculator.py
+uv run -m vram_model_calculator.vram_calculator
 ```
 
 **Konfiguration** (direkt im Skript):
@@ -271,8 +272,6 @@ vram-model-calculator/
 │   ├── __init__.py
 │   ├── gguf_scanner.py           # Schritt 1: GGUF-Dateien scannen → models_cache.json
 │   └── vram_calculator.py        # Schritt 2 (optional): Terminal-Ausgabe
-├── gguf-scanner.py               # Legacy-Skript (direkter Aufruf ohne Installation)
-├── vram-calculator.py            # Legacy-Skript (direkter Aufruf ohne Installation)
 ├── models_cache.json             # Generiert vom Scanner (im Arbeitsverzeichnis)
 ├── index.html                    # Browser-UI
 ├── filter.js                     # Logik der Browser-UI
