@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qwen 3.5 &amp; 3.6 – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>Qwen 3.5 &amp; 3.6</h1>
+  <p class="subtitle">Alibaba Cloud / Qwen Team · Apache 2.0 · 262k Kontextfenster · Hybrid Attention</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">qwen35</span>
+    <span class="badge badge-moe">MoE verfügbar</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Vision (MoE)</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">GatedDeltaNet</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Qwen 3.5 9B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">9 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">32</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Qwen 3.5 27B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~28 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">64</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">GatedDeltaNet</span>
+      <span class="spec-card-title">Qwen 3.6 27B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~28 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense · Hybrid</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid (GatedDeltaNet)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/256</span>
+      <span class="spec-card-title">Qwen 3.5 / 3.6 · 35B-A3B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">3 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~36 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid (75 % GatedDeltaNet)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE</span>
+      <span class="spec-card-title">Qwen 3.5 122B-A10B</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Server</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">10 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~125 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">MoE</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k Token</span></div>
+    <div class="spec-row"><span class="spec-label">VRAM Q4 (min.)</span><span class="spec-value">~70 GB</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Empfehlung</span><span class="spec-value">Multi-GPU (A100/H100)</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (Q4-Quantisierung)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. RTX 3090 / 4090</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">Qwen 3.5 9B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~5–6 GB</td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Passt vollständig in VRAM; ~1–2 GB Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Platz für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Massig Reserven; höhere Quant möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Platz für parallele Agenten oder Q8</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~10–14 Tok/Sek · Passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Qwen 3.5 27B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~17 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Auch Q3 (~14 GB) passt kaum; kein Puffer</span></td>
+    <td class="fit-detail fit-tight"><strong>Q3 möglich</strong><span>Q3_K_M (~14 GB) passt; Q4 (~17 GB) läuft über</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut (Q4–Q6)</strong><span>~34 Tok/Sek · Komfortabel; Q6 empfohlen</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Modell sprengt 16 GB RAM → starker Swap</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Qwen 3.6 27B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~17 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Q3 (~14 GB) passt kaum; kein Puffer</span></td>
+    <td class="fit-detail fit-tight"><strong>Q3 möglich</strong><span>Q3_K_M (~14 GB) passt; Q4 (~17 GB) läuft über</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut (Q4–Q6)</strong><span>~34 Tok/Sek · Hybrid-Attn · Bild unterstützt</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Modell sprengt 16 GB RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Qwen 3.5 / 3.6 · 35B-A3B</td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
+    <td class="col-mono">~22 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein für Q3+</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Offload möglich, aber &lt;5 Tok/Sek</span></td>
+    <td class="fit-detail fit-good"><strong>Empfohlen (Q4)</strong><span>~111 Tok/Sek · 3× schneller als 27B Dense dank MoE</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM vollständig</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Qwen 3.5 122B-A10B</td>
+    <td><span class="badge badge-moe">MoE</span></td>
+    <td class="col-mono">~70 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Braucht Multi-GPU: 4× A100 / 2× H100</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Kontextfenster-Skalierung (VRAM-Wachstum bei Q4_K_M)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="col-mono" style="text-align:center">4k Token</th>
+  <th class="col-mono" style="text-align:center">32k Token</th>
+  <th class="col-mono" style="text-align:center">128k Token</th>
+  <th class="col-mono" style="text-align:center">262k Token</th>
+  <th>Wachstumsverhalten</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Qwen 3.5 27B</td>
+    <td class="col-mono" style="text-align:center">~17 GB</td>
+    <td class="col-mono" style="text-align:center">~19 GB</td>
+    <td class="col-mono" style="text-align:center">~27 GB</td>
+    <td class="col-mono" style="text-align:center">~33 GB</td>
+    <td style="font-size:0.78rem;color:var(--text-muted)">Lineares Wachstum – Standard-Attention baut vollen KV-Cache auf</td>
+  </tr>
+  <tr>
+    <td class="col-name">Qwen 3.6 27B</td>
+    <td class="col-mono" style="text-align:center">~17 GB</td>
+    <td class="col-mono" style="text-align:center">~18 GB</td>
+    <td class="col-mono" style="text-align:center">~20 GB</td>
+    <td class="col-mono" style="text-align:center">~22 GB</td>
+    <td style="font-size:0.78rem;color:var(--green)">Geringes Wachstum – Hybrid GatedDeltaNet reduziert KV-Cache-Aufbau</td>
+  </tr>
+  <tr>
+    <td class="col-name">Qwen 3.5 / 3.6 · 35B-A3B</td>
+    <td class="col-mono" style="text-align:center">~22 GB</td>
+    <td class="col-mono" style="text-align:center">~23 GB</td>
+    <td class="col-mono" style="text-align:center">~24 GB</td>
+    <td class="col-mono" style="text-align:center">~25 GB</td>
+    <td style="font-size:0.78rem;color:var(--green)">Minimales Wachstum – 75 % der Layer nutzen GatedDeltaNet (kein KV-Cache)</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Fähigkeiten &amp; Features</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Bild</th>
+  <th class="cap-cell">Thinking</th>
+  <th class="cap-cell">Function Calling</th>
+  <th class="cap-cell">Hybrid Attn.</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Speed (RTX 3090)</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Qwen 3.5 9B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">262k</td>
+    <td class="col-mono col-muted">~60–80 Tok/Sek</td>
+  </tr>
+  <tr>
+    <td class="col-name">Qwen 3.5 27B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">262k</td>
+    <td class="col-mono col-muted">~34 Tok/Sek</td>
+  </tr>
+  <tr>
+    <td class="col-name">Qwen 3.6 27B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">262k</td>
+    <td class="col-mono col-muted">~34 Tok/Sek</td>
+  </tr>
+  <tr>
+    <td class="col-name">Qwen 3.5 / 3.6 · 35B-A3B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">262k</td>
+    <td class="col-mono" style="color:var(--green)">~111 Tok/Sek</td>
+  </tr>
+  <tr>
+    <td class="col-name">Qwen 3.5 122B-A10B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">262k</td>
+    <td class="col-mono col-muted">Multi-GPU nötig</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-box">
+  <strong>Qwen 3.5 vs. Qwen 3.6:</strong> Qwen 3.6 erweitert die Serie um zwei neue Varianten: <strong>Qwen 3.6 27B</strong> (Dense mit Hybrid GatedDeltaNet + Standard-Attention, multimodal) sowie <strong>Qwen 3.6 35B-A3B</strong> (MoE, baugleich mit Qwen 3.5 35B-A3B). Qwen 3.6-27B unterscheidet sich von Qwen 3.5-27B durch Hybrid-Attention und Bildunterstützung. GGUF-Dateien aller Varianten verwenden die Architektur-Kennung <code>qwen35</code>.<br><br>
+  <strong>GatedDeltaNet (Hybrid Attention):</strong> 75 % der Layer im MoE-Modell nutzen lineares GatedDeltaNet statt Standard-Attention. Dadurch entfällt der KV-Cache für diese Layer – das VRAM-Wachstum bei langen Kontexten ist minimal: von 4k auf 262k Token nur +3 GB, beim Dense-Modell hingegen +16 GB.<br><br>
+  <strong>Quantisierung:</strong> Q3 und Q4 liefern laut Benchmarks nahezu identische Qualität. Unter Q2 bricht die Ausgabequalität spürbar ein – <em>Q2_K vermeiden</em>. Empfehlung für 24 GB: Q4_K_M oder UD-Q4_K_XL (Unsloth-Format).<br><br>
+  <strong>VRAM-Werte</strong> gelten ohne KV-Cache (Basis-Kontext 4k). Speed-Werte gemessen auf RTX 3090 mit Q4_K_M via llama.cpp.
+</div>
+
+</div>
+</body>
+</html>
