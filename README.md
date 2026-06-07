@@ -12,10 +12,19 @@ https://wlanboy.github.io/vram-model-calculator/
 
 ### 1. Voraussetzungen
 
-Python 3.11+ und `uv` (empfohlen) oder `pip`:
+Python 3.11+ und `uv` (empfohlen) oder `pip`.
+
+**Option A — Als installiertes CLI-Tool (empfohlen):**
 
 ```bash
-# Mit uv (empfohlen)
+uv build
+uv tool install dist/vram_model_calculator-0.1.0-py3-none-any.whl
+```
+
+**Option B — Direkt aus dem Repo:**
+
+```bash
+# Mit uv
 uv sync
 
 # Oder klassisch
@@ -27,6 +36,10 @@ pip install gguf tqdm
 Zeige auf das Verzeichnis, in dem deine `.gguf`-Dateien liegen (LM Studio legt sie z. B. unter `~/LMStudio/models/` ab):
 
 ```bash
+# Als installiertes Tool (Option A)
+gguf-scanner ~/LMStudio/models/
+
+# Direkt aus dem Repo (Option B)
 python gguf-scanner.py ~/LMStudio/models/
 ```
 
@@ -41,6 +54,10 @@ GGUF Scan: 100%|████████████| 5/5 [00:03<00:00]
 ### 3. VRAM-Matrix im Terminal anzeigen (optional)
 
 ```bash
+# Als installiertes Tool (Option A)
+vram-calculator
+
+# Direkt aus dem Repo (Option B)
 python vram-calculator.py
 ```
 
@@ -192,15 +209,74 @@ Der Tooltip am Modellnamen warnt, wenn der gewählte Kontext das ursprüngliche 
 
 ---
 
+## Installation als CLI-Tool (Wheel)
+
+Das Projekt lässt sich als installiertes CLI-Paket nutzen — kein `python` davor, keine lokalen Skriptpfade.
+
+### Wheel bauen
+
+```bash
+uv build
+# Erstellt:
+#   dist/vram_model_calculator-0.1.0-py3-none-any.whl
+#   dist/vram_model_calculator-0.1.0.tar.gz
+```
+
+### Global installieren (empfohlen)
+
+```bash
+uv tool install dist/vram_model_calculator-0.1.0-py3-none-any.whl
+```
+
+Danach stehen zwei Kommandos systemweit bereit:
+
+```bash
+gguf-scanner ~/LMStudio/models/
+vram-calculator
+```
+
+### Ohne Installation testen
+
+```bash
+uv run --with dist/vram_model_calculator-0.1.0-py3-none-any.whl gguf-scanner ~/LMStudio/models/
+uv run --with dist/vram_model_calculator-0.1.0-py3-none-any.whl vram-calculator
+```
+
+### Neu installieren / aktualisieren
+
+```bash
+# Wheel neu bauen
+uv build
+
+# Cache leeren (wichtig damit uv die neue Version zieht)
+uv cache clean vram-model-calculator
+
+# Neu installieren
+uv tool install --force dist/vram_model_calculator-0.1.0-py3-none-any.whl
+```
+
+### Deinstallieren
+
+```bash
+uv tool uninstall vram-model-calculator
+```
+
+---
+
 ## Projektstruktur
 
 ```
 vram-model-calculator/
-├── gguf-scanner.py       # Schritt 1: GGUF-Dateien scannen → models_cache.json
-├── vram-calculator.py    # Schritt 2 (optional): Terminal-Ausgabe
-├── models_cache.json     # Generiert vom Scanner
-├── index.html            # Browser-UI
-├── filter.js             # Logik der Browser-UI
-├── style.css             # Styles der Browser-UI
-└── pyproject.toml        # Python-Abhängigkeiten (gguf, tqdm)
+├── vram_model_calculator/        # Installiertes Python-Paket
+│   ├── __init__.py
+│   ├── gguf_scanner.py           # Schritt 1: GGUF-Dateien scannen → models_cache.json
+│   └── vram_calculator.py        # Schritt 2 (optional): Terminal-Ausgabe
+├── gguf-scanner.py               # Legacy-Skript (direkter Aufruf ohne Installation)
+├── vram-calculator.py            # Legacy-Skript (direkter Aufruf ohne Installation)
+├── models_cache.json             # Generiert vom Scanner (im Arbeitsverzeichnis)
+├── index.html                    # Browser-UI
+├── filter.js                     # Logik der Browser-UI
+├── style.css                     # Styles der Browser-UI
+├── dist/                         # Build-Artefakte (wheel + sdist)
+└── pyproject.toml                # Paket-Metadaten und Abhängigkeiten
 ```
