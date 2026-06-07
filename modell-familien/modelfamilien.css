@@ -47,6 +47,12 @@
 .spec-card-title {
     font-weight: 600;
     font-size: 0.88rem;
+    overflow-wrap: break-word;
+    min-width: 0;
+}
+
+.col-name {
+    white-space: normal;
 }
 .spec-row {
     display: flex;
