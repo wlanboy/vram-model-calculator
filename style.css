@@ -61,6 +61,7 @@ h1 {
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
+    flex-wrap: wrap;
 }
 
 .family-nav-label {
@@ -281,4 +282,49 @@ tbody tr:hover { background: var(--surface); }
     padding: 2.5rem;
     color: var(--text-muted);
     font-style: italic;
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem 0.75rem;
+    }
+
+    .page-header {
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .family-nav {
+        flex-shrink: 1;
+        width: 100%;
+    }
+
+    .control-group {
+        width: 100%;
+    }
+
+    select,
+    input[type="search"] {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .check-row {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* Arch und Quant ausblenden – als Filter bereits wählbar */
+    th:nth-child(2), td:nth-child(2),
+    th:nth-child(3), td:nth-child(3),
+    /* KV-Cache ausblenden */
+    th:nth-child(5), td:nth-child(5) {
+        display: none;
+    }
+
+    .col-name {
+        max-width: 160px;
+    }
 }
