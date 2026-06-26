@@ -43,6 +43,7 @@ gguf-scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner ~/.lmstudio/models/
 uv run -m vram_model_calculator.gguf_scanner /models
+uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 ```
 
 Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen — nur neue oder geänderte Dateien werden verarbeitet.
