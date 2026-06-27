@@ -1,5 +1,5 @@
 {
-    "_version": 8,
+    "_version": 10,
     "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -56,7 +56,7 @@
         "n_experts_used": null,
         "vocab_size": 262144,
         "n_ctx_orig": 131072,
-        "file_size_bytes": 3427877696,
+        "file_size_bytes": 3427873312,
         "file_size_gb": 3.192,
         "rel_path": "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q4_K_M.gguf"
     },
@@ -504,7 +504,7 @@
         "type": "llm",
         "arch": "llama",
         "name": "Codestral-22B-v0.1",
-        "size_label": "22B",
+        "size_label": null,
         "parameter_count": null,
         "quant": "Q4_K_M",
         "n_layers": 56,
@@ -516,8 +516,8 @@
         "n_experts_used": null,
         "vocab_size": 32768,
         "n_ctx_orig": 32768,
-        "file_size_bytes": 13341237600,
-        "file_size_gb": 12.425,
+        "file_size_bytes": 12717129728,
+        "file_size_gb": 11.844,
         "rel_path": "Codestral-22B-v0.1-GGUF/Codestral-22B-v0.1-Q4_K_M.gguf"
     },
     "gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf": {
@@ -616,8 +616,8 @@
         "n_experts_used": null,
         "vocab_size": 131072,
         "n_ctx_orig": 393216,
-        "file_size_bytes": 14334437504,
-        "file_size_gb": 13.35,
+        "file_size_bytes": 4110417920,
+        "file_size_gb": 3.828,
         "rel_path": "Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf"
     },
     "Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf": {
@@ -1459,5 +1459,45 @@
         "file_size_bytes": 2104932800,
         "file_size_gb": 1.96,
         "rel_path": "Qwen2.5-Coder-3B-Instruct-GGUF/qwen2.5-coder-3b-instruct-q4_k_m.gguf"
+    },
+    "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf": {
+        "type": "llm",
+        "arch": "glm4",
+        "name": "Glm-4.1V-9B-Thinking",
+        "size_label": "9B",
+        "parameter_count": null,
+        "quant": "Q3_K_S",
+        "n_layers": 40,
+        "n_embd": 4096,
+        "n_heads": 32,
+        "n_kv_heads": 2,
+        "n_ff": 13696,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 151552,
+        "n_ctx_orig": 65536,
+        "file_size_bytes": 4592039616,
+        "file_size_gb": 4.277,
+        "rel_path": "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf"
+    },
+    "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-Q4_0.gguf": {
+        "type": "llm",
+        "arch": "lfm2moe",
+        "name": "LFM2.5-8B-A1B",
+        "size_label": "32x959M",
+        "parameter_count": null,
+        "quant": "Q4_0",
+        "n_layers": 24,
+        "n_embd": 2048,
+        "n_heads": 32,
+        "n_kv_heads": 32,
+        "n_ff": 7168,
+        "n_experts": 32,
+        "n_experts_used": 4,
+        "vocab_size": 128000,
+        "n_ctx_orig": 128000,
+        "file_size_bytes": 4844678368,
+        "file_size_gb": 4.512,
+        "rel_path": "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-Q4_0.gguf"
     }
 }
