@@ -167,6 +167,25 @@ def _field_is_string(field):
 
 # --- Debug dump ---
 
+def _detect_mcp(reader, name, file_path):
+    """Returns True if the model supports tool calls / MCP."""
+    tmpl = get_str(reader, "tokenizer.chat_template")
+    if tmpl:
+        tl = tmpl.lower()
+        if "tool_call" in tl or "function_call" in tl or "<|tool|>" in tl:
+            return True
+    tags_field = reader.fields.get("general.tags")
+    if tags_field:
+        try:
+            for part in tags_field.parts:
+                tag = part.tobytes().decode("utf-8", errors="replace").strip("\x00").lower()
+                if "tool" in tag or "function-call" in tag or "mcp" in tag:
+                    return True
+        except Exception:
+            pass
+    return False
+
+
 def _detect_thinking(reader, name, file_path):
     """Returns True if the model supports extended thinking/reasoning."""
     # Primary signal: chat template contains <think> token
@@ -314,6 +333,7 @@ def get_model_params(file_path, file_size_bytes=None):
         "name": name,
         "size_label": get_str(reader, "general.size_label"),
         "parameter_count": get_safe_int(reader, "general.parameter_count"),
+        "mcp":      _detect_mcp(reader, name, file_path),
         "thinking": _detect_thinking(reader, name, file_path),
         "quant": quant,
         "n_layers": n_layers,

@@ -21,7 +21,7 @@
     const ADVISOR_VRAM = [4, 6, 8, 10, 12, 16, 24, 32, 48, 64, 80];
 
     const ADVISOR_CAPS = [
-        { id: "toolcalls",    icon: "🔧", title: "Tool Calls / MCP",  desc: "Werkzeugaufrufe für Agenten-Workflows",     re: /instruct|\binit\b|\bsft\b|-chat\b|-it\b|rlhf|-dpo\b|assistant/i },
+        { id: "toolcalls",    icon: "🔧", title: "Tool Calls / MCP",  desc: "Werkzeugaufrufe für Agenten-Workflows",     re: null, field: "mcp" },
         { id: "thinking",     icon: "🧠", title: "Thinking",          desc: "Extended Reasoning / Chain-of-Thought",     re: null, field: "thinking" },
         { id: "code",         icon: "💻", title: "Code",              desc: "Code generieren und analysieren",           re: /code|coder|starcoder|devstral|codestral/i },
         { id: "multilingual", icon: "🌍", title: "Mehrsprachig",      desc: "Optimiert für Nicht-Englische Texte",       re: /qwen|eurollm|aya|bloom|mistral.nemo|multilingual|deutsch|euro/i },
@@ -89,6 +89,7 @@
                 quant:    data.quant || null,
                 size_gb:  data.file_size_gb || 0,
                 n_ctx_orig: data.n_ctx_orig || null,
+                mcp:      !!data.mcp,
                 thinking: !!data.thinking,
                 moe,
                 isSSM,
@@ -147,12 +148,9 @@
 
         const adv = state.advisor;
 
-        const MCP_RE = /instruct|\binit\b|\bsft\b|-chat\b|-it\b|rlhf|-dpo\b|assistant/i;
-
         let rows = models.filter(m => {
-            const text = (m.name + " " + m.key).toLowerCase();
-            if (state.mcp      && !MCP_RE.test(text)) return false;
-            if (state.thinking && !m.thinking)         return false;
+            if (state.mcp      && !m.mcp)      return false;
+            if (state.thinking && !m.thinking) return false;
             if (state.quant && m.quant !== state.quant) return false;
             if (q && !m.name.toLowerCase().includes(q) && !m.arch.toLowerCase().includes(q)) return false;
             if (isHiddenByRed(m)) return false;
