@@ -172,7 +172,7 @@ def _detect_mcp(reader, name, file_path):
     tmpl = get_str(reader, "tokenizer.chat_template")
     if tmpl:
         tl = tmpl.lower()
-        if "tool_call" in tl or "function_call" in tl or "<|tool|>" in tl:
+        if "tool_call" in tl or "function_call" in tl or "<|tool|>" in tl or "[tool_calls]" in tl:
             return True
     tags_field = reader.fields.get("general.tags")
     if tags_field:
