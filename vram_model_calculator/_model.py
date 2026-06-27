@@ -5,6 +5,22 @@ from gguf import GGUFReader
 
 METADATA_DUMP_FILE = "model-metadata.txt"
 
+
+def _open_gguf_reader(file_path):
+    try:
+        return GGUFReader(file_path)
+    except (ValueError, Exception) as e:
+        if "reshape" not in str(e):
+            raise
+        # Tensor data loading failed (unsupported quant layout) — retry reading
+        # metadata-only by temporarily suppressing _build_tensors.
+        original = GGUFReader._build_tensors
+        GGUFReader._build_tensors = lambda self, *a, **kw: None
+        try:
+            return GGUFReader(file_path)
+        finally:
+            GGUFReader._build_tensors = original
+
 # Pure SSM architectures with no attention layers (n_kv_heads not applicable)
 SSM_ARCHS = {"mamba", "mamba2", "rwkv", "rwkv6", "rwkv7"}
 
@@ -197,7 +213,7 @@ def get_mmproj_params(reader, file_path, file_size_bytes):
 
 
 def get_model_params(file_path, file_size_bytes=None):
-    reader = GGUFReader(file_path)
+    reader = _open_gguf_reader(file_path)
     if file_size_bytes is None:
         file_size_bytes = os.path.getsize(file_path)
 
