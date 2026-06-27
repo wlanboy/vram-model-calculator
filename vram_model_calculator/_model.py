@@ -21,6 +21,11 @@ def _open_gguf_reader(file_path):
         finally:
             GGUFReader._build_tensors = original
 
+THINKING_NAME_RE = re.compile(
+    r'(think(?:ing)?|qwq|deepseek[-_]?r\d+|reason(?:ing)?|logic|reflect|chain|cog)',
+    re.IGNORECASE
+)
+
 # Pure SSM architectures with no attention layers (n_kv_heads not applicable)
 SSM_ARCHS = {"mamba", "mamba2", "rwkv", "rwkv6", "rwkv7"}
 
@@ -162,6 +167,27 @@ def _field_is_string(field):
 
 # --- Debug dump ---
 
+def _detect_thinking(reader, name, file_path):
+    """Returns True if the model supports extended thinking/reasoning."""
+    # Primary signal: chat template contains <think> token
+    tmpl = get_str(reader, "tokenizer.chat_template")
+    if tmpl and "<think>" in tmpl:
+        return True
+    # Secondary signal: general.tags contains "thinking" or "reasoning"
+    tags_field = reader.fields.get("general.tags")
+    if tags_field:
+        try:
+            for part in tags_field.parts:
+                tag = part.tobytes().decode("utf-8", errors="replace").strip("\x00").lower()
+                if "think" in tag or "reason" in tag:
+                    return True
+        except Exception:
+            pass
+    # Fallback: name/path heuristic
+    text = (name or "") + " " + os.path.basename(file_path)
+    return bool(THINKING_NAME_RE.search(text))
+
+
 def dump_all_fields(reader, file_path):
     """Appends all raw GGUF fields to METADATA_DUMP_FILE for debugging."""
     skip_keys = {"tokenizer.ggml.merges", "tokenizer.ggml.tokens", "tokenizer.ggml.token_type"}
@@ -288,6 +314,7 @@ def get_model_params(file_path, file_size_bytes=None):
         "name": name,
         "size_label": get_str(reader, "general.size_label"),
         "parameter_count": get_safe_int(reader, "general.parameter_count"),
+        "thinking": _detect_thinking(reader, name, file_path),
         "quant": quant,
         "n_layers": n_layers,
         "n_embd": n_embd,
