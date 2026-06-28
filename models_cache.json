@@ -1,5 +1,5 @@
 {
-    "_version": 14,
+    "_version": 15,
     "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -60,7 +60,7 @@
         "n_experts_used": null,
         "vocab_size": 262144,
         "n_ctx_orig": 131072,
-        "file_size_bytes": 3427877696,
+        "file_size_bytes": 3427873312,
         "file_size_gb": 3.192,
         "rel_path": "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q4_K_M.gguf"
     },
@@ -673,8 +673,8 @@
         "n_experts_used": null,
         "vocab_size": 131072,
         "n_ctx_orig": 393216,
-        "file_size_bytes": 14334437504,
-        "file_size_gb": 13.35,
+        "file_size_bytes": 4110417920,
+        "file_size_gb": 3.828,
         "rel_path": "Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf"
     },
     "Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf": {
@@ -1615,5 +1615,27 @@
         "file_size_bytes": 4844678368,
         "file_size_gb": 4.512,
         "rel_path": "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-Q4_0.gguf"
+    },
+    "Ornith-1.0-9B-GGUF/ornith-1.0-9b-Q4_K_M.gguf": {
+        "type": "llm",
+        "arch": "qwen35",
+        "name": "Ornith 1.0 9B",
+        "size_label": "9B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": true,
+        "quant": "Q4_K_M",
+        "n_layers": 32,
+        "n_embd": 4096,
+        "n_heads": 16,
+        "n_kv_heads": 4,
+        "n_ff": 12288,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 248320,
+        "n_ctx_orig": 262144,
+        "file_size_bytes": 5629108704,
+        "file_size_gb": 5.243,
+        "rel_path": "Ornith-1.0-9B-GGUF/ornith-1.0-9b-Q4_K_M.gguf"
     }
 }
