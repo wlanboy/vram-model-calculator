@@ -95,14 +95,38 @@ h1 {
 
 .controls {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 0.75rem;
     margin-bottom: 1.25rem;
     padding: 1rem 1.25rem;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 6px;
+}
+
+.controls-search-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+}
+
+.controls-search-row input[type="search"] {
+    width: 100%;
+    min-width: unset;
+}
+
+.controls-vram-row {
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+}
+
+.controls-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
 }
 
 .control-group {
@@ -294,6 +318,10 @@ tbody tr:hover { background: var(--surface); }
 .control-group-fill {
     flex: 1 1 auto;
     min-width: 0;
+}
+
+.vram-filter-red {
+    margin-top: 0.35rem;
 }
 
 .pill {
