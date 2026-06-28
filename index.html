@@ -31,6 +31,10 @@
     <select id="ctx-select"></select>
   </div>
   <div class="control-group">
+    <label for="sessions-select">Sessions</label>
+    <select id="sessions-select"></select>
+  </div>
+  <div class="control-group">
     <label>Features</label>
     <div class="check-row">
       <label class="check-label"><input type="checkbox" id="filter-mcp"> 🔧 MCP</label>
@@ -38,69 +42,13 @@
     </div>
   </div>
   <div class="control-group">
-    <label for="quant-select">Quantisierung</label>
-    <select id="quant-select"></select>
-  </div>
-  <div class="control-group">
     <label for="search">Suche</label>
     <input type="search" id="search" placeholder="Modellname...">
   </div>
-  <div class="control-group">
-    <label>Rote ausblenden</label>
-    <div class="check-row">
-      <label class="check-label"><input type="checkbox" data-hide-gb="4">  4 GB</label>
-      <label class="check-label"><input type="checkbox" data-hide-gb="6">  6 GB</label>
-      <label class="check-label"><input type="checkbox" data-hide-gb="12"> 12 GB</label>
-      <label class="check-label"><input type="checkbox" data-hide-gb="16"> 16 GB</label>
-      <label class="check-label"><input type="checkbox" data-hide-gb="24"> 24 GB</label>
-    </div>
-  </div>
-  <div class="control-group">
-    <label>&nbsp;</label>
-    <button id="advisor-btn" class="advisor-btn">⚡ Berater</button>
-  </div>
-</div>
-
-<div id="advisor-overlay" class="advisor-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-  <div class="advisor-card">
-    <div class="advisor-header">
-      <div>
-        <h2 id="advisor-title">Modell-Berater</h2>
-        <p>Einstellungen werden direkt auf die Tabelle angewendet.</p>
-      </div>
-      <button class="advisor-close" id="advisor-close" aria-label="Schließen">✕</button>
-    </div>
-    <div class="advisor-body">
-      <div>
-        <div class="adv-label">VRAM</div>
-        <div class="pill-grid" id="adv-vram"></div>
-      </div>
-      <div>
-        <div class="adv-label">Kontext</div>
-        <div class="pill-grid" id="adv-ctx"></div>
-      </div>
-      <div>
-        <div class="adv-label">Einsatzzweck</div>
-        <div class="cap-grid" id="adv-cap"></div>
-      </div>
-      <div class="adv-row">
-        <div>
-          <div class="adv-label">Architektur</div>
-          <div class="toggle-group" id="adv-arch"></div>
-        </div>
-        <div>
-          <div class="adv-label">Quantisierung</div>
-          <div class="toggle-group" id="adv-qual"></div>
-        </div>
-      </div>
-    </div>
-    <div class="advisor-footer">
-      <button id="advisor-reset" class="btn-ghost">Zurücksetzen</button>
-      <div class="footer-actions">
-        <button id="advisor-cancel" class="btn-ghost">Abbrechen</button>
-        <button id="advisor-apply" class="btn-primary">Anwenden</button>
-      </div>
-    </div>
+  <div class="control-group control-group-fill">
+    <label>Sichtbare VRAM-Spalten</label>
+    <div id="hide-vram-pills" class="pill-grid"></div>
+    <label class="check-label vram-filter-red"><input type="checkbox" id="filter-red"> Nicht passende ausblenden</label>
   </div>
 </div>
 
@@ -114,7 +62,16 @@
   <th class="sortable" data-col="kv">KV-Cache</th>
   <th class="sortable" data-col="ctx">Max Ctx</th>
   <th class="sortable" data-col="total">VRAM Total</th>
-  <th class="fit-cell">6 GB</th><th class="fit-cell">12 GB</th><th class="fit-cell">16 GB</th><th class="fit-cell">24 GB</th>
+  <th class="fit-cell" data-vram="4">4 GB</th>
+  <th class="fit-cell" data-vram="6">6 GB</th>
+  <th class="fit-cell" data-vram="8">8 GB</th>
+  <th class="fit-cell" data-vram="12">12 GB</th>
+  <th class="fit-cell" data-vram="16">16 GB</th>
+  <th class="fit-cell" data-vram="24">24 GB</th>
+  <th class="fit-cell" data-vram="32">32 GB</th>
+  <th class="fit-cell" data-vram="48">48 GB</th>
+  <th class="fit-cell" data-vram="64">64 GB</th>
+  <th class="fit-cell" data-vram="80">80 GB</th>
 </tr></thead>
 <tbody id="model-tbody"></tbody>
 </table>
