@@ -26,29 +26,39 @@
 </div>
 
 <div class="controls">
-  <div class="control-group">
-    <label for="ctx-select">Kontext</label>
-    <select id="ctx-select"></select>
-  </div>
-  <div class="control-group">
-    <label for="sessions-select">Sessions</label>
-    <select id="sessions-select"></select>
-  </div>
-  <div class="control-group">
-    <label>Features</label>
-    <div class="check-row">
-      <label class="check-label"><input type="checkbox" id="filter-mcp"> 🔧 MCP</label>
-      <label class="check-label"><input type="checkbox" id="filter-thinking"> 🧠 Thinking</label>
+  <div class="controls-search-row">
+    <div class="control-group" style="flex:1">
+      <label for="search">Suche</label>
+      <input type="search" id="search" placeholder="Modellname...">
+    </div>
+    <div class="control-group">
+      <label>&nbsp;</label>
+      <label class="check-label vram-filter-red">
+      <input type="checkbox" id="filter-red"> filter red</label>
     </div>
   </div>
-  <div class="control-group">
-    <label for="search">Suche</label>
-    <input type="search" id="search" placeholder="Modellname...">
+  <div class="controls-main">
+    <div class="control-group">
+      <label for="ctx-select">Kontext</label>
+      <select id="ctx-select"></select>
+    </div>
+    <div class="control-group">
+      <label for="sessions-select">Sessions</label>
+      <select id="sessions-select"></select>
+    </div>
+    <div class="control-group">
+      <label>Features</label>
+      <div class="check-row">
+        <label class="check-label"><input type="checkbox" id="filter-mcp"> 🔧 MCP</label>
+        <label class="check-label"><input type="checkbox" id="filter-thinking"> 🧠 Thinking</label>
+      </div>
+    </div>
   </div>
-  <div class="control-group control-group-fill">
-    <label>Sichtbare VRAM-Spalten</label>
-    <div id="hide-vram-pills" class="pill-grid"></div>
-    <label class="check-label vram-filter-red"><input type="checkbox" id="filter-red"> Nicht passende ausblenden</label>
+  <div class="controls-vram-row">
+    <div class="control-group control-group-fill">
+      <label>Sichtbare VRAM-Spalten</label>
+      <div id="hide-vram-pills" class="pill-grid"></div>
+    </div>
   </div>
 </div>
 
