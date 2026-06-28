@@ -4,7 +4,7 @@ import json
 import sys
 from tqdm import tqdm
 
-from ._model import get_model_params, METADATA_DUMP_FILE
+from ._model import get_model_params, METADATA_DUMP_FILE, clean_name
 
 CACHE_FILE = "models_cache.json"
 SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
@@ -45,6 +45,22 @@ def _migrate_cache(cache):
     return migrated
 
 
+def _refresh_names(cache):
+    """Re-apply clean_name to all cached entries so improved rules take effect without a rescan."""
+    refreshed = 0
+    for key, entry in cache.items():
+        if not isinstance(entry, dict) or 'name' not in entry:
+            continue
+        old = entry['name']
+        new = clean_name(old)
+        if new and new != old:
+            cache[key] = {**entry, 'name': new}
+            refreshed += 1
+    if refreshed:
+        print(f"✨ {refreshed} Modellnamen aktualisiert.")
+    return cache
+
+
 def needs_scan(rel_key, abs_path, cache):
     if rel_key not in cache:
         return True
@@ -69,7 +85,7 @@ def update_cache(base_dirs):
                 loaded = json.load(f)
             file_version = loaded.get("_version", 0)
             raw = {k: v for k, v in loaded.items() if k != "_version"}
-            cache = _migrate_cache(raw)
+            cache = _refresh_names(_migrate_cache(raw))
         except Exception as e:
             print(f"⚠️ Cache-Datei korrupt, erstelle neu. ({e})")
 
