@@ -1,5 +1,5 @@
 {
-    "_version": 16,
+    "_version": 17,
     "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -1709,5 +1709,49 @@
         "file_size_bytes": 98670464,
         "file_size_gb": 0.092,
         "rel_path": "gemma-4-E4B-it-qat-GGUF/gemma-4-E4B-it-Q8_0-MTP.gguf"
+    },
+    "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-UD-Q4_K_XL.gguf": {
+        "type": "llm",
+        "arch": "phi3",
+        "name": "Phi-4-Mini-Reasoning",
+        "size_label": "mini",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": true,
+        "quant": "Q4_K_M",
+        "n_layers": 32,
+        "n_embd": 3072,
+        "n_heads": 24,
+        "n_kv_heads": 8,
+        "n_ff": 8192,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 200064,
+        "n_ctx_orig": 131072,
+        "file_size_bytes": 2462678944,
+        "file_size_gb": 2.294,
+        "rel_path": "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-UD-Q4_K_XL.gguf"
+    },
+    "Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf": {
+        "type": "llm",
+        "arch": "phi3",
+        "name": "Phi 4 Mini Instruct",
+        "size_label": "mini",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": false,
+        "quant": "Q4_K_M",
+        "n_layers": 32,
+        "n_embd": 3072,
+        "n_heads": 24,
+        "n_kv_heads": 8,
+        "n_ff": 8192,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 200064,
+        "n_ctx_orig": 131072,
+        "file_size_bytes": 2491874272,
+        "file_size_gb": 2.321,
+        "rel_path": "Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf"
     }
 }
