@@ -60,12 +60,16 @@ _HEX_RE = re.compile(r'^[0-9a-fA-F]+$')
 def clean_name(name):
     if not name:
         return name
+    # Strip HuggingFace org/user prefix: "allenai_olmOCR", "Ibm Granite_Granite 4.0", "Zai org_GLM"
     if '_' in name:
         prefix, rest = name.split('_', 1)
-        if rest and rest[0].isupper() and ' ' not in prefix:
+        prefix_letters = prefix.replace(' ', '')
+        if rest and prefix_letters.isalpha() and 2 <= len(prefix_letters) <= 25:
             name = rest
-    name = re.sub(r'[-_]GGUF$', '', name, flags=re.IGNORECASE)
-    name = re.sub(r'\s+(BF16|F16|F32|Q\d+[_K0-9A-Z]*)$', '', name)
+    # Strip format suffixes (space, dash, or underscore as separator)
+    name = re.sub(r'(\s+|[-_])(GGUF|AWQ|GPTQ|EXL2|MLX)$', '', name, flags=re.IGNORECASE)
+    # Strip trailing quant/precision labels
+    name = re.sub(r'\s+(BF16|F16|F32|IQ\d+[_A-Z0-9]*|Q\d+[_K0-9A-Z]*)$', '', name, flags=re.IGNORECASE)
     return name.strip()
 
 
