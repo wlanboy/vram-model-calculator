@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLM – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>GLM</h1>
+  <p class="subtitle">Zhipu AI / Z.ai · Dense &amp; MoE · Juni 2025 – Juni 2026 · 151k–155k Vokabular · Lizenz: MIT (ab GLM-4.5)</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">glm4_moe</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Multimodal (V-Varianten)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking / Agentic</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling / MCP</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">GQA-Attention</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">MIT-Lizenz</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter — Flaggschiffe (Server-/Multi-GPU-Hardware)</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="spec-card-title">GLM-4.5-Air</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">12 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">106 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">46</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">4.096</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">GQA (96 Heads / 8 KV)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">151.552</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Juli 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">zai-org/GLM-4.5-Air</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/160</span>
+      <span class="spec-card-title">GLM-4.5</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">355 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 160 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">92</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">5.120</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">GQA (96 Heads / 8 KV)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">151.552</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Juli 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">zai-org/GLM-4.5</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/160</span>
+      <span class="spec-card-title">GLM-4.6</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">357 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 160 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">92</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">200k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">~30 % weniger Tokenverbrauch als 4.5</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Sept./Okt. 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">zai-org/GLM-4.6</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/160</span>
+      <span class="spec-card-title">GLM-4.7</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">~32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~358 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 160 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">92</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">200k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Interleaved/Preserved/Turn-Thinking · SWE-bench 73,8 %</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Jan. 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">zai-org/GLM-4.7</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/256</span>
+      <span class="spec-card-title">GLM-5.2</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">~40 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">744 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">78 (3 dense + 75 sparse)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">DSA + IndexShare (Sparse)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1.048.576 Token (1 M)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">2 Thinking-Effort-Stufen (High/Max)</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">13. Juni 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">zai-org/GLM-5.2</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter — Kompakte &amp; Vision-Modelle (Consumer-tauglich)</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">GLM-4.1V-9B-Thinking</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">9 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">4.096</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">GQA (32 Heads / 2 KV)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">64k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">151.552</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">GLM-4-9B-0414</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Juni 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">GLM-4.6V-Flash</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~9,4 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">4.096</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">GQA (32 Heads / 2 KV)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">151.552</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Function Calling</span><span class="spec-value">Ja (MCP)</span></div>
+    <div class="spec-row"><span class="spec-label">Hinweis</span><span class="spec-value">Werte aus lokalen GGUF-Metadaten</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 4/64</span>
+      <span class="spec-card-title">GLM-4.7-Flash</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">~3 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">30 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">4 aktiv / 64 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">47</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">2.048</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">200k Token <span class="col-muted">(Doku teils 128k)</span></span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">154.880</span></div>
+    <div class="spec-row"><span class="spec-label">Function Calling</span><span class="spec-value">Ja (MCP)</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">19. Jan. 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität — Flaggschiffe (Q4)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. Intel Arc Pro B60</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">GLM-4.5-Air <span class="col-muted">(106 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td class="col-mono">~60 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~10× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~5× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~3,8× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~2,5× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM bei Weitem; nur mit 64 GB+ Unified RAM oder Multi-GPU nutzbar</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">GLM-4.5 <span class="col-muted">(355 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/160</span></td>
+    <td class="col-mono">~210 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~35× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~17,5× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~13× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~8,8× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Server-Hardware oder API praktikabel</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">GLM-4.6 <span class="col-muted">(357 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/160</span></td>
+    <td class="col-mono">~215 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~36× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~18× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~13,4× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~9× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Server-Hardware oder API praktikabel</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">GLM-4.7 <span class="col-muted">(358 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/160</span></td>
+    <td class="col-mono">~215 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~36× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~18× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~13,4× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~9× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Server-Hardware, Ollama Cloud oder API</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">GLM-5.2 <span class="col-muted">(744 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
+    <td class="col-mono">~445 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~74× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~37× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~28× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~18,5× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Multi-GPU-Cluster, Ollama Cloud oder API praktikabel</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität — Kompakte &amp; Vision-Modelle (Q4)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. Intel Arc Pro B60</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">GLM-4.1V-9B-Thinking <span class="col-muted">(9 B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~5–6 GB</td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Text passt knapp; Vision-Encoder braucht zusätzlichen Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Text + Bild gut nutzbar, ausreichend Kontext-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Puffer für lange Thinking-Ketten</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Massig Platz für parallele Anfragen</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~10–14 Tok/Sek · Passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">GLM-4.6V-Flash <span class="col-muted">(9,4 B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~5,7 GB</td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Text passt; mit Vision-Encoder (+1,7 GB) kaum Puffer übrig</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Text + Bild + brauchbarer Kontext-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Riesiger Kontext-Puffer frei</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Mehrere Instanzen parallel möglich</span></td>
+    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~9–12 Tok/Sek · Vision-Encoder belegt zusätzlichen RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">GLM-4.7-Flash <span class="col-muted">(30 B, ~3 B aktiv)</span></td>
+    <td><span class="badge badge-moe">MoE 4/64</span></td>
+    <td class="col-mono">~16,9 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Hohe Qualität bei niedrigen aktiven Parametern, viel Kontext-Puffer</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Q4_K_M knapp über 16 GB RAM; kleinere Quants (Q3/Q2) laufen dank nur ~3 B aktiver Parameter dennoch flott</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Modalitäten &amp; Fähigkeiten</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Bild</th>
+  <th class="cap-cell">Thinking</th>
+  <th class="cap-cell">Function Calling</th>
+  <th class="cap-cell">Code</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Sprachen</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">GLM-4.1V-9B-Thinking</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">64k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-4.5-Air</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-4.5</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-4.6</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">200k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-4.6V-Flash</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-4.7</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">200k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-4.7-Flash</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">200k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+  <tr>
+    <td class="col-name">GLM-5.2</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">1M</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Quantisierungen</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Format</th>
+  <th>Variante</th>
+  <th style="white-space:nowrap">Gewichte</th>
+  <th>Hinweis</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">4.1V-9B-Thinking</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q3_K_S</td>
+    <td class="col-mono">4,3 GB</td>
+    <td class="col-muted">Kleinstes lokal getestetes GGUF</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.1V-9B-Thinking</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~5,5 GB</td>
+    <td class="col-muted">Empfehlung für 12-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.1V-9B-Thinking</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~18 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.6V-Flash</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">5,7 GB</td>
+    <td class="col-muted">Empfehlung für 12-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.6V-Flash</td>
+    <td>mmproj (Vision)</td>
+    <td class="col-mono">F16</td>
+    <td class="col-mono">1,7 GB</td>
+    <td class="col-muted">Zusätzlich zum Sprachmodell nötig</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.6V-Flash</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~18,8 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.7-Flash</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">16,9 GB</td>
+    <td class="col-muted">Empfohlen für 24-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.7-Flash</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~32 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">4.7-Flash</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~60 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.5-Air</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~60 GB</td>
+    <td class="col-muted">Kleinstes praktikables Flaggschiff-GGUF</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.5-Air</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~212 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.5 / 4.6 / 4.7</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~210–215 GB</td>
+    <td class="col-muted">Nur Multi-GPU-Server</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.5 / 4.6 / 4.7</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~710–716 GB</td>
+    <td class="col-muted">Referenz-Precision</td>
+  </tr>
+  <tr>
+    <td class="col-name">5.2</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~445 GB</td>
+    <td class="col-muted">Multi-GPU-Cluster</td>
+  </tr>
+  <tr>
+    <td class="col-name">5.2</td>
+    <td>FP8</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~745 GB</td>
+    <td class="col-muted">Empfohlene Referenz-Precision</td>
+  </tr>
+  <tr>
+    <td class="col-name">5.2</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~1.490 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Deployment</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Ollama</span>
+      <span class="spec-card-title">Lokal &amp; Cloud</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">4.7-Flash (lokal)</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run glm-4.7-flash</span></div>
+    <div class="spec-row"><span class="spec-label">4.7 / 5.2 (zu groß lokal)</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run glm-4.7:cloud</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">LM Studio</span>
+      <span class="spec-card-title">GUI-Support</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Kompakte Modelle</span><span class="spec-value">GGUF direkt aus HuggingFace wählbar</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">llama.cpp</span>
+      <span class="spec-card-title">MoE-Experten-Offload</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Experten auf CPU</span><span class="spec-value col-mono" style="font-size:0.75rem">-ot ".ffn_.*_exps.=CPU"</span></div>
+    <div class="spec-row"><span class="spec-label">Effekt</span><span class="spec-value">Attention/Shared-Layer im VRAM, Routed Experts im RAM</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Flaggschiffe (Multi-GPU)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve zai-org/GLM-4.6</span></div>
+    <div class="spec-row"><span class="spec-label">Tensor Parallel</span><span class="spec-value col-mono" style="font-size:0.8rem">--tensor-parallel-size 8</span></div>
+    <div class="spec-row"><span class="spec-label">Kontext</span><span class="spec-value col-mono" style="font-size:0.8rem">--max-model-len 202752</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">SGLang</span>
+      <span class="spec-card-title">Von Z.ai empfohlen</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.75rem;word-break:break-all">python -m sglang.launch_server --model-path zai-org/GLM-4.6 --tp 8 --port 30000</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">Kompakt (24-GB-GPU)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve zai-org/GLM-4.7-Flash</span></div>
+    <div class="spec-row"><span class="spec-label">Kontext</span><span class="spec-value col-mono" style="font-size:0.8rem">--max-model-len 131072</span></div>
+  </div>
+
+</div>
+
+<div class="note-box">
+  <strong>Hinweise:</strong><br>
+  · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem Kontextfenster steigt der Bedarf deutlich, besonders bei GLM-5.2 (1 M Kontext).<br>
+  · Die Flaggschiffe (4.5/4.5-Air/4.6/4.7) nutzen GQA (96 Attention-Heads / 8 KV-Heads) — <strong>keine</strong> Multi-head Latent Attention (MLA), obwohl die MoE-Routing-Strategie (Sigmoid-Gates, "noaux_tc") an DeepSeek-V3 erinnert. Manche GGUF-Tools ordnen kleinere GLM-MoE-Varianten intern trotzdem der "deepseek2"-Architektur zu (strukturelle Ähnlichkeit im Format), die tatsächliche HuggingFace-Architektur heißt <code>glm4_moe</code> bzw. <code>glm4_moe_lite</code>.<br>
+  · GLM-5.2 führt <strong>DSA (Dynamic Sparse Attention)</strong> mit "IndexShare" ein: Der Indexer wird alle 4 sparsen Layer wiederverwendet und senkt die FLOPs pro Token bei 1-M-Kontext um Faktor 2,9 — die ersten 3 Layer bleiben dense.<br>
+  · GLM-4.7-Flash: Kontextangaben schwanken zwischen Quellen (Modell-Konfiguration: 202.752 Token / manche Dokus nennen 128k) — hier wird der Konfigurationswert verwendet.<br>
+  · GLM-4.6V-Flash und GLM-4.7-Flash sind sehr aktuelle Releases (Stand: Anfang 2026); ihre Spezifikationen stammen primär aus lokal geladenen GGUF-Metadaten statt aus vollständig dokumentierten offiziellen Modellkarten und können von späteren offiziellen Angaben abweichen.<br>
+  · GLM-4.7-Flash: MoE mit nur ~3 B aktiven von 30 B Gesamtparametern — Rechenlast bleibt niedrig, auch wenn das komplette Modell im Speicher liegen muss.<br>
+  · Zhipu AI firmiert international mittlerweile als "Z.ai".<br>
+  · Alle Modelle ab GLM-4.5 stehen unter MIT-Lizenz — keine proprietären Nutzungsbeschränkungen.<br>
+  · Wegen der enormen Gesamtparameterzahl der Flaggschiffe (bis 744 B) ist lokale Consumer-Hardware nur für die "Flash"/"Air"-Varianten bzw. die kompakten Vision-Modelle praktikabel; für die großen Modelle sind Multi-GPU-Server, Ollama Cloud oder die offizielle API die realistischen Optionen.
+</div>
+
+</div>
+</body>
+</html>
