@@ -2,7 +2,7 @@
 #    uv pip compile pyproject.toml -o requirements.txt
 certifi==2026.6.17
     # via requests
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via requests
 gguf==0.19.0
     # via vram-model-calculator (pyproject.toml)
@@ -14,7 +14,7 @@ pyyaml==6.0.3
     # via gguf
 requests==2.34.2
     # via gguf
-tqdm==4.68.3
+tqdm==4.68.4
     # via
     #   vram-model-calculator (pyproject.toml)
     #   gguf
