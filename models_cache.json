@@ -1,5 +1,5 @@
 {
-    "_version": 18,
+    "_version": 19,
     "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -1811,5 +1811,27 @@
         "file_size_bytes": 1432090624,
         "file_size_gb": 1.334,
         "rel_path": "deepseek-coder-1.3B-kexer-GGUF/deepseek-coder-1.3B-kexer-Q8_0.gguf"
+    },
+    "MiniCPM5-1B-GGUF/MiniCPM5-1B-Q8_0.gguf": {
+        "type": "llm",
+        "arch": "llama",
+        "name": "MiniCPM5 1B",
+        "size_label": "1B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": true,
+        "quant": "Q8_0",
+        "n_layers": 24,
+        "n_embd": 1536,
+        "n_heads": 16,
+        "n_kv_heads": 2,
+        "n_ff": 4608,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 130560,
+        "n_ctx_orig": 131072,
+        "file_size_bytes": 1153529216,
+        "file_size_gb": 1.074,
+        "rel_path": "MiniCPM5-1B-GGUF/MiniCPM5-1B-Q8_0.gguf"
     }
 }
