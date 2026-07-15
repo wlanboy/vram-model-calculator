@@ -10,9 +10,11 @@ def _open_gguf_reader(file_path):
     try:
         return GGUFReader(file_path)
     except (ValueError, Exception) as e:
-        if "reshape" not in str(e):
+        msg = str(e)
+        if "reshape" not in msg and "GGMLQuantizationType" not in msg:
             raise
-        # Tensor data loading failed (unsupported quant layout) — retry reading
+        # Tensor data loading failed (unsupported quant layout, e.g. a tensor
+        # dtype ID the installed gguf lib doesn't know yet) — retry reading
         # metadata-only by temporarily suppressing _build_tensors.
         original = GGUFReader._build_tensors
         GGUFReader._build_tensors = lambda self, *a, **kw: None
@@ -277,7 +279,7 @@ def get_model_params(file_path, file_size_bytes=None):
             "file_size_gb": round(file_size_bytes / (1024**3), 3),
         }
 
-    if os.path.basename(file_path).startswith("mmproj-") or general_type == "projector":
+    if "mmproj" in os.path.basename(file_path).lower() or general_type == "projector":
         return get_mmproj_params(reader, file_path, file_size_bytes)
 
     arch = get_str(reader, "general.architecture")
