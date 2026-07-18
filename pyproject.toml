@@ -7,7 +7,7 @@ name = "vram-model-calculator"
 version = "0.1.0"
 description = "GGUF model scanner and VRAM calculator for local LLMs"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 license = {text = "MIT"}
 classifiers = ["Private :: Do Not Upload"]
 dependencies = [

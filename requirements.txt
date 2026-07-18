@@ -14,7 +14,7 @@ pyyaml==6.0.3
     # via gguf
 requests==2.34.2
     # via gguf
-tqdm==4.68.4
+tqdm==4.69.0
     # via
     #   vram-model-calculator (pyproject.toml)
     #   gguf
