@@ -1,5 +1,5 @@
 {
-    "_version": 24,
+    "_version": 25,
     "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -2213,5 +2213,27 @@
         "file_size_bytes": 2414272288,
         "file_size_gb": 2.248,
         "rel_path": "Bonsai-8B-llama.cpp/Bonsai-8B-TQ2_0.gguf"
+    },
+    "granite-3.1-8b-instruct-GGUF/granite-3.1-8b-instruct-Q3_K_L.gguf": {
+        "type": "llm",
+        "arch": "granite",
+        "name": "Granite 3.1 8b Instruct",
+        "size_label": "8B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": false,
+        "quant": "Q3_K_L",
+        "n_layers": 40,
+        "n_embd": 4096,
+        "n_heads": 32,
+        "n_kv_heads": 8,
+        "n_ff": 12800,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 49155,
+        "n_ctx_orig": 131072,
+        "file_size_bytes": 4349429952,
+        "file_size_gb": 4.051,
+        "rel_path": "granite-3.1-8b-instruct-GGUF/granite-3.1-8b-instruct-Q3_K_L.gguf"
     }
 }
