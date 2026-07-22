@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bonsai (PrismML) – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>Bonsai</h1>
+  <p class="subtitle">PrismML · Apache 2.0 · 1-Bit &amp; Ternär-Quantisierung · Dense (Qwen3-Basis) · Edge/On-Device-Fokus</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">qwen3</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">1-bit (Q1_0)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Ternär (Q2_0)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
+    <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision (27B)</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">YaRN 4×</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Bonsai 1.7B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">1.7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">28</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">8.192 → 32.768 (YaRN 4×)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard (GQA, 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Bonsai 4B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~4 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">36</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">8.192 → 32.768 (YaRN 4×)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard (GQA, 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Bonsai 8B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">8.2 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">36</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">16.384 → 65.536 (YaRN 4×)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard (GQA, 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">Bonsai 27B</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">27 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense (Basis: Qwen 3.6 27B)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262.144 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard (kein YaRN nötig)</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Tower</span><span class="spec-value">~0,9 GiB · 4-bit</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild → Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (native 1-bit- / Ternär-Gewichte, Basiskontext)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">Größe 1-bit / Ternär</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. RTX 3090 / 4090</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">Bonsai 1.7B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~0,25 / ~0,43 GB</td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Verschwindend kleiner Fußabdruck; massig Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Praktisch kostenlos in VRAM</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Dutzende parallele Instanzen möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kein sinnvoller Engpass mehr</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Zielplattform: Wearables/Smart Glasses – auch ohne GPU flott</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Bonsai 4B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~0,57 / ~1,0 GB</td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Passt mehrfach parallel in 6 GB</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kaum messbarer VRAM-Verbrauch</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Viel Reserve für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kein sinnvoller Engpass mehr</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Für Edge-Geräte mit wenig RAM ausgelegt</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Bonsai 8B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~1,1 / ~2,0–2,3 GB</td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Auch Ternär-Variante passt locker</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Reserve für 65k Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Volle YaRN-Kontextlänge nutzbar</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Platz für Parallel-Sessions</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Bis zu ~368 Tok/Sek lt. PrismML (Referenzsystem)</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Bonsai 27B</td>
+    <td><span class="badge badge-arch">Dense</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
+    <td class="col-mono">~4,4 / ~8,0 GB<br><span style="opacity:0.7;font-size:0.68rem">(inkl. ~0,9 GiB Vision-Tower)</span></td>
+    <td class="fit-detail fit-tight"><strong>Nur 1-bit knapp</strong><span>1-bit passt (~4,4 GB); Ternär (~8 GB) läuft über</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Beide Varianten passen; Reserve für KV-Cache</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Platz für Bild-Input + langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Vergleichsweise winzig für ein 27B-Modell</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Selbst Ternär passt komplett in 16 GB RAM</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">KV-Cache-Wachstum (fp16-Cache, aus GGUF-Metadaten berechnet)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="col-mono" style="text-align:center">Basis (nativ)</th>
+  <th class="col-mono" style="text-align:center">KV @ nativ</th>
+  <th class="col-mono" style="text-align:center">Max (YaRN 4×)</th>
+  <th class="col-mono" style="text-align:center">KV @ Max</th>
+  <th>Hinweis</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Bonsai 1.7B</td>
+    <td class="col-mono" style="text-align:center">8k</td>
+    <td class="col-mono" style="text-align:center">~0,9 GB</td>
+    <td class="col-mono" style="text-align:center">32k</td>
+    <td class="col-mono" style="text-align:center">~3,5 GB</td>
+    <td style="font-size:0.78rem;color:var(--text-muted)">Standard-Attention – KV-Cache wächst linear und übersteigt bei 32k das Modellgewicht deutlich</td>
+  </tr>
+  <tr>
+    <td class="col-name">Bonsai 4B</td>
+    <td class="col-mono" style="text-align:center">8k</td>
+    <td class="col-mono" style="text-align:center">~0,7 GB</td>
+    <td class="col-mono" style="text-align:center">32k</td>
+    <td class="col-mono" style="text-align:center">~2,9 GB</td>
+    <td style="font-size:0.78rem;color:var(--text-muted)">Kleinerer Head-Dim (80) bremst das Wachstum leicht gegenüber 1.7B/8B</td>
+  </tr>
+  <tr>
+    <td class="col-name">Bonsai 8B</td>
+    <td class="col-mono" style="text-align:center">16k</td>
+    <td class="col-mono" style="text-align:center">~2,3 GB</td>
+    <td class="col-mono" style="text-align:center">65k</td>
+    <td class="col-mono" style="text-align:center">~9,0 GB</td>
+    <td style="font-size:0.78rem;color:var(--yellow)">Bei voller YaRN-Kontextlänge übersteigt der KV-Cache das (1-bit-)Gewicht um ein Vielfaches</td>
+  </tr>
+  <tr>
+    <td class="col-name">Bonsai 27B</td>
+    <td class="col-mono" style="text-align:center">262k</td>
+    <td class="col-mono" style="text-align:center">k. A.*</td>
+    <td class="col-mono" style="text-align:center">—</td>
+    <td class="col-mono" style="text-align:center">—</td>
+    <td style="font-size:0.78rem;color:var(--text-muted)">*Kein YaRN nötig, aber keine eigenen GGUF-Header-Metadaten im Modell-Cache vorhanden – analog Qwen 3.6 27B ist bei 262k Token mit mehreren zusätzlichen GB KV-Cache zu rechnen</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Fähigkeiten &amp; Features</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Bild</th>
+  <th class="cap-cell">Thinking</th>
+  <th class="cap-cell">Function Calling</th>
+  <th style="white-space:nowrap">Formate</th>
+  <th style="white-space:nowrap">Kontext (nativ → YaRN)</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Bonsai 1.7B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">GGUF · MLX</td>
+    <td class="col-mono">8k → 32k</td>
+  </tr>
+  <tr>
+    <td class="col-name">Bonsai 4B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">GGUF · MLX</td>
+    <td class="col-mono">8k → 32k</td>
+  </tr>
+  <tr>
+    <td class="col-name">Bonsai 8B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">GGUF · MLX</td>
+    <td class="col-mono">16k → 65k</td>
+  </tr>
+  <tr>
+    <td class="col-name">Bonsai 27B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">GGUF · MLX</td>
+    <td class="col-mono">262k (fix)</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-box">
+  <strong>PrismML &amp; Bonsai:</strong> Bonsai ist eine Familie extrem quantisierter Modelle von PrismML auf Basis der Qwen3-Architektur (GGUF-Kennung <code>qwen3</code>; das 27B-Flaggschiff basiert laut Doku konkret auf <strong>Qwen 3.6 27B</strong> und erbt dessen Bild-Input-Fähigkeit). Zielgruppe sind Edge- und On-Device-Szenarien (Laptops, Smartphones, Wearables, Smart Glasses) mit vollständig lokaler Inferenz ohne Datenübertragung.<br><br>
+  <strong>1-bit vs. Ternär:</strong> <em>1-bit (Q1_0)</em> begrenzt alle Gewichte (Embeddings, Attention, MLPs, LM-Head) auf {−1, +1} – maximale Kompression, kleinster Fußabdruck (z. B. 27B nur ~3,5 GiB statt ~54 GB in Full-Precision). <em>Ternär (Q2_0)</em> erlaubt zusätzlich 0 als Gewichtswert und ist dadurch ca. 50&nbsp;% größer, liefert laut PrismML aber messbar höhere Ausgabequalität. Der Vision-Tower von Bonsai 27B läuft unabhängig davon immer mit 4-bit-Präzision.<br><br>
+  <strong>Wichtig – Runtime-Unterstützung prüfen:</strong> <code>Q1_0</code> ist offiziell in llama.cpp gemerged (native Kernel für CPU, Metal, CUDA, Vulkan; MLX-Support steht noch aus). <code>Q2_0</code> (Ternär) benötigt im GGUF-Format aktuell den PrismML-eigenen llama.cpp-Fork, ist aber in Stock-MLX auf Apple Silicon nativ unterstützt. Läuft eine Datei auf einer Runtime ohne passenden Kernel, wird sie entweder abgelehnt oder still auf höhere Präzision entpackt – die VRAM-Ersparnis geht dann verloren, ohne dass eine Fehlermeldung erscheint.<br><br>
+  <strong>KV-Cache bleibt teuer:</strong> Trotz winziger Modellgewichte nutzt Bonsai reine Standard-Attention (kein Hybrid/Linear-Attention wie GatedDeltaNet bei Qwen 3.6). Bei voller YaRN-Kontextlänge übersteigt der fp16-KV-Cache besonders bei 8B/27B das eigentliche Gewicht um ein Vielfaches – die Formate glänzen primär bei kurzem bis mittlerem Kontext.<br><br>
+  <strong>Quellen:</strong> Werte für 1.7B/4B/8B stammen aus lokal gecachten GGUF-Headern (models_cache.json); Werte für 27B sowie alle Formatangaben stammen aus der PrismML-Dokumentation (docs.prismml.com), da noch keine vollständigen 27B-LLM-Metadaten im lokalen Cache vorliegen.
+</div>
+
+</div>
+</body>
+</html>
