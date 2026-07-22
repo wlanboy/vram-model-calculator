@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OLMo 3 &amp; Tülu 3 – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>OLMo 3 &amp; Tülu 3</h1>
+  <p class="subtitle">Allen Institute for AI (Ai2) · Apache 2.0 · 65k Kontextfenster · Vollständig offen (Gewichte, Daten, Code, Checkpoints)</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">olmo3</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Sliding-Window Attention</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode (RLVR)</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Tool Calling</span>
+    <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Tülu 3 (Post-Training)</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">OLMo 3 7B Base</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense Decoder-Transformer</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">32</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size</span><span class="spec-value">4096</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">32 Query- / 32 KV-Heads (volle MHA, kein GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">65.536 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Training</span><span class="spec-value">5,5 Bio. Token (Dolma 3)</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">OLMo 3 7B Instruct</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">OLMo 3 7B Base + Tülu-Post-Training</span></div>
+    <div class="spec-row"><span class="spec-label">Post-Training</span><span class="spec-value">SFT · DPO · RLVR</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">65.536 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Chat, Tool-/Function-Calling</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">OLMo 3 7B Think</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Pipeline</span><span class="spec-value">Think-SFT → Think-DPO → RLVR</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">65.536 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Chain-of-Thought, Mathematik, Code</span></div>
+    <div class="spec-row"><span class="spec-label">Benchmark</span><span class="spec-value">≈ Qwen 3 8B auf MATH</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">OLMo 3 32B Base</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense Decoder-Transformer</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">64</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size</span><span class="spec-value">5120</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">40 Query- / 8 KV-Heads (GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">65.536 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Training</span><span class="spec-value">5,5 Bio. Token (Dolma 3)</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">OLMo 3 32B Instruct</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">OLMo 3 32B Base + Tülu-Post-Training</span></div>
+    <div class="spec-row"><span class="spec-label">Post-Training</span><span class="spec-value">SFT · DPO · RLVR</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">65.536 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Chat, Tool-/Function-Calling</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">OLMo 3 32B Think</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Pipeline</span><span class="spec-value">Think-SFT → Think-DPO → RLVR</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">65.536 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Stärkstes vollständig offenes Reasoning-Modell</span></div>
+    <div class="spec-row"><span class="spec-label">Benchmark</span><span class="spec-value">Nähert sich Qwen 3 32B bei ~6× weniger Trainingsdaten</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (Q4_K_M-Quantisierung, GGUF)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4_K_M</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. RTX 3090 / 4090</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">OLMo 3 7B (Base/Instruct/Think)</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~4,5 GB</td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Passt, aber kaum Puffer für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Viel Reserve für 65k Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Auch Q6/Q8 möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Platz für parallele Agenten</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~8–12 Tok/Sek · Passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">OLMo 3 32B (Base/Instruct/Think)</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~19,5 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Auch Q3 (~15,6 GB) hat kaum Puffer</span></td>
+    <td class="fit-detail fit-tight"><strong>Q3 möglich</strong><span>Q3_K_M (~15,6 GB) passt; Q4 (~19,5 GB) läuft über</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich (Q4)</strong><span>~19,5 GB + wenig Puffer für KV-Cache bei langem Kontext</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Modell sprengt 16 GB RAM → starker Swap</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Tülu 3 8B (Llama 3.1)</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~4,9 GB</td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Passt, wenig Puffer für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Viel Platz für 128k Kontext (Llama-3.1-Basis)</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Auch höhere Quants möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Reserven</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~8–12 Tok/Sek · Passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Tülu 3 70B (Llama 3.1)</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~42,5 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Braucht Multi-GPU (2× 24 GB) oder Q2/Q3-Offload</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM vollständig</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Tülu 3 405B (Llama 3.1)</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~230 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Multi-GPU-Cluster (z. B. 4–8× A100/H100)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Fähigkeiten &amp; Features</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Thinking</th>
+  <th class="cap-cell">Tool Calling</th>
+  <th class="cap-cell">GQA</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Basis / Post-Training</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">OLMo 3 7B Base</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">65k</td>
+    <td class="col-mono col-muted">Dolma 3 (5,5 Bio. Token)</td>
+  </tr>
+  <tr>
+    <td class="col-name">OLMo 3 7B Instruct</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">65k</td>
+    <td class="col-mono col-muted">SFT · DPO · RLVR</td>
+  </tr>
+  <tr>
+    <td class="col-name">OLMo 3 7B Think</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">65k</td>
+    <td class="col-mono col-muted">Think-SFT · Think-DPO · RLVR</td>
+  </tr>
+  <tr>
+    <td class="col-name">OLMo 3 32B Base</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">65k</td>
+    <td class="col-mono col-muted">Dolma 3 (5,5 Bio. Token)</td>
+  </tr>
+  <tr>
+    <td class="col-name">OLMo 3 32B Instruct</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">65k</td>
+    <td class="col-mono col-muted">SFT · DPO · RLVR</td>
+  </tr>
+  <tr>
+    <td class="col-name">OLMo 3 32B Think</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">65k</td>
+    <td class="col-mono col-muted">Think-SFT · Think-DPO · RLVR</td>
+  </tr>
+  <tr>
+    <td class="col-name">Tülu 3 8B / 70B / 405B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">128k*</td>
+    <td class="col-mono col-muted">Llama 3.1 + SFT · DPO · RLVR</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-box">
+  <strong>OLMo 3 (Ai2):</strong> OLMo 3 ist Allen AI's dritte Generation vollständig offener "glass-box"-Sprachmodelle: nicht nur die Gewichte, sondern auch Trainingsdaten (Dolma 3), Zwischen-Checkpoints, Trainingscode (OlmoCore) und die Post-Training-Pipeline (Dolci/Tülu 3) sind offen einsehbar. Die Familie erscheint in <strong>7B</strong> und <strong>32B</strong>, jeweils als <strong>Base</strong>, <strong>Instruct</strong> und <strong>Think</strong> (Reasoning) sowie zusätzlich als <strong>RL Zero</strong> (7B, reines RL-Bootstrapping ohne SFT-Start). Die GGUF-Architektur-Kennung lautet <code>olmo3</code>.<br><br>
+  <strong>Architektur-Unterschied 7B vs. 32B:</strong> Das 7B-Modell nutzt volle Multi-Head-Attention (32 Query- = 32 KV-Heads), das 32B-Modell dagegen Grouped-Query-Attention (40 Query- / 8 KV-Heads) zur Reduktion des KV-Cache. Beide Größen kombinieren Sliding-Window-Attention (3 von 4 Layern, Fenster 4096 Token) mit vollständiger Attention im jeweils letzten Layer eines Blocks sowie QK-Norm (RMSNorm auf Query/Key) und YaRN-Skalierung (Faktor 8) für ein natives Kontextfenster von 65.536 Token.<br><br>
+  <strong>Think-Modelle:</strong> OLMo 3 32B Think gilt laut Ai2 als das stärkste vollständig offene Reasoning-Modell und nähert sich Qwen 3 32B an – bei rund 6× weniger Trainingsdaten. OLMo 3 7B Think erreicht auf MATH etwa das Niveau von Qwen 3 8B.<br><br>
+  <strong>Tülu 3 – Post-Training-Rezept:</strong> Tülu 3 ist keine eigene Basisarchitektur, sondern Ai2's offene Post-Training-Pipeline (SFT → DPO → RLVR/RL mit verifizierbaren Belohnungen für Mathe/Code). Sie wurde ursprünglich auf Llama 3.1 (8B/70B/405B, Meta-Lizenz) angewendet und bildet zugleich die Grundlage der OLMo-3-Instruct-/Think-Varianten. Tülu-3-Modelle auf Llama-3.1-Basis unterliegen der Llama-3.1-Community-Lizenz, nicht Apache 2.0.<br><br>
+  <strong>Quantisierung:</strong> Q4_K_M gilt für beide Größen als guter Kompromiss aus Qualität und Größe; für 32 GB Consumer-GPUs (RTX 5090) ist bei OLMo 3 32B auch Q6_K (~26,5 GB) praktikabel. Unter Q3 nimmt die Reasoning-Qualität der Think-Varianten spürbar ab.<br><br>
+  <strong>VRAM-Werte</strong> stammen aus GGUF-Quantisierungen von bartowski (Basis: reale Dateigrößen, ohne KV-Cache). Architekturdetails aus Hugging-Face-Modellkarten (allenai/Olmo-3-1125-32B, allenai/Olmo-3-1125-7B) und dem OLMo-3-Technical-Report; Tülu-3-Angaben aus dem Tülu-3-Paper (arXiv:2411.15124) und den offiziellen Ai2-Dokumentationsseiten (<a href="https://allenai.org/olmo" target="_blank" rel="noopener">allenai.org/olmo</a>, <a href="https://docs.allenai.org/models/olmo" target="_blank" rel="noopener">docs.allenai.org/models/olmo</a>, <a href="https://docs.allenai.org/models/tulu" target="_blank" rel="noopener">docs.allenai.org/models/tulu</a>). *Tülu-3-Kontextfenster entspricht dem der jeweiligen Llama-3.1-Basis; für 405B nicht offiziell separat dokumentiert.
+</div>
+
+</div>
+</body>
+</html>
