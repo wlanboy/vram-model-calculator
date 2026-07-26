@@ -14,15 +14,9 @@
         { label: "80 GB", gb: 80 },
     ];
 
-    const CTX_TOKENS = {
-        "Chat (8k)":    8000,
-        "Code (32k)":   32000,
-        "Doc (64k)":    64000,
-        "Rev (128k)":   128000,
-        "Res (256k)":   256000,
-        "Agent (512k)": 512000,
-        "Agent (1M)":   1000000,
-    };
+    const CTX_MIN     = 1024;
+    const CTX_STEP    = 1024;
+    const CTX_DEFAULT = 8192;
 
 function activeGpuLimits() {
         return GPU_LIMITS.filter(g => state.hideRed[String(g.gb)]);
@@ -31,7 +25,7 @@ function activeGpuLimits() {
     let models = [];
 
     let state = {
-        ctx:      Object.keys(CTX_TOKENS)[0],
+        ctx:      CTX_DEFAULT,
         sessions: 1,
         mcp:       false,
         thinking:  false,
@@ -44,24 +38,10 @@ function activeGpuLimits() {
 
     // ── VRAM calculation ─────────────────────────────────────
 
-    function calcVram(data) {
-        const layers  = data.n_layers    || 0;
-        const embd    = data.n_embd      || 0;
-        const heads   = data.n_heads     || 1;
-        const kvHeads = data.n_kv_heads;   // null = SSM/Hybrid (kein KV-Cache)
-        const base    = data.file_size_gb || 0;
-        const isSSM   = kvHeads === null || kvHeads === 0;
-        const vram    = {};
-
-        for (const [name, ctx] of Object.entries(CTX_TOKENS)) {
-            let kv = 0;
-            if (!isSSM && kvHeads > 0 && layers > 0 && embd > 0) {
-                const headDim = Math.floor(embd / (heads || 1));
-                kv = (2 * layers * kvHeads * headDim * ctx * 2) / (1024 ** 3);
-            }
-            vram[name] = { kv, total: base + kv };
-        }
-        return { vram, isSSM };
+    function calcKv(model, ctx) {
+        if (model.isSSM || !model.n_kv_heads || !model.n_layers || !model.n_embd) return 0;
+        const headDim = Math.floor(model.n_embd / (model.n_heads || 1));
+        return (2 * model.n_layers * model.n_kv_heads * headDim * ctx * 2) / (1024 ** 3);
     }
 
     function buildModels(raw) {
@@ -71,7 +51,8 @@ function activeGpuLimits() {
             const moe = (data.n_experts && data.n_experts_used)
                 ? data.n_experts_used + "/" + data.n_experts
                 : null;
-            const { vram, isSSM } = calcVram(data);
+            const kvHeads = data.n_kv_heads;   // null = SSM/Hybrid (kein KV-Cache)
+            const isSSM = kvHeads === null || kvHeads === undefined || kvHeads === 0;
             result.push({
                 key,
                 name:     data.name || key,
@@ -83,7 +64,10 @@ function activeGpuLimits() {
                 thinking: !!data.thinking,
                 moe,
                 isSSM,
-                vram,
+                n_layers:   data.n_layers || 0,
+                n_embd:     data.n_embd   || 0,
+                n_heads:    data.n_heads  || 1,
+                n_kv_heads: kvHeads,
             });
         }
         return result;
@@ -110,8 +94,8 @@ function activeGpuLimits() {
     }
 
     function effectiveTotal(model) {
-        const v = model.vram[state.ctx] || { kv: 0, total: 0 };
-        return model.size_gb + v.kv * state.sessions;
+        const kv = calcKv(model, state.ctx);
+        return model.size_gb + kv * state.sessions;
     }
 
     function isHiddenByRed(model) {
@@ -123,13 +107,12 @@ function activeGpuLimits() {
     }
 
     function colValue(model, col) {
-        const v = model.vram[state.ctx] || { kv: 0, total: 0 };
         switch (col) {
             case "name":  return model.name.toLowerCase();
             case "arch":  return model.arch;
             case "quant": return model.quant || "";
             case "size":  return model.size_gb;
-            case "kv":    return v.kv * state.sessions;
+            case "kv":    return calcKv(model, state.ctx) * state.sessions;
             case "ctx":   return model.n_ctx_orig || 0;
             case "total": return effectiveTotal(model);
             default:      return model.name.toLowerCase();
@@ -178,11 +161,14 @@ function activeGpuLimits() {
         }
 
         tbody.innerHTML = rows.map(function (m) {
-            const v      = m.vram[state.ctx] || { kv: 0, total: 0 };
-            const kvEff  = v.kv * state.sessions;
+            const kv     = calcKv(m, state.ctx);
+            const kvEff  = kv * state.sessions;
             const totalEff = m.size_gb + kvEff;
             const moe    = m.moe ? '<span class="badge badge-moe">MoE ' + m.moe + '</span>' : "";
-            const ctxOver = m.n_ctx_orig && CTX_TOKENS[state.ctx] > m.n_ctx_orig
+            const feats  =
+                (m.mcp      ? '<span class="feat-icon" title="Unterstützt Tool Calls (MCP)">🔧</span>' : "") +
+                (m.thinking ? '<span class="feat-icon" title="Unterstützt Thinking/Reasoning">🧠</span>' : "");
+            const ctxOver = m.n_ctx_orig && state.ctx > m.n_ctx_orig
                 ? ' title="Über Trainings-Kontextfenster (' + m.n_ctx_orig.toLocaleString() + ' Token)"'
                 : "";
             const gpuCells = activeGpu.map(function (g) {
@@ -192,9 +178,9 @@ function activeGpuLimits() {
                 if (cls !== "fit-none") {
                     if (m.isSSM) {
                         parallelHtml = '<span class="parallel-count">∞×</span>';
-                    } else if (v.kv > 0) {
+                    } else if (kv > 0) {
                         const remaining = g.gb - m.size_gb;
-                        const parallel = remaining > 0 ? Math.floor(remaining / v.kv) : 0;
+                        const parallel = remaining > 0 ? Math.floor(remaining / kv) : 0;
                         if (parallel > 0) {
                             parallelHtml = '<span class="parallel-count">' + parallel + "×</span>";
                         }
@@ -209,7 +195,7 @@ function activeGpuLimits() {
 
             return [
                 "<tr>",
-                '<td class="col-name" title="' + m.key + '"' + ctxOver + ">" + m.name + "</td>",
+                '<td class="col-name" title="' + m.key + '"' + ctxOver + ">" + m.name + feats + "</td>",
                 "<td><span class='badge badge-arch'>" + m.arch + "</span>" + moe + "</td>",
                 "<td>" + (m.quant || "—") + "</td>",
                 '<td class="col-mono col-muted">' + m.size_gb.toFixed(2) + " GB</td>",
@@ -225,8 +211,7 @@ function activeGpuLimits() {
     // ── Filters & sort init ──────────────────────────────────
 
     function populateFilters() {
-        document.getElementById("ctx-select").innerHTML =
-            Object.keys(CTX_TOKENS).map(l => "<option>" + l + "</option>").join("");
+        document.getElementById("ctx-input").value = state.ctx;
 
         document.getElementById("sessions-select").innerHTML =
             Array.from({ length: 20 }, (_, i) => i + 1)
@@ -251,8 +236,6 @@ function activeGpuLimits() {
             });
             hideVramEl.appendChild(btn);
         });
-
-        state.ctx = Object.keys(CTX_TOKENS)[0];
     }
 
     function initSort() {
@@ -284,8 +267,23 @@ function activeGpuLimits() {
                 populateFilters();
                 initSort();
 
-                document.getElementById("ctx-select").addEventListener("change", function (e) {
-                    state.ctx = e.target.value; renderTable();
+                const ctxInput = document.getElementById("ctx-input");
+
+                function setCtx(value) {
+                    const clamped = Math.max(CTX_MIN, Math.round(value / CTX_STEP) * CTX_STEP);
+                    state.ctx = clamped;
+                    ctxInput.value = clamped;
+                    renderTable();
+                }
+
+                document.getElementById("ctx-minus").addEventListener("click", function () {
+                    setCtx(state.ctx - CTX_STEP);
+                });
+                document.getElementById("ctx-plus").addEventListener("click", function () {
+                    setCtx(state.ctx + CTX_STEP);
+                });
+                ctxInput.addEventListener("change", function (e) {
+                    setCtx(Number(e.target.value) || CTX_DEFAULT);
                 });
                 document.getElementById("sessions-select").addEventListener("change", function (e) {
                     state.sessions = Number(e.target.value); renderTable();

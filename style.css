@@ -162,6 +162,55 @@ input[type="search"]:focus { border-color: var(--accent); }
 
 input[type="search"]::placeholder { color: var(--text-muted); }
 
+.ctx-stepper {
+    display: flex;
+    align-items: stretch;
+}
+
+.ctx-input {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.85rem;
+    width: 90px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s;
+    -moz-appearance: textfield;
+}
+
+.ctx-input:focus { border-color: var(--accent); }
+
+.ctx-input::-webkit-outer-spin-button,
+.ctx-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stepper-btn {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.7rem;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.stepper-btn:first-child { border-radius: 4px 0 0 4px; }
+.stepper-btn:last-child  { border-radius: 0 4px 4px 0; }
+
+.stepper-btn:hover {
+    background: var(--surface);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
 .check-row {
     display: flex;
     gap: 0.75rem;
@@ -276,6 +325,12 @@ tbody tr:hover { background: var(--surface); }
     background: rgba(210, 153, 34, 0.15);
     color: var(--yellow);
     margin-left: 0.35rem;
+}
+
+.feat-icon {
+    margin-left: 0.35rem;
+    font-size: 0.85rem;
+    cursor: help;
 }
 
 /* ── GPU fit cells ──────────────────────────────────────── */

@@ -43,8 +43,12 @@
   </div>
   <div class="controls-main">
     <div class="control-group">
-      <label for="ctx-select">Kontext</label>
-      <select id="ctx-select"></select>
+      <label for="ctx-input">Kontext</label>
+      <div class="ctx-stepper">
+        <button type="button" id="ctx-minus" class="stepper-btn" aria-label="Kontext verringern">−</button>
+        <input type="number" id="ctx-input" class="ctx-input" step="1024" min="1024" value="8192">
+        <button type="button" id="ctx-plus" class="stepper-btn" aria-label="Kontext erhöhen">+</button>
+      </div>
     </div>
     <div class="control-group">
       <label for="sessions-select">Sessions</label>
