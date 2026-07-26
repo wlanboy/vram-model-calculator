@@ -9,6 +9,16 @@ from ._model import get_model_params, METADATA_DUMP_FILE, clean_name
 CACHE_FILE = "models_cache.json"
 SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
 
+# Well-known model locations, scanned automatically when no path is given
+# on the command line. Missing entries (e.g. an unmounted /wdblack) are
+# skipped by update_cache() without error.
+DEFAULT_DIRS = [
+    os.path.expanduser("~/LMStudio/models/"),
+    os.path.expanduser("~/.lmstudio/models/"),
+    "/models",
+    "/wdblack/models",
+]
+
 
 def get_shard_info(path):
     """Returns (shard_index, total_shards) or None if not a shard file."""
@@ -171,7 +181,7 @@ def update_cache(base_dirs):
 
 
 def main():
-    targets = sys.argv[1:] if len(sys.argv) > 1 else ["."]
+    targets = sys.argv[1:] if len(sys.argv) > 1 else DEFAULT_DIRS
     update_cache(targets)
 
 

@@ -33,17 +33,29 @@ pip install gguf tqdm
 
 ### 2. GGUF-Modelle scannen
 
-Zeige auf das Verzeichnis, in dem deine `.gguf`-Dateien liegen (LM Studio legt sie z. B. unter `~/LMStudio/models/` ab):
+Ohne Argument scannt der Scanner automatisch alle bekannten Standard-Verzeichnisse:
+
+- `~/LMStudio/models/`
+- `~/.lmstudio/models/`
+- `/models`
+- `/wdblack/models`
+
+Fehlende Pfade (z. B. ein nicht eingehängtes `/wdblack`) werden übersprungen, ohne den Scan abzubrechen.
 
 ```bash
-# Als installiertes Tool (Option A)
-gguf-scanner ~/LMStudio/models/
+# Als installiertes Tool (Option A) — scannt alle Standard-Verzeichnisse
+gguf-scanner
 
 # Direkt aus dem Repo (Option B)
+uv run -m vram_model_calculator.gguf_scanner
+```
+
+Ein explizites Verzeichnis überschreibt die Standard-Verzeichnisse:
+
+```bash
+gguf-scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
-uv run -m vram_model_calculator.gguf_scanner ~/.lmstudio/models/
-uv run -m vram_model_calculator.gguf_scanner /models
-uv run -m vram_model_calculator.gguf_scanner /wdblack/models
+uv run -m vram_model_calculator.gguf_scanner /pfad/zu/weiteren/modellen
 ```
 
 Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen — nur neue oder geänderte Dateien werden verarbeitet.
@@ -92,13 +104,14 @@ Die Seite lädt `models_cache.json` direkt, berechnet alle VRAM-Werte im Browser
 
 ### `gguf-scanner.py` — Metadaten-Scanner
 
-Scannt ein Verzeichnis rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-Metadaten.
+Scannt ein oder mehrere Verzeichnisse rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-Metadaten. Ohne Argument werden die Standard-Verzeichnisse (`~/LMStudio/models/`, `~/.lmstudio/models/`, `/models`, `/wdblack/models`) gescannt; fehlende Pfade werden dabei stillschweigend übersprungen.
 
 **Aufruf:**
 
 ```bash
-uv run -m vram_model_calculator.gguf_scanner <pfad>
+uv run -m vram_model_calculator.gguf_scanner [pfad ...]
 # Beispiele:
+uv run -m vram_model_calculator.gguf_scanner
 uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner .
 ```
