@@ -114,7 +114,7 @@ uv run -m vram_model_calculator.gguf_scanner [pfad ...]
 uv run -m vram_model_calculator.gguf_scanner
 uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner ~/.lmstudio/models/
-uv run -m vram_model_calculator.gguf_scanner .
+uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 ```
 
 **Was der Scanner liest:**
