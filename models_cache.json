@@ -1,5 +1,5 @@
 {
-    "_version": 27,
+    "_version": 28,
     "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -58,6 +58,28 @@
         "file_size_gb": 0.867,
         "rel_path": "Bonsai-27B-GGUF/mmproj-Bonsai-27B-BF16.gguf"
     },
+    "Bonsai-4B-gguf/Bonsai-4B-Q1_0.gguf": {
+        "type": "llm",
+        "arch": "qwen3",
+        "name": "Bonsai-4B",
+        "size_label": "4.0B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": true,
+        "quant": "Q1_0",
+        "n_layers": 36,
+        "n_embd": 2560,
+        "n_heads": 32,
+        "n_kv_heads": 8,
+        "n_ff": 9728,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 151669,
+        "n_ctx_orig": 32768,
+        "file_size_bytes": 572270624,
+        "file_size_gb": 0.533,
+        "rel_path": "Bonsai-4B-gguf/Bonsai-4B-Q1_0.gguf"
+    },
     "Bonsai-8B-TQ2_0.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -101,28 +123,6 @@
         "file_size_bytes": 1158654496,
         "file_size_gb": 1.079,
         "rel_path": "Bonsai-8B-gguf/Bonsai-8B-Q1_0.gguf"
-    },
-    "Bonsai-8B-llama.cpp/Bonsai-8B-TQ2_0.gguf": {
-        "type": "llm",
-        "arch": "qwen3",
-        "name": "Bonsai-8B-TQ2_0-Q4out-llamacpp",
-        "size_label": "8B",
-        "parameter_count": null,
-        "mcp": true,
-        "thinking": true,
-        "quant": "TQ2_0",
-        "n_layers": 36,
-        "n_embd": 4096,
-        "n_heads": 32,
-        "n_kv_heads": 8,
-        "n_ff": 12288,
-        "n_experts": null,
-        "n_experts_used": null,
-        "vocab_size": 151669,
-        "n_ctx_orig": 65536,
-        "file_size_bytes": 2414272288,
-        "file_size_gb": 2.248,
-        "rel_path": "Bonsai-8B-llama.cpp/Bonsai-8B-TQ2_0.gguf"
     },
     "Codestral-22B-v0.1-GGUF/Codestral-22B-v0.1-Q4_K_M.gguf": {
         "type": "llm",
@@ -229,8 +229,8 @@
         "n_experts_used": null,
         "vocab_size": 131072,
         "n_ctx_orig": 393216,
-        "file_size_bytes": 4110417920,
-        "file_size_gb": 3.828,
+        "file_size_bytes": 14334437504,
+        "file_size_gb": 13.35,
         "rel_path": "Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf"
     },
     "Devstral-Small-2-24B-Instruct-2512-GGUF/mmproj-Devstral-Small-2-24B-Instruct-2512-F16.gguf": {
@@ -269,6 +269,28 @@
         "file_size_gb": 13.349,
         "rel_path": "Devstral-Small-2507-GGUF/Devstral-Small-2507-Q4_K_M.gguf"
     },
+    "ERNIE-4.5-21B-A3B-PT-GGUF/ERNIE-4.5-21B-A3B-PT-Q4_K_M.gguf": {
+        "type": "llm",
+        "arch": "ernie4_5-moe",
+        "name": "ERNIE 4.5 21B A3B PT",
+        "size_label": "21B-A3B",
+        "parameter_count": null,
+        "mcp": false,
+        "thinking": false,
+        "quant": "Q4_K_M",
+        "n_layers": 28,
+        "n_embd": 2560,
+        "n_heads": 20,
+        "n_kv_heads": 4,
+        "n_ff": 12288,
+        "n_experts": 64,
+        "n_experts_used": 6,
+        "vocab_size": 103424,
+        "n_ctx_orig": 131072,
+        "file_size_bytes": 13499267904,
+        "file_size_gb": 12.572,
+        "rel_path": "ERNIE-4.5-21B-A3B-PT-GGUF/ERNIE-4.5-21B-A3B-PT-Q4_K_M.gguf"
+    },
     "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf": {
         "type": "llm",
         "arch": "glm4",
@@ -287,8 +309,8 @@
         "n_experts_used": null,
         "vocab_size": 151552,
         "n_ctx_orig": 65536,
-        "file_size_bytes": 4592039616,
-        "file_size_gb": 4.277,
+        "file_size_bytes": 2314344496,
+        "file_size_gb": 2.155,
         "rel_path": "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf"
     },
     "GLM-4.6V-Flash-GGUF/GLM-4.6V-Flash-Q4_K_M.gguf": {
@@ -345,8 +367,8 @@
         "n_experts_used": 4,
         "vocab_size": 154880,
         "n_ctx_orig": 202752,
-        "file_size_bytes": 10133438464,
-        "file_size_gb": 9.438,
+        "file_size_bytes": 18132721120,
+        "file_size_gb": 16.887,
         "rel_path": "GLM-4.7-Flash-GGUF/GLM-4.7-Flash-Q4_K_M.gguf"
     },
     "Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_GGUF/Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_Q6_k.gguf": {
@@ -370,6 +392,28 @@
         "file_size_bytes": 1011739744,
         "file_size_gb": 0.942,
         "rel_path": "Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_GGUF/Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_Q6_k.gguf"
+    },
+    "Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_Q6_k.gguf": {
+        "type": "llm",
+        "arch": "gemma3",
+        "name": "Gemma 3 1B It GLM 4.7 Flash Heretic Uncensored Thinking",
+        "size_label": "1B",
+        "parameter_count": null,
+        "mcp": false,
+        "thinking": true,
+        "quant": "Q6_K",
+        "n_layers": 26,
+        "n_embd": 1152,
+        "n_heads": 4,
+        "n_kv_heads": 1,
+        "n_ff": 6912,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 262144,
+        "n_ctx_orig": 32768,
+        "file_size_bytes": 1011739744,
+        "file_size_gb": 0.942,
+        "rel_path": "Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_Q6_k.gguf"
     },
     "Hermes-3-Llama-3.2-3B-GGUF/Hermes-3-Llama-3.2-3B.Q4_K_M.gguf": {
         "type": "llm",
@@ -1386,7 +1430,7 @@
     "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf": {
         "type": "llm",
         "arch": "qwen35",
-        "name": "Qwen3.5-0.8B",
+        "name": "Qwen3.5 0.8B",
         "size_label": "0.8B",
         "parameter_count": null,
         "mcp": true,
@@ -1401,7 +1445,7 @@
         "n_experts_used": null,
         "vocab_size": 248320,
         "n_ctx_orig": 262144,
-        "file_size_bytes": 811843840,
+        "file_size_bytes": 811843040,
         "file_size_gb": 0.756,
         "rel_path": "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf"
     },
@@ -1418,6 +1462,20 @@
         "file_size_bytes": 402381664,
         "file_size_gb": 0.375,
         "rel_path": "Qwen3.5-0.8B-GGUF/mmproj-F32.gguf"
+    },
+    "Qwen3.5-0.8B-GGUF/mmproj-Qwen3.5-0.8B-BF16.gguf": {
+        "type": "mmproj",
+        "name": "Qwen3.5 0.8B",
+        "image_size": 768,
+        "patch_size": 16,
+        "n_embd": 768,
+        "n_ff": 3072,
+        "n_layers": 12,
+        "projection_dim": 1024,
+        "has_llava_projector": null,
+        "file_size_bytes": 207345952,
+        "file_size_gb": 0.193,
+        "rel_path": "Qwen3.5-0.8B-GGUF/mmproj-Qwen3.5-0.8B-BF16.gguf"
     },
     "Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF/Qwen3.5-27B.Q4_K_S.gguf": {
         "type": "llm",
@@ -1878,7 +1936,7 @@
         "n_experts_used": null,
         "vocab_size": 262144,
         "n_ctx_orig": 262144,
-        "file_size_bytes": 6975879008,
+        "file_size_bytes": 6975878560,
         "file_size_gb": 6.497,
         "rel_path": "gemma-4-12B-it-QAT-GGUF/gemma-4-12B-it-QAT-Q4_0.gguf"
     },
@@ -2094,8 +2152,8 @@
         "n_experts_used": null,
         "vocab_size": 262144,
         "n_ctx_orig": 131072,
-        "file_size_bytes": 3349515424,
-        "file_size_gb": 3.119,
+        "file_size_bytes": 1160981296,
+        "file_size_gb": 1.081,
         "rel_path": "gemma-4-E2B-it-QAT-GGUF/gemma-4-E2B-it-QAT-Q4_0.gguf"
     },
     "gemma-4-E2B-it-QAT-GGUF/mmproj-gemma-4-E2B-it-QAT-BF16.gguf": {
