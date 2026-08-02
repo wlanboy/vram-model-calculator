@@ -166,7 +166,7 @@ def update_cache(base_dirs):
 
     new_version = file_version + 1
     with open(CACHE_FILE, 'w') as f:
-        json.dump({"_version": new_version, **cache}, f, indent=4)
+        json.dump({"_version": new_version, **dict(sorted(cache.items()))}, f, indent=4)
 
     if errors:
         print("\n⚠️ SCAN-FEHLER:")
