@@ -1,10 +1,11 @@
+import json
 import os
 import re
-import json
 import sys
+
 from tqdm import tqdm
 
-from ._model import get_model_params, METADATA_DUMP_FILE, clean_name
+from ._model import METADATA_DUMP_FILE, clean_name, get_model_params
 
 CACHE_FILE = "models_cache.json"
 SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
@@ -96,7 +97,7 @@ def update_cache(base_dirs):
             file_version = loaded.get("_version", 0)
             raw = {k: v for k, v in loaded.items() if k != "_version"}
             cache = _refresh_names(_migrate_cache(raw))
-        except Exception as e:
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError) as e:
             print(f"⚠️ Cache-Datei korrupt, erstelle neu. ({e})")
 
     all_pairs = []
@@ -160,7 +161,7 @@ def update_cache(base_dirs):
                 params = get_model_params(abs_path)
             params["rel_path"] = rel
             cache[rel] = params
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 -- one bad/corrupt GGUF file must not abort the whole batch scan
             errors.append(f"Datei: {rel} | Grund: {e}")
 
     new_version = file_version + 1

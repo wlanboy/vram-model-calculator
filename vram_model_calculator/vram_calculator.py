@@ -77,7 +77,7 @@ def calculate_vram_matrix():
         print(f"\n\033[1m🤖 {name[:60]}\033[0m")
         print(f"Arch: {arch}{moe_tag} | Size: {base_size:.2f} GB")
 
-        header = f"{'Usecase':<12} | {'KV-Cache':<10} | " + " | ".join([f"{k:<10}" for k in GPU_LIMITS.keys()])
+        header = f"{'Usecase':<12} | {'KV-Cache':<10} | " + " | ".join([f"{k:<10}" for k in GPU_LIMITS])
         print(header)
         print("-" * len(header))
 
@@ -89,7 +89,7 @@ def calculate_vram_matrix():
             total = base_size + kv_vram
 
             status_row = []
-            for _, limit in GPU_LIMITS.items():
+            for limit in GPU_LIMITS.values():
                 icon = get_color(total, limit)
                 status_row.append(f"{icon} {total:>5.1f}G")
 

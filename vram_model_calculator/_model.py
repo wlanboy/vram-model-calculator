@@ -1,3 +1,4 @@
+import contextlib
 import os
 import re
 
@@ -38,7 +39,7 @@ try:
         e.value: e.name.replace("MOSTLY_", "").replace("ALL_", "")
         for e in LlamaFileType
     }
-except Exception:
+except ImportError:
     FILE_TYPE_MAP = {
         0: "F32", 1: "F16", 2: "Q4_0", 3: "Q4_1", 7: "Q8_0",
         8: "Q5_0", 9: "Q5_1", 10: "Q2_K", 11: "Q3_K_S", 12: "Q3_K_M",
@@ -80,9 +81,7 @@ def _is_unreliable_name(name):
         return True
     if len(name) <= 2:
         return True
-    if _HEX_RE.match(name) and len(name) >= 16:
-        return True
-    return False
+    return bool(_HEX_RE.match(name) and len(name) >= 16)
 
 
 def _name_from_path(file_path):
@@ -103,7 +102,7 @@ def get_str(reader, key):
         if hasattr(val, 'tobytes'):
             return val.tobytes().decode('utf-8').strip('\x00')
         return str(val)
-    except Exception:
+    except (AttributeError, IndexError, UnicodeDecodeError):
         return None
 
 
@@ -154,21 +153,21 @@ def get_vocab_size(reader, arch):
         return None
     try:
         return len(field.data)
-    except Exception:
+    except (AttributeError, TypeError):
         return None
 
 
 try:
     from gguf.constants import GGUFValueType as _GVT
     _STRING_TYPE = _GVT.STRING
-except Exception:
+except ImportError:
     _STRING_TYPE = None
 
 
 def _field_is_string(field):
     try:
         return field.types[0] == _STRING_TYPE
-    except Exception:
+    except (AttributeError, IndexError):
         return False
 
 # --- Debug dump ---
@@ -182,13 +181,11 @@ def _detect_mcp(reader, name, file_path):
             return True
     tags_field = reader.fields.get("general.tags")
     if tags_field:
-        try:
+        with contextlib.suppress(AttributeError, IndexError, UnicodeDecodeError):
             for part in tags_field.parts:
                 tag = part.tobytes().decode("utf-8", errors="replace").strip("\x00").lower()
                 if "tool" in tag or "function-call" in tag or "mcp" in tag:
                     return True
-        except Exception:
-            pass
     return False
 
 
@@ -201,13 +198,11 @@ def _detect_thinking(reader, name, file_path):
     # Secondary signal: general.tags contains "thinking" or "reasoning"
     tags_field = reader.fields.get("general.tags")
     if tags_field:
-        try:
+        with contextlib.suppress(AttributeError, IndexError, UnicodeDecodeError):
             for part in tags_field.parts:
                 tag = part.tobytes().decode("utf-8", errors="replace").strip("\x00").lower()
                 if "think" in tag or "reason" in tag:
                     return True
-        except Exception:
-            pass
     # Fallback: name/path heuristic
     text = (name or "") + " " + os.path.basename(file_path)
     return bool(THINKING_NAME_RE.search(text))
@@ -234,7 +229,7 @@ def dump_all_fields(reader, file_path):
                 else:
                     display = str(val)
                 f.write(f"  {key}: {display}\n")
-            except Exception as e:
+            except (AttributeError, IndexError, TypeError, ValueError, UnicodeDecodeError) as e:
                 f.write(f"  {key}: <read error: {e}>\n")
 
 # --- Model parameter extraction ---
