@@ -1,5 +1,5 @@
 {
-    "_version": 29,
+    "_version": 30,
     "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -506,10 +506,10 @@
     "LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf": {
         "type": "llm",
         "arch": "lfm2",
-        "name": "LFM2.5 1.2B Instruct",
+        "name": "LFM2.5-1.2B-Instruct",
         "size_label": "1.2B",
         "parameter_count": null,
-        "mcp": true,
+        "mcp": false,
         "thinking": false,
         "quant": "Q8_0",
         "n_layers": 16,
@@ -521,9 +521,31 @@
         "n_experts_used": null,
         "vocab_size": 65536,
         "n_ctx_orig": 128000,
-        "file_size_bytes": 1246255456,
+        "file_size_bytes": 1246253888,
         "file_size_gb": 1.161,
         "rel_path": "LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf"
+    },
+    "LFM2.5-1.2B-Thinking-GGUF/LFM2.5-1.2B-Thinking-Q8_0.gguf": {
+        "type": "llm",
+        "arch": "lfm2",
+        "name": "LFM2.5-1.2B-Thinking",
+        "size_label": "1.2B",
+        "parameter_count": null,
+        "mcp": false,
+        "thinking": true,
+        "quant": "Q8_0",
+        "n_layers": 16,
+        "n_embd": 2048,
+        "n_heads": 32,
+        "n_kv_heads": 32,
+        "n_ff": 8192,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 65536,
+        "n_ctx_orig": 128000,
+        "file_size_bytes": 1246254080,
+        "file_size_gb": 1.161,
+        "rel_path": "LFM2.5-1.2B-Thinking-GGUF/LFM2.5-1.2B-Thinking-Q8_0.gguf"
     },
     "LFM2.5-230M-GGUF/LFM2.5-230M-Q6_K.gguf": {
         "type": "llm",
@@ -1452,7 +1474,7 @@
     "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf": {
         "type": "llm",
         "arch": "qwen35",
-        "name": "Qwen3.5-0.8B",
+        "name": "Qwen3.5 0.8B",
         "size_label": "0.8B",
         "parameter_count": null,
         "mcp": true,
@@ -1467,7 +1489,7 @@
         "n_experts_used": null,
         "vocab_size": 248320,
         "n_ctx_orig": 262144,
-        "file_size_bytes": 811843840,
+        "file_size_bytes": 811843040,
         "file_size_gb": 0.756,
         "rel_path": "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf"
     },
