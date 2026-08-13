@@ -140,6 +140,35 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 
 ---
 
+### `gguf-checker.py` — Integritätsprüfung
+
+Prüft `.gguf`-Dateien auf strukturelle Korrektheit und Vollständigkeit, unabhängig vom Metadaten-Cache. Nützlich nach einem Download oder Kopiervorgang, um abgebrochene/beschädigte Dateien zu erkennen, bevor sie z. B. mit llama.cpp geladen werden.
+
+**Aufruf:**
+
+```bash
+uv run -m vram_model_calculator.gguf_checker [pfad ...]
+# Beispiele:
+uv run -m vram_model_calculator.gguf_checker /models
+uv run -m vram_model_calculator.gguf_checker ~/LMStudio/models/modell.gguf
+uv run -m vram_model_calculator.gguf_checker ~/.lmstudio/models
+```
+
+Ohne Argument werden dieselben Standard-Verzeichnisse wie beim Scanner durchsucht. Einzelne `.gguf`-Dateien können auch direkt angegeben werden.
+
+**Was geprüft wird:**
+
+| Prüfung | Erkennt |
+|---|---|
+| Magic-Bytes (`GGUF`) & Version | Falsche/fremde Dateien, komplett beschädigte Header |
+| Header- & Tensor-Info-Parsing | Beschädigte Metadaten (z. B. doppelte Tensor-Namen) |
+| Tensor-Datenbereich vs. tatsächliche Dateigröße | Abgebrochene Downloads / abgeschnittene Dateien |
+| Shard-Vollständigkeit (`-00001-of-00005.gguf`) | Fehlende Teile bei mehrteiligen Modellen |
+
+**Status je Datei:** `ok` (vollständig & valide), `incomplete` (Datei bricht mitten in den Tensor-Daten ab oder ein Shard fehlt) oder `corrupt` (ungültiger Header/Metadaten). Der Prozess beendet sich mit Exit-Code `1`, sobald mindestens eine Datei nicht `ok` ist — eignet sich damit auch für Skripte/CI.
+
+---
+
 ### `vram-calculator.py` — Terminal-Rechner
 
 Liest `models_cache.json` und gibt für jedes LLM-Modell eine VRAM-Matrix im Terminal aus.
@@ -249,6 +278,7 @@ Danach stehen zwei Kommandos systemweit bereit:
 
 ```bash
 gguf-scanner ~/LMStudio/models/
+gguf-checker ~/LMStudio/models/
 vram-calculator
 ```
 
@@ -287,6 +317,7 @@ vram-model-calculator/
 ├── vram_model_calculator/        # Installiertes Python-Paket
 │   ├── __init__.py
 │   ├── gguf_scanner.py           # Schritt 1: GGUF-Dateien scannen → models_cache.json
+│   ├── gguf_checker.py           # Optional: GGUF-Dateien auf Korrektheit/Vollständigkeit prüfen
 │   └── vram_calculator.py        # Schritt 2 (optional): Terminal-Ausgabe
 ├── models_cache.json             # Generiert vom Scanner (im Arbeitsverzeichnis)
 ├── index.html                    # Browser-UI

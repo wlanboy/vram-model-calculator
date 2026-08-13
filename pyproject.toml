@@ -17,6 +17,7 @@ dependencies = [
 
 [project.scripts]
 gguf-scanner = "vram_model_calculator.gguf_scanner:main"
+gguf-checker = "vram_model_calculator.gguf_checker:main"
 vram-calculator = "vram_model_calculator.vram_calculator:main"
 
 [tool.hatch.build.targets.wheel]
