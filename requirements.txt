@@ -2,13 +2,13 @@
 #    uv pip compile pyproject.toml -o requirements.txt
 certifi==2026.7.22
     # via requests
-charset-normalizer==3.4.9
+charset-normalizer==3.5.0
     # via requests
 gguf==0.19.0
     # via vram-model-calculator (pyproject.toml)
 idna==3.18
     # via requests
-numpy==2.5.1
+numpy==2.5.2
     # via gguf
 pyyaml==6.0.3
     # via gguf
