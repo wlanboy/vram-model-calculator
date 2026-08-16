@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intel Arc B580 – LLM-Kompatibilität</title>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../hardware.css">
+</head>
+<body>
+<div class="container">
+
+<a class="family-link" href="../index.html">← Hardware</a>
+
+<div class="page-header" style="margin-top:1rem">
+  <div class="page-header-left">
+    <h1>Intel Arc B580 (12 GB)</h1>
+    <p class="subtitle">Welche LLMs laufen auf dieser Hardware? Klick auf eine Spaltenüberschrift zum Sortieren.</p>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="controls-search-row">
+    <div class="control-group control-group-fill">
+      <label for="search-input">Suche</label>
+      <input type="search" id="search-input" placeholder="Modellname, Typ oder Quant …">
+    </div>
+  </div>
+</div>
+
+<div class="row-count" id="row-count"></div>
+
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th class="sortable" data-col="name" data-type="string">Modell</th>
+  <th class="sortable" data-col="params" data-type="number">Parameter</th>
+  <th class="sortable" data-col="type" data-type="string">Typ</th>
+  <th class="sortable" data-col="quant" data-type="string">Quant</th>
+  <th class="sortable" data-col="vram" data-type="number">VRAM</th>
+  <th class="sortable" data-col="speed" data-type="number">Speed</th>
+  <th class="sortable" data-col="ctx" data-type="number">Kontext</th>
+  <th class="sortable" data-col="status" data-type="string">Status</th>
+  <th class="sortable" data-col="score" data-type="number">Note</th>
+</tr></thead>
+<tbody id="model-tbody"></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+// [name, paramsB, type, quant, vramGb, vramPct, speed(t/s), ctxLabel, ctxNum, statusKey, statusText, grade, score]
+const MODELS = [
+['GLM 4.6V Flash',13.5,'Chat, Vision','Q4_K_M',8.6,72,8.4,'128K',128,'decent','DECENT','B',53],
+['Gemma 4 12B IT',12.0,'Chat','Q4_K_M',8.2,68,8.7,'262K',262,'decent','DECENT','B',54],
+['Gemma 4 E4B IT',8.0,'Chat','Q4_K_M',6.8,57,28.8,'131K',131,'decent','DECENT','B',58],
+['Gemma 4 E4B',8.0,'Chat','Q4_K_M',6.8,57,29.1,'131K',131,'decent','DECENT','B',58],
+['Ornith 1.0 9B',9.4,'Chat','Q4_K_M',6.1,51,19.1,'262K',262,'decent','DECENT','B',60],
+['DeepSeek R1 0528 Qwen3 8B',8.2,'Chat, Reasoning','Q4_K_M',5.4,45,22.3,'131K',131,'decent','DECENT','B',62],
+['LFM2.5 8B A1B',8.5,'Chat','Q4_K_M',5.2,43,111.5,'128K',128,'decent','DECENT','B',63],
+['Bonsai 27B',27.0,'Chat','IQ2_XXS',5.1,42,23.8,'128K',128,'decent','DECENT','B',63],
+['Gemma 4 E2B IT',5.1,'Chat','Q4_K_M',4.8,40,41.9,'131K',131,'decent','DECENT','B',64],
+['Gemma 4 E2B',5.1,'Chat','Q4_K_M',4.8,40,42.0,'131K',131,'decent','DECENT','B',64],
+['Gemma 4 E2B IT QAT',5.1,'Chat','Q4_K_M',4.7,39,55.8,'131K',131,'well','RUNS WELL','A',65],
+['Phi 4 Mini Reasoning',3.8,'Chat, Math, Code, Reasoning','Q4_K_M',2.7,22,34.1,'131K',131,'well','RUNS WELL','A',78],
+['Qwen3 4B',4.0,'Chat','Q4_K_M',2.7,22,37.3,'41K',41,'well','RUNS WELL','A',78],
+['DeepSeek R1 Distill Qwen 1.5B',1.5,'Chat, Reasoning','Q4_K_M',2.0,17,40.8,'131K',131,'well','RUNS WELL','A',82],
+['Qwen3 1.7B',1.7,'Chat','Q4_K_M',1.8,15,46.3,'41K',41,'well','RUNS WELL','A',84],
+['LFM2 1.2B',1.2,'Chat','Q4_K_M',1.3,11,57.0,'33K',33,'great','RUNS GREAT','S',88],
+['LFM2.5 1.2B Instruct',1.2,'Chat','Q4_K_M',1.3,11,57.3,'128K',128,'great','RUNS GREAT','S',88],
+['LFM2.5 1.2B',1.2,'Chat','Q4_K_M',1.3,11,56.7,'128K',128,'great','RUNS GREAT','S',88],
+['Bonsai 8B',8.0,'Chat','IQ2_XXS',1.3,11,70.2,'128K',128,'great','RUNS GREAT','S',88],
+['Bonsai 4B',4.0,'Chat','IQ2_XXS',0.6,5,92.9,'128K',128,'great','RUNS GREAT','S',95],
+['Bonsai 1.7B',1.7,'Chat','IQ2_XXS',0.3,2,136.8,'128K',128,'great','RUNS GREAT','S',99],
+];
+</script>
+<script src="../hardware.js"></script>
+</body>
+</html>
