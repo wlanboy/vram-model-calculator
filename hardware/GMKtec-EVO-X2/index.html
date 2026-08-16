@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GMKtec EVO-X2 – LLM-Kompatibilität</title>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../hardware.css">
+</head>
+<body>
+<div class="container">
+
+<a class="family-link" href="../index.html">← Hardware</a>
+
+<div class="page-header" style="margin-top:1rem">
+  <div class="page-header-left">
+    <h1>GMKtec EVO-X2 (Ryzen AI Max+ 395, 128 GB)</h1>
+    <p class="subtitle">Welche LLMs laufen auf dieser Hardware? Klick auf eine Spaltenüberschrift zum Sortieren.</p>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="controls-search-row">
+    <div class="control-group control-group-fill">
+      <label for="search-input">Suche</label>
+      <input type="search" id="search-input" placeholder="Modellname, Typ oder Quant …">
+    </div>
+  </div>
+</div>
+
+<div class="row-count" id="row-count"></div>
+
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th class="sortable" data-col="name" data-type="string">Modell</th>
+  <th class="sortable" data-col="params" data-type="number">Parameter</th>
+  <th class="sortable" data-col="type" data-type="string">Typ</th>
+  <th class="sortable" data-col="quant" data-type="string">Quant</th>
+  <th class="sortable" data-col="vram" data-type="number">VRAM</th>
+  <th class="sortable" data-col="speed" data-type="number">Speed</th>
+  <th class="sortable" data-col="ctx" data-type="number">Kontext</th>
+  <th class="sortable" data-col="status" data-type="string">Status</th>
+  <th class="sortable" data-col="score" data-type="number">Note</th>
+</tr></thead>
+<tbody id="model-tbody"></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+// [name, paramsB, type, quant, vramGb, vramPct, speed(t/s), ctxLabel, ctxNum, statusKey, statusText, grade, score]
+const MODELS = [
+["GPT OSS 120B",120.4,"Chat","Q4_K_M",72.7,76,2.3,"131K",131,"barely","BARELY RUNS","C",38],
+["Llama 4 Scout 17B 16E Instruct",108.6,"Vision","Q4_K_M",71.7,75,2.3,"–",0,"barely","BARELY RUNS","C",38],
+["NVIDIA Nemotron 3 Super 120B A12B BF16",123.6,"Chat","Q4_K_M",74.7,78,2.2,"262K",262,"barely","BARELY RUNS","C",38],
+["GLM 4.5 Air",110.5,"Chat","Q4_K_M",66.7,69,2.5,"131K",131,"barely","BARELY RUNS","C",38],
+["Intern S2 Preview",36.1,"Vision","BF16",72.6,76,2.3,"262K",262,"barely","BARELY RUNS","C",38],
+["C4ai Command A 03 2025",111.1,"Chat","Q4_K_M",73.3,76,2.3,"–",0,"barely","BARELY RUNS","C",38],
+["DeepSeek Coder v2 Instruct",235.7,"Chat","IQ2_XS",73.5,77,2.3,"164K",164,"barely","BARELY RUNS","C",38],
+["GLM 4.6V",107.7,"Vision","Q4_K_M",65.1,68,2.6,"131K",131,"barely","BARELY RUNS","C",38],
+["DeepSeek V4 Flash DSpark",165.3,"Chat","Q3_K_M",80.9,84,2.1,"1049K",1049,"barely","BARELY RUNS","C",32],
+["Leanstral 1.5 119B A6B",119,"Chat","Q4_K_M",78.5,82,2.1,"–",0,"barely","BARELY RUNS","C",35],
+["Llama 3.1 70B Instruct",70.6,"Chat","Q4_K_M",46.6,49,3.6,"131K",131,"barely","BARELY RUNS","C",40],
+["Qwen3 Next 80B A3B Instruct",81.3,"Chat","Q4_K_M",49.2,51,3.4,"262K",262,"barely","BARELY RUNS","C",40],
+["Llama 3.3 70B Instruct",70.6,"Chat","Q4_K_M",46.6,49,3.6,"131K",131,"barely","BARELY RUNS","C",40],
+["Qwen3 Next 80B A3B Thinking",81.3,"Chat","Q4_K_M",49.2,51,3.4,"262K",262,"barely","BARELY RUNS","C",40],
+["Qwen2.5 72B Instruct",72.7,"Chat","Q4_K_M",44.6,46,3.7,"33K",33,"barely","BARELY RUNS","C",40],
+["Qwen1.5 72B Chat",72.3,"Chat","Q4_K_M",49.0,51,3.4,"33K",33,"barely","BARELY RUNS","C",40],
+["Qwen2 72B Instruct",72.7,"Chat","Q4_K_M",44.6,46,3.7,"33K",33,"barely","BARELY RUNS","C",40],
+["Qwen2.5 72B",72.7,"Chat","Q4_K_M",44.6,46,3.7,"131K",131,"barely","BARELY RUNS","C",40],
+["Llama 3.1 Nemotron 70B Instruct HF",70.6,"Chat","Q4_K_M",43.3,45,3.8,"131K",131,"barely","BARELY RUNS","C",40],
+["Qwen3 4B",4.0,"Chat","Q4_K_M",2.9,3,57.4,"41K",41,"well","RUNS WELL","A",82],
+["Llama 3.2 1B Instruct",1.2,"Chat","Q4_K_M",0.8,1,202.9,"131K",131,"great","RUNS GREAT","S",100],
+["Qwen3 4B Instruct 2507",4.0,"Chat","Q4_K_M",2.9,3,57.4,"262K",262,"well","RUNS WELL","A",82],
+["Gemma 3 4B IT",4.3,"Vision","Q4_K_M",2.8,3,58.6,"–",0,"well","RUNS WELL","A",83],
+["Gemma 3 1B IT",1.0,"Chat","Q4_K_M",0.7,1,252.1,"33K",33,"great","RUNS GREAT","S",100],
+["Gemma 4 E2B IT",5.1,"Chat","Q4_K_M",3.4,4,48.5,"131K",131,"well","RUNS WELL","A",79],
+["TinyLlama 1.1B Chat v1.0",1.1,"Chat","Q4_K_M",1.0,1,164.8,"2K",2,"great","RUNS GREAT","S",97],
+["Llama 3.2 3B Instruct",3.2,"Chat","Q4_K_M",2.1,2,78.5,"131K",131,"great","RUNS GREAT","S",87],
+["Phi 2",2.8,"Chat, Code","Q4_K_M",2.6,3,63.0,"2K",2,"well","RUNS WELL","A",84],
+["Kimi Dev 72B",72.7,"Chat","Q4_K_M",44.6,46,3.7,"131K",131,"barely","BARELY RUNS","C",40],
+["Phi 4 Mini Instruct",3.8,"Chat, Code","Q4_K_M",2.9,3,58.0,"131K",131,"well","RUNS WELL","A",83],
+["Phi 3 Mini 4k Instruct",3.8,"Chat, Code","Q4_K_M",3.4,4,48.9,"4K",4,"well","RUNS WELL","A",79],
+["Gemma 3 270M IT",0.268,"Chat","Q4_K_M",0.2,0,924.4,"–",0,"great","RUNS GREAT","S",100],
+["SmolLM3 3B",3.1,"Chat","Q4_K_M",2.3,2,72.3,"66K",66,"great","RUNS GREAT","S",86],
+["Gemma 2 2B IT",2.6,"Chat","Q4_K_M",1.7,2,96.2,"8K",8,"great","RUNS GREAT","S",90],
+["Hermes 2 Theta Llama 3 70B",70.6,"Chat","Q4_K_M",43.3,45,3.8,"8K",8,"barely","BARELY RUNS","C",40],
+["MiniCPM5 1B",1.1,"Chat","Q4_K_M",1.0,1,168.1,"131K",131,"great","RUNS GREAT","S",98],
+["Gemma 3n E2B IT",5.4,"Vision","Q4_K_M",3.6,4,46.4,"–",0,"well","RUNS WELL","A",78],
+["StableBeluga2 70B",70.6,"Chat","Q4_K_M",43.0,45,3.9,"4K",4,"barely","BARELY RUNS","C",40],
+["Mixtral 8x22B v0.1",140.6,"Chat","Q4_K_M",85.1,89,2.0,"66K",66,"barely","BARELY RUNS","D",25],
+["Starcoder2 3B",3.0,"Chat, Code","Q4_K_M",2.2,2,76.3,"16K",16,"great","RUNS GREAT","S",87],
+["InternLM 20B",20,"Chat","BF16",42.8,45,3.9,"4K",4,"barely","BARELY RUNS","C",40],
+["Hy MT2 1.8B",2.0,"Translation","Q4_K_M",1.7,2,100.2,"262K",262,"great","RUNS GREAT","S",91],
+["Granite 4.0 Micro",3.4,"Chat","Q4_K_M",2.5,3,66.3,"131K",131,"great","RUNS GREAT","S",85],
+["WizardLM 2 8x22B",140.6,"Chat","Q4_K_M",85.1,89,2.0,"66K",66,"barely","BARELY RUNS","D",25],
+["Qwen2.5 7B Instruct",7.6,"Chat","Q4_K_M",5.0,5,33.3,"33K",33,"well","RUNS WELL","A",72],
+["Phi 4 Mini Reasoning",3.8,"Chat, Math, Code, Reasoning","Q4_K_M",2.9,3,58.0,"131K",131,"well","RUNS WELL","A",83],
+["LFM2.5 230M",0.23,"Chat","Q4_K_M",0.5,1,332.8,"128K",128,"great","RUNS GREAT","S",100],
+["Llama 3.1 Tulu 3 70B DPO",70.6,"Chat","Q4_K_M",43.3,45,3.8,"131K",131,"barely","BARELY RUNS","C",40],
+["Mistral 7B Instruct v0.3",7.2,"Chat","Q4_K_M",4.9,5,33.8,"33K",33,"well","RUNS WELL","A",73],
+["Qwen2.5 Coder 3B",3.1,"Chat, Code","Q4_K_M",2.2,2,74.6,"33K",33,"great","RUNS GREAT","S",86],
+["ChatGLM2 6B",6.0,"Chat","Q4_K_M",4.0,4,42.0,"33K",33,"well","RUNS WELL","A",76],
+["Qwen3 8B",8.2,"Chat","Q4_K_M",5.5,6,30.1,"41K",41,"well","RUNS WELL","A",71],
+["Llama 3.1 8B Instruct",8.0,"Chat","Q4_K_M",5.3,6,31.4,"131K",131,"well","RUNS WELL","A",71],
+["Mixtral 8x7B Instruct v0.1",46.7,"Chat","Q4_K_M",28.6,30,5.8,"33K",33,"barely","BARELY RUNS","C",43],
+["Gemma 4 E4B IT",8.0,"Chat","Q4_K_M",5.3,6,31.3,"131K",131,"well","RUNS WELL","A",71],
+["DeepSeek R1 0528 Qwen3 8B",8.2,"Chat, Reasoning","Q4_K_M",5.5,6,30.1,"131K",131,"well","RUNS WELL","A",71],
+["Gemma 4 31B IT",32.7,"Vision","Q4_K_M",21.2,22,7.8,"262K",262,"decent","DECENT","B",45],
+["Qwen3.6 35B A3B",36.0,"Vision","Q4_K_M",21.9,23,7.6,"262K",262,"decent","DECENT","B",45],
+["DeepSeek R1 Distill Qwen 7B",7.6,"Chat, Reasoning","Q4_K_M",5.0,5,33.3,"131K",131,"well","RUNS WELL","A",72],
+["Qwen 1.8B",1.8,"Chat","Q4_K_M",1.2,1,137.5,"8K",8,"great","RUNS GREAT","S",96],
+["Hermes 3 Llama 3.1 8B",8.0,"Chat, Roleplay","Q4_K_M",5.4,6,30.9,"131K",131,"well","RUNS WELL","A",71],
+["Mixtral 8x7B v0.1",46.7,"Chat","Q4_K_M",28.6,30,5.8,"33K",33,"barely","BARELY RUNS","C",43],
+["Qwen3 32B",32.8,"Chat","Q4_K_M",20.3,21,8.2,"41K",41,"decent","DECENT","B",45],
+["Yi 6B Chat",6.1,"Chat","Q4_K_M",4.1,4,40.9,"4K",4,"well","RUNS WELL","A",75],
+["DeepSeek R1 Distill Llama 8B",8.0,"Chat, Reasoning","Q4_K_M",5.4,6,30.9,"131K",131,"well","RUNS WELL","A",71],
+["Gemma 4 26B A4B IT",26.5,"Vision","Q4_K_M",16.6,17,10.0,"262K",262,"decent","DECENT","B",48],
+["Deepseek Coder 6.7B Instruct",6.7,"Chat, Code","Q4_K_M",5.4,6,30.7,"16K",16,"well","RUNS WELL","A",71],
+["Yi 6B",6.1,"Chat","Q4_K_M",4.1,4,40.9,"4K",4,"well","RUNS WELL","A",75],
+["Phi 3.5 MoE Instruct",41.9,"Chat, Code","Q4_K_M",25.7,27,6.5,"131K",131,"barely","BARELY RUNS","C",43],
+["Ornith 1.0 9B",9.4,"Chat","Q4_K_M",6.2,6,26.8,"262K",262,"well","RUNS WELL","A",68],
+["Gemma 4 12B IT",12.0,"Chat","Q4_K_M",8.2,9,20.2,"262K",262,"decent","DECENT","B",60],
+["Falcon 40B",41.8,"Chat","Q4_K_M",27.6,29,6.0,"–",0,"barely","BARELY RUNS","C",43],
+["GPT OSS 20B",21.5,"Chat","Q4_K_M",13.3,14,12.5,"131K",131,"decent","DECENT","B",51],
+["Ornith 1.0 35B",35.1,"Chat","Q4_K_M",21.4,22,7.8,"262K",262,"decent","DECENT","B",45],
+["Qwen3.6 27B",27.8,"Vision","Q4_K_M",17.4,18,9.6,"262K",262,"decent","DECENT","B",47],
+["Olmo 3 7B Instruct",7.3,"Chat","Q4_K_M",5.8,6,28.9,"66K",66,"well","RUNS WELL","A",69],
+["Gemma 2 9B IT",9.2,"Chat","Q4_K_M",6.1,6,27.3,"8K",8,"well","RUNS WELL","A",68],
+["Qwen2.5 Coder 32B Instruct",32.8,"Chat, Code","Q4_K_M",20.5,21,8.1,"33K",33,"decent","DECENT","B",45],
+["LFM2.5 8B A1B",8.5,"Chat","Q4_K_M",5.5,6,30.4,"128K",128,"well","RUNS WELL","A",71],
+["Qwen3 30B A3B Instruct 2507",30.5,"Chat","Q4_K_M",18.7,19,8.9,"262K",262,"decent","DECENT","B",47],
+["Qwen3 Coder 30B A3B Instruct",30.5,"Chat, Code","Q4_K_M",18.7,19,8.9,"262K",262,"decent","DECENT","B",47],
+["Gemma 3 12B IT",12.2,"Vision","Q4_K_M",8.0,8,20.7,"33K",33,"decent","DECENT","B",61],
+["Qwen 7B",7.7,"Chat","Q4_K_M",5.1,5,32.6,"33K",33,"well","RUNS WELL","A",72],
+["Diffusiongemma 26B A4B IT",25.8,"Vision","Q4_K_M",16.1,17,10.3,"262K",262,"decent","DECENT","B",49],
+["DeepSeek R1 Distill Qwen 32B",32.8,"Chat, Reasoning","Q4_K_M",20.5,21,8.1,"131K",131,"decent","DECENT","B",45],
+["Hy MT2 7B",8.0,"Translation","Q4_K_M",5.4,6,30.9,"262K",262,"well","RUNS WELL","A",71],
+["Gemma 3n E4B IT",7.8,"Vision","Q4_K_M",5.2,5,32.1,"–",0,"well","RUNS WELL","A",71],
+["Qwen1.5 7B",7.7,"Chat","Q4_K_M",6.0,6,27.7,"33K",33,"well","RUNS WELL","A",68],
+["Baichuan2 7B Base",7.0,"Chat","Q4_K_M",4.6,5,36.0,"4K",4,"well","RUNS WELL","A",73],
+["Gemma 3 27B IT",27.4,"Vision","Q4_K_M",18.1,19,9.2,"131K",131,"decent","DECENT","B",47],
+["Gemma 4 12B",12.0,"Chat","Q4_K_M",8.2,9,20.2,"262K",262,"decent","DECENT","B",60],
+["Phi 4",14.7,"Chat, Math","Q4_K_M",9.5,10,17.5,"16K",16,"decent","DECENT","B",57],
+["QwQ 32B",32.8,"Chat, Reasoning","Q4_K_M",20.5,21,8.1,"41K",41,"decent","DECENT","B",45],
+["Mistral Nemo Instruct 2407",12.2,"Chat","Q4_K_M",8.1,8,20.6,"131K",131,"decent","DECENT","B",60],
+["CodeQwen1.5 7B",7.3,"Chat, Code","Q4_K_M",4.8,5,34.8,"66K",66,"well","RUNS WELL","A",73],
+["Llama 3.2 11B Vision Instruct",10.7,"Vision","Q4_K_M",7.0,7,23.6,"–",0,"decent","DECENT","B",64],
+["Falcon H1 7B Instruct",7.6,"Chat","Q4_K_M",5.0,5,33.0,"262K",262,"well","RUNS WELL","A",72],
+["Falcon 40B Instruct",40.0,"Chat","Q4_K_M",26.4,27,6.3,"–",0,"barely","BARELY RUNS","C",43],
+["Llama 2 13B Chat HF",13.0,"Chat","Q4_K_M",8.6,9,19.4,"–",0,"decent","DECENT","B",59],
+["Qwen AgentWorld 35B A3B",34.7,"Chat, Functions","Q4_K_M",21.2,22,7.9,"262K",262,"decent","DECENT","B",45],
+["Tmax 9B",9.0,"Chat","Q4_K_M",5.9,6,28.0,"262K",262,"well","RUNS WELL","A",69],
+["MiniMax M2",228.7,"Chat","IQ3_XXS",89.2,93,1.9,"197K",197,"barely","BARELY RUNS","D",18],
+["Hy MT2 30B A3B",30.1,"Translation","Q4_K_M",18.4,19,9.0,"262K",262,"decent","DECENT","B",47],
+["Mistral Small 3.2 24B Instruct 2506",24.0,"Chat","Q4_K_M",15.1,16,11.0,"131K",131,"decent","DECENT","B",49],
+["C4ai Command R V01",35.0,"Chat","Q4_K_M",23.1,24,7.2,"–",0,"barely","BARELY RUNS","C",44],
+["Qwen3 30B A3B Thinking 2507",30.5,"Chat","Q4_K_M",18.7,19,8.9,"262K",262,"decent","DECENT","B",47],
+["Yi 9B",8.8,"Chat","Q4_K_M",5.8,6,28.7,"4K",4,"well","RUNS WELL","A",69],
+["Xgen 7B 8k Base",7.0,"Chat","Q4_K_M",4.6,5,36.0,"8K",8,"well","RUNS WELL","A",73],
+["Agents A1",35.1,"Vision","Q4_K_M",21.4,22,7.8,"262K",262,"decent","DECENT","B",45],
+["Gemma 2 27B IT",27.2,"Chat","Q4_K_M",18.0,19,9.3,"8K",8,"decent","DECENT","B",47],
+["BitCPM CANN 8B",8.0,"Chat","Q4_K_M",5.2,5,32.2,"33K",33,"well","RUNS WELL","A",71],
+["Yi 34B Chat",34.4,"Chat","Q4_K_M",21.4,22,7.8,"4K",4,"decent","DECENT","B",45],
+["Mistral Small 24B Instruct 2501",23.6,"Chat","Q4_K_M",14.9,15,11.2,"33K",33,"decent","DECENT","B",49],
+["Yi 1.5 34B Chat",34.4,"Chat","Q4_K_M",21.4,22,7.8,"4K",4,"decent","DECENT","B",45],
+["Llama 2 13B HF",13.0,"Chat","Q4_K_M",8.6,9,19.4,"–",0,"decent","DECENT","B",59],
+["Qwen1.5 32B",32.5,"Chat","Q4_K_M",20.3,21,8.2,"33K",33,"decent","DECENT","B",45],
+["North Mini Code 1.0",30.5,"Chat, Code, Functions","Q4_K_M",18.7,19,8.9,"500K",500,"decent","DECENT","B",47],
+["Yi 34B",34.4,"Chat","Q4_K_M",21.4,22,7.8,"4K",4,"decent","DECENT","B",45],
+["Eurus 2 7B PRIME",7.6,"Chat","Q4_K_M",5.0,5,33.3,"4K",4,"well","RUNS WELL","A",72],
+["Qwen1.5 32B Chat",32.5,"Chat","Q4_K_M",20.3,21,8.2,"33K",33,"decent","DECENT","B",45],
+["Qwen1.5 14B",14.2,"Chat","Q4_K_M",10.5,11,15.9,"33K",33,"decent","DECENT","B",56],
+["Baichuan 7B",7.0,"Chat","BF16",15.4,16,10.8,"4K",4,"decent","DECENT","B",49],
+["Falcon 11B",11.1,"Chat","Q4_K_M",7.3,8,22.7,"8K",8,"decent","DECENT","B",63],
+["Phi 4 Reasoning",14.7,"Chat, Math, Code, Reasoning","Q4_K_M",9.5,10,17.5,"33K",33,"decent","DECENT","B",57],
+["Deepseek Coder 33B Instruct",33.3,"Chat, Code","Q4_K_M",20.8,22,8.0,"16K",16,"decent","DECENT","B",45],
+["Baichuan2 13B Chat",13.0,"Chat","Q4_K_M",8.6,9,19.4,"–",0,"decent","DECENT","B",59],
+["Magistral Small 2506",23.6,"Chat","Q4_K_M",14.9,15,11.2,"41K",41,"decent","DECENT","B",49],
+["Mellum2 12B A2.5B Thinking",12.1,"Chat","Q4_K_M",7.7,8,21.7,"131K",131,"decent","DECENT","B",62],
+["Mellum2 12B A2.5B Instruct",12.1,"Chat","Q4_K_M",7.7,8,21.7,"131K",131,"decent","DECENT","B",62],
+["Qwen2.5 Coder 32B",32.8,"Chat, Code","Q4_K_M",20.5,21,8.1,"33K",33,"decent","DECENT","B",45],
+["Phi 3 Small 8k Instruct",7.4,"Chat, Code","BF16",15.3,16,10.8,"8K",8,"decent","DECENT","B",49],
+["Baichuan2 13B Base",13.0,"Chat","Q4_K_M",8.6,9,19.4,"–",0,"decent","DECENT","B",59],
+["Tmax 27B",26.9,"Chat","Q4_K_M",16.9,18,9.9,"262K",262,"decent","DECENT","B",48],
+["Qwen 14B Chat",14.2,"Chat","Q4_K_M",9.3,10,17.8,"8K",8,"decent","DECENT","B",58],
+["Vicuna 13B V1.3",13.0,"Chat","Q4_K_M",8.6,9,19.4,"2K",2,"decent","DECENT","B",59],
+["INTELLECT 1 Instruct",10.2,"Chat","Q4_K_M",6.8,7,24.5,"8K",8,"well","RUNS WELL","A",65],
+["Qwen3 235B A22B Instruct 2507",235.1,"Chat","IQ3_XXS",91.6,95,1.8,"262K",262,"barely","BARELY RUNS","D",15],
+["Qwen 14B",14.2,"Chat","Q4_K_M",9.3,10,17.8,"8K",8,"decent","DECENT","B",58],
+["Baichuan 13B Base",13.0,"Chat","Q4_K_M",8.6,9,19.4,"–",0,"decent","DECENT","B",59],
+["Qwen3 235B A22B Thinking 2507",235.1,"Chat","IQ3_XXS",91.6,95,1.8,"262K",262,"barely","BARELY RUNS","D",15],
+["InternLM 7B",7.0,"Chat","FP16",15.4,16,10.8,"2K",2,"decent","DECENT","B",49],
+["InternLM Chat 20B",20.0,"Chat","Q4_K_M",14.8,15,11.2,"4K",4,"decent","DECENT","B",49],
+["Command A Plus 05 2026 BF16",218.8,"Vision, Chat","Q2_K",93.3,97,1.8,"200K",200,"wontfit","WON'T FIT","F",11],
+["Step 3.7 Flash",201.4,"Vision","Q2_K",94.1,98,1.8,"262K",262,"wontfit","WON'T FIT","F",10],
+["Hy3",298.8,"Chat","IQ2_S",94.0,98,1.8,"262K",262,"wontfit","WON'T FIT","F",10],
+["DeepSeek V2.5",235.7,"Chat","IQ3_XXS",94.2,98,1.8,"164K",164,"wontfit","WON'T FIT","F",10],
+];
+</script>
+<script src="../hardware.js"></script>
+</body>
+</html>
