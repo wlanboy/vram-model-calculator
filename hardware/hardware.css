@@ -1,0 +1,128 @@
+/* Gemeinsame Styles für alle hardware/<Gerät>/index.html Kompatibilitäts-Tabellen
+   sowie die hardware/index.html Übersichtsseite */
+
+.hardware-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.hardware-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+a.hardware-card:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.hardware-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hardware-card-spec {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.hardware-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.hardware-card-stat {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.hardware-card-stat.stat-great { background: var(--green-dim); color: var(--green); }
+.hardware-card-stat.stat-well  { background: rgba(63,185,80,0.07); color: #56d364; }
+
+.hardware-card.is-pending {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.hardware-card.is-pending:hover {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.hardware-card-pending-badge {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  background: var(--yellow-dim);
+  color: var(--yellow);
+  font-family: ui-monospace, monospace;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  white-space: nowrap;
+}
+.status-great, .status-well  { background: var(--green-dim);  color: var(--green); }
+.status-decent               { background: rgba(63,185,80,0.07); color: #56d364; }
+.status-barely               { background: rgba(219,123,43,0.14); color: #db8b3f; }
+.status-wontfit              { background: var(--red-dim);    color: var(--red); }
+
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+}
+.grade-letter {
+  display: inline-block;
+  width: 1.3em;
+  text-align: center;
+  border-radius: 3px;
+  padding: 0.05rem 0;
+  font-size: 0.72rem;
+  color: #0d1117;
+}
+.grade-S, .grade-A { background: var(--green); }
+.grade-B { background: #56d364; }
+.grade-C { background: var(--yellow); }
+.grade-D { background: #db8b3f; }
+.grade-F { background: var(--red); }
+.grade-score { color: var(--text-muted); font-size: 0.78rem; }
+
+.vram-bar-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.vram-bar { position: relative; width: 70px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; flex-shrink: 0; }
+.vram-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+
+.type-tag {
+  display: inline-block;
+  padding: 0.08rem 0.4rem;
+  margin: 0 0.15rem 0.15rem 0;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  background: rgba(88,166,255,0.1);
+  color: var(--accent);
+}
