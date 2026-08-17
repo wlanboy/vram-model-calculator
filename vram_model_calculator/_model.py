@@ -29,8 +29,14 @@ THINKING_NAME_RE = re.compile(
     re.IGNORECASE
 )
 
-# Pure SSM architectures with no attention layers (n_kv_heads not applicable)
-SSM_ARCHS = {"mamba", "mamba2", "rwkv", "rwkv6", "rwkv7"}
+# Pure SSM and hybrid SSM/attention architectures where n_kv_heads is absent
+# from the GGUF metadata (n_kv_heads not applicable, or not exposed as a
+# single global value for the hybrid attention layers)
+SSM_ARCHS = {
+    "mamba", "mamba2", "rwkv", "rwkv6", "rwkv7", "rwkv6qwen2", "arwkv7",
+    "jamba", "falcon_h1", "granite_hybrid", "plamo2", "plamo3",
+    "qwen3next", "lfm2", "lfm2moe", "nemotron_h", "nemotron_h_moe",
+}
 
 # Build FILE_TYPE_MAP from the gguf library so newer quant types are included automatically.
 try:
