@@ -1,18 +1,16 @@
 # VRAM Model Calculator
 
-Beantwortet eine einfache Frage: **Passt dieses GGUF-Modell in meine GPU?**
+Beantwortet die kurze aber komplexe Frage: **Passt dieses GGUF-Modell in meine GPU?**
 
-Das Tool scannt lokale GGUF-Dateien, liest deren Metadaten aus und berechnet den VRAM-Bedarf für verschiedene Kontextlängen — vom kurzen Chat-Einsatz bis hin zu langen Coding-Agent-Läufen. Das Ergebnis lässt sich sowohl im Terminal als auch als interaktive Webseite anzeigen.
+Das Tool scannt lokale GGUF-Dateien, liest deren Metadaten aus und berechnet den VRAM-Bedarf für verschiedene Kontextlängen. Zusätzlich gibt es fertige Hardware- und Modellfamilien-Übersichten für gängige GPUs/APUs.
 
 https://wlanboy.github.io/vram-model-calculator/
 
 ---
 
-## Tutorial: von Null zum Ergebnis
+## 1. Voraussetzungen
 
-### 1. Voraussetzungen
-
-Python 3.11+ und `uv` (empfohlen) oder `pip`.
+Python 3.14+ und `uv` (empfohlen) oder `pip`.
 
 **Option A — Als installiertes CLI-Tool (empfohlen):**
 
@@ -28,10 +26,10 @@ uv tool install dist/vram_model_calculator-0.1.0-py3-none-any.whl
 uv sync
 
 # Oder klassisch
-pip install gguf tqdm
+pip install -r requirements.txt
 ```
 
-### 2. GGUF-Modelle scannen
+## 2. GGUF-Modelle scannen
 
 Ohne Argument scannt der Scanner automatisch alle bekannten Standard-Verzeichnisse:
 
@@ -58,15 +56,22 @@ uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner /pfad/zu/weiteren/modellen
 ```
 
-Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen — nur neue oder geänderte Dateien werden verarbeitet.
+Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen. Nur neue, geänderte oder unvollständig ausgewertete Dateien werden aktualisiert.
 
 ```
 🔍 5 Modelle werden analysiert...
 GGUF Scan: 100%|████████████| 5/5 [00:03<00:00]
-💾 Cache gespeichert unter 'models_cache.json' (28 Einträge).
+💾 Cache v12 gespeichert unter 'models_cache.json' (28 Einträge).
 ```
 
-### 3. VRAM-Matrix im Terminal anzeigen (optional)
+Soll der komplette Cache beim nächsten Lauf neu bewertet werden (z. B. nach einem Update der Erkennungslogik), markiert `rescan.sh` alle Einträge dafür:
+
+```bash
+./rescan.sh
+gguf-scanner
+```
+
+## 3. VRAM-Matrix im Terminal anzeigen (optional)
 
 ```bash
 # Als installiertes Tool (Option A)
@@ -86,7 +91,7 @@ Chat (8k)    |     0.19GB | 🟢  2.5G   | 🟢  2.5G  | ...
 Agent (512k) |    11.87GB | 🔴 14.2G   | 🟡 14.2G  | ...
 ```
 
-### 4. Interaktive Webansicht öffnen
+## 4. Interaktive Webansicht öffnen
 
 ```bash
 python -m http.server
@@ -94,7 +99,7 @@ python -m http.server
 
 Dann im Browser: [http://localhost:8000](http://localhost:8000)
 
-Die Seite lädt `models_cache.json` direkt, berechnet alle VRAM-Werte im Browser und zeigt eine filterbare Tabelle.
+Die Seite lädt `models_cache.json` direkt, berechnet alle VRAM-Werte im Browser und zeigt eine filterbare, sortierbare Tabelle mit frei wählbarer Kontextlänge, Session-Multiplikator sowie den Hardware- und Modellfamilien-Übersichten in der Navigation.
 
 > `fetch()` benötigt einen HTTP-Server — direktes Öffnen der `index.html` per `file://` funktioniert nicht.
 
@@ -102,9 +107,9 @@ Die Seite lädt `models_cache.json` direkt, berechnet alle VRAM-Werte im Browser
 
 ## Werkzeuge im Detail
 
-### `gguf-scanner.py` — Metadaten-Scanner
+### `gguf_scanner.py` — Metadaten-Scanner
 
-Scannt ein oder mehrere Verzeichnisse rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-Metadaten. Ohne Argument werden die Standard-Verzeichnisse (`~/LMStudio/models/`, `~/.lmstudio/models/`, `/models`, `/wdblack/models`) gescannt; fehlende Pfade werden dabei stillschweigend übersprungen.
+Scannt ein oder mehrere Verzeichnisse rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-Metadaten über den gemeinsamen Parser in [`_model.py`](vram_model_calculator/_model.py). Ohne Argument werden die Standard-Verzeichnisse (`~/LMStudio/models/`, `~/.lmstudio/models/`, `/models`, `/wdblack/models`) gescannt; fehlende Pfade werden dabei stillschweigend übersprungen.
 
 **Aufruf:**
 
@@ -124,23 +129,26 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 | `arch` | Modellarchitektur (`llama`, `qwen3`, `mistral`, …) |
 | `n_layers` | Anzahl der Transformer-Blöcke |
 | `n_embd` | Embedding-Dimension (Hidden Size) |
-| `n_heads` / `n_kv_heads` | Attention-Heads / KV-Heads |
+| `n_heads` / `n_kv_heads` | Attention-Heads / KV-Heads (`null` bei SSM/Hybrid-Architekturen) |
 | `n_experts` / `n_experts_used` | MoE-Parameter (falls vorhanden) |
-| `quant` | Quantisierungstyp (`Q4_K_M`, `Q8_0`, `F16`, …) |
+| `quant` | Quantisierungstyp (`Q4_K_M`, `Q8_0`, `F16`, …), automatisch aus `gguf.constants.LlamaFileType` abgeleitet |
 | `n_ctx_orig` | Trainings-Kontextfenster des Modells |
-| `file_size_gb` | Dateigröße in GB (= Gewichts-VRAM) |
+| `file_size_gb` | Dateigröße in GB (= Gewichts-VRAM); bei Shards die Summe aller Teile |
+| `mcp` / `thinking` | Heuristisch erkannt (Tool-Calling- bzw. Reasoning-Fähigkeit anhand Name/Metadaten) |
+| `has_missing_fields` | `true`, wenn Pflichtfelder fehlten — wird beim nächsten Scan automatisch neu bewertet |
 
-**Inkrementeller Cache:**  
-`models_cache.json` wird beim nächsten Scan wiederverwendet. Eine Datei wird nur neu gescannt, wenn sie noch nicht im Cache ist oder sich ihre Dateigröße geändert hat. Bei veralteter Cache-Version (`_version`) wird der Cache automatisch neu aufgebaut.
+**Inkrementeller, versionierter Cache:**
+`models_cache.json` wird beim nächsten Scan wiederverwendet. Eine Datei wird nur neu gescannt, wenn sie noch nicht im Cache ist, sich ihre Dateigröße geändert hat, oder sie beim letzten Mal mit `has_missing_fields: true` markiert wurde. Der Cache trägt eine `_version`, die bei jedem Schreibvorgang hochgezählt wird; alte Cache-Keys (mit HuggingFace-Org-Präfix) werden automatisch migriert und bereinigte Modellnamen rückwirkend aktualisiert, ohne dass ein Rescan nötig ist.
 
 **Besonderheiten:**
+- Mehrteilige Modelle (`-00001-of-00005.gguf`) werden als eine Einheit behandelt: nur der erste Shard wird geparst, die Gesamtgröße über alle Shards aufsummiert
 - Dateien, die mit `mmproj-` beginnen, werden als Vision-Projektor erkannt und separat gespeichert (`"type": "mmproj"`)
-- SSM-Modelle (z. B. LFM2, Nemotron-H) haben `n_kv_heads = 0` — kein KV-Cache
-- Fehlende Metadaten (z. B. `vocab_size`) werden über Fallback-Methoden ermittelt
+- SSM- und Hybrid-Architekturen (siehe `SSM_ARCHS` in `_model.py`: Mamba, RWKV, Jamba, Falcon-H1, Granite-Hybrid, PLaMo2/3, Qwen3-Next, LFM2, Nemotron-H u. a.) haben `n_kv_heads = null` — kein klassischer KV-Cache
+- Fehlende Metadaten (z. B. `vocab_size`) werden über Fallback-Methoden ermittelt; Modelle mit weiterhin fehlenden Feldern werden in `model-metadata.txt` protokolliert
 
 ---
 
-### `gguf-checker.py` — Integritätsprüfung
+### `gguf_checker.py` — Integritätsprüfung
 
 Prüft `.gguf`-Dateien auf strukturelle Korrektheit und Vollständigkeit, unabhängig vom Metadaten-Cache. Nützlich nach einem Download oder Kopiervorgang, um abgebrochene/beschädigte Dateien zu erkennen, bevor sie z. B. mit llama.cpp geladen werden.
 
@@ -169,7 +177,7 @@ Ohne Argument werden dieselben Standard-Verzeichnisse wie beim Scanner durchsuch
 
 ---
 
-### `vram-calculator.py` — Terminal-Rechner
+### `vram_calculator.py` — Terminal-Rechner
 
 Liest `models_cache.json` und gibt für jedes LLM-Modell eine VRAM-Matrix im Terminal aus.
 
@@ -210,7 +218,7 @@ Gesamt         = Gewichte + KV-Cache
 
 `head_dim = n_embd / n_heads`
 
-Bei SSM-Modellen (`n_kv_heads = 0`) entfällt der KV-Cache-Term.
+Bei SSM-/Hybrid-Modellen (`n_kv_heads = null`) entfällt der KV-Cache-Term.
 
 **Farbcodierung:**
 
@@ -228,30 +236,52 @@ Eine reine Browser-Anwendung ohne Build-Schritt. Sie besteht aus drei Dateien:
 
 | Datei | Aufgabe |
 |---|---|
-| `index.html` | Struktur: Tabelle, Filter-Controls |
+| `index.html` | Struktur: Tabelle, Filter-Controls, Navigation zu Hardware/Modell-Familien |
 | `filter.js` | Logik: JSON laden, VRAM berechnen, filtern, sortieren |
 | `style.css` | Dark-Mode-Design |
 
 **Funktionen:**
 
-- **Kontext-Auswahl** — wechselt die angezeigte VRAM-Spalte (Chat 8k bis Agent 1M)
-- **Architektur-Filter** — zeigt nur Modelle einer bestimmten Architektur
-- **Quantisierungs-Filter** — filtert nach Quant-Typ
+- **Kontext-Stepper** — frei wählbare Kontextlänge (1024er-Schritte, Standard 8192), statt fester Presets
+- **Sessions** — Multiplikator für den KV-Cache, um parallele Anfragen/Sessions zu simulieren
+- **Feature-Filter** — 🔧 MCP (Tool-Calling) und 🧠 Thinking/Reasoning, heuristisch aus den Modelldaten erkannt
 - **Suche** — Freitext-Suche über Modellname und Architektur
-- **Rote ausblenden** — vier Checkboxen (6 / 12 / 16 / 24 GB): blendet Modelle aus, die für die jeweilige GPU-Größe zu groß sind
+- **Sichtbare VRAM-Spalten** — zehn GPU-Größen von 4 GB bis 80 GB als ein-/ausblendbare Pills, standardmäßig sind 6 GB und 12 GB als „rot ausblenden“ aktiv
 - **Sortierung** — jede Spalte ist klickbar, auf- und absteigend
-
-**GPU-Fit-Zellen:**
-
-| Symbol | CSS-Klasse | Bedeutung |
-|---|---|---|
-| `✓` | `fit-good` | Passt bequem (≤ 85 %) |
-| `~` | `fit-tight` | Passt knapp (≤ 100 %) |
-| `✗` | `fit-none` | Passt nicht |
 
 Der Tooltip am Modellnamen warnt, wenn der gewählte Kontext das ursprüngliche Trainings-Kontextfenster des Modells überschreitet.
 
-`filter.js` lädt `models_cache.json` per `fetch()` und führt dieselbe VRAM-Berechnung wie `vram-calculator.py` im Browser durch — kein Server-Rendering, kein Build-Prozess.
+`filter.js` lädt `models_cache.json` per `fetch()` und führt dieselbe VRAM-Berechnung wie `vram_calculator.py` im Browser durch — kein Server-Rendering, kein Build-Prozess.
+
+---
+
+### `hardware/` — Hardware-Kompatibilitätsübersichten
+
+Statische, vorberechnete Kompatibilitätstabellen für konkrete GPUs/APUs: welche gescannten Modelle laufen darauf komfortabel, welche knapp, welche gar nicht. `hardware/index.html` listet alle Geräte als Karten mit Kurzstatistik, jede Unterseite (`hardware/<Gerät>/index.html`) zeigt die volle Tabelle.
+
+Aktuell dokumentierte Geräte:
+
+| Gerät | Typ |
+|---|---|
+| GMKtec EVO-X2 | Ryzen AI Max+ 395, 128 GB Unified Memory |
+| Intel Arc Pro B60 | Workstation-GPU, 24 GB VRAM |
+| Intel Arc B580 | Consumer-GPU, 12 GB VRAM |
+
+Layout und Styling liegen in `hardware/hardware.css` / `hardware/hardware.js`.
+
+---
+
+### `modell-familien/` — Modellfamilien-Steckbriefe
+
+Statische Übersichtsseiten je Modellfamilie (Architektur, typische Größen, Besonderheiten, Empfehlungen) als eigenständige HTML-Seiten, verlinkt aus der Navigation von `index.html`:
+
+Gemma 4 · Mistral · Qwen 3.5/3.6 · DeepSeek V3 · Phi-4 · GLM · Bonsai · LFM · OLMo/Tülu
+
+---
+
+### `gguf-format.md` — Referenz zum GGUF-Dateiformat
+
+Technische Übersicht über das GGUF-Format selbst (Header/Metadaten/Tensordaten-Aufbau, `general.type`-Werte, architekturspezifische Metadatenfelder). Hintergrundwissen dazu, welche Felder der Scanner ausliest und warum — kein Bestandteil der Tools, sondern Dokumentation.
 
 ---
 
@@ -274,7 +304,7 @@ uv build
 uv tool install dist/vram_model_calculator-0.1.0-py3-none-any.whl
 ```
 
-Danach stehen zwei Kommandos systemweit bereit:
+Danach stehen drei Kommandos systemweit bereit:
 
 ```bash
 gguf-scanner ~/LMStudio/models/
@@ -310,19 +340,12 @@ uv tool uninstall vram-model-calculator
 
 ---
 
-## Projektstruktur
+## CI
 
-```
-vram-model-calculator/
-├── vram_model_calculator/        # Installiertes Python-Paket
-│   ├── __init__.py
-│   ├── gguf_scanner.py           # Schritt 1: GGUF-Dateien scannen → models_cache.json
-│   ├── gguf_checker.py           # Optional: GGUF-Dateien auf Korrektheit/Vollständigkeit prüfen
-│   └── vram_calculator.py        # Schritt 2 (optional): Terminal-Ausgabe
-├── models_cache.json             # Generiert vom Scanner (im Arbeitsverzeichnis)
-├── index.html                    # Browser-UI
-├── filter.js                     # Logik der Browser-UI
-├── style.css                     # Styles der Browser-UI
-├── dist/                         # Build-Artefakte (wheel + sdist)
-└── pyproject.toml                # Paket-Metadaten und Abhängigkeiten
-```
+`.github/workflow/ci.yml` läuft bei jedem Push/PR auf `main`:
+
+1. Abhängigkeiten via `uv sync --frozen` installieren (exakt gemäß `uv.lock`)
+2. Lint & Syntax-Check mit `ruff check .`
+3. Typprüfung mit `pyright .`
+
+---
