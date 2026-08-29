@@ -18,6 +18,18 @@
     const CTX_STEP    = 1024;
     const CTX_DEFAULT = 8192;
 
+    const MODEL_TYPE_LLM = "llm";
+
+    // KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and
+    // one Value tensor. Keep these two in sync with the identical constants
+    // in vram_calculator.py.
+    const KV_BYTES_PER_ELEMENT = 2;
+    const KV_TENSORS_PER_LAYER = 2;
+
+    // A GPU is "tight" once usage crosses this fraction of its VRAM. Keep in
+    // sync with the identical constant in vram_calculator.py.
+    const TIGHT_FIT_RATIO = 0.85;
+
 function activeGpuLimits() {
         return GPU_LIMITS.filter(g => state.hideRed[String(g.gb)]);
     }
@@ -41,13 +53,13 @@ function activeGpuLimits() {
     function calcKv(model, ctx) {
         if (model.isSSM || !model.n_kv_heads || !model.n_layers || !model.n_embd) return 0;
         const headDim = Math.floor(model.n_embd / (model.n_heads || 1));
-        return (2 * model.n_layers * model.n_kv_heads * headDim * ctx * 2) / (1024 ** 3);
+        return (KV_TENSORS_PER_LAYER * model.n_layers * model.n_kv_heads * headDim * ctx * KV_BYTES_PER_ELEMENT) / (1024 ** 3);
     }
 
     function buildModels(raw) {
         const result = [];
         for (const [key, data] of Object.entries(raw)) {
-            if (typeof data !== "object" || data.type !== "llm") continue;
+            if (typeof data !== "object" || data.type !== MODEL_TYPE_LLM) continue;
             const moe = (data.n_experts && data.n_experts_used)
                 ? data.n_experts_used + "/" + data.n_experts
                 : null;
@@ -82,14 +94,14 @@ function activeGpuLimits() {
     }
 
     function fitClass(total, limitGb) {
-        if (total <= limitGb * 0.85) return "fit-good";
-        if (total <= limitGb)        return "fit-tight";
+        if (total <= limitGb * TIGHT_FIT_RATIO) return "fit-good";
+        if (total <= limitGb)                   return "fit-tight";
         return "fit-none";
     }
 
     function fitIcon(total, limitGb) {
-        if (total <= limitGb * 0.85) return "✓";
-        if (total <= limitGb)        return "~";
+        if (total <= limitGb * TIGHT_FIT_RATIO) return "✓";
+        if (total <= limitGb)                   return "~";
         return "✗";
     }
 
@@ -106,17 +118,18 @@ function activeGpuLimits() {
         });
     }
 
+    const COLUMN_ACCESSORS = {
+        name:  m => m.name.toLowerCase(),
+        arch:  m => m.arch,
+        quant: m => m.quant || "",
+        size:  m => m.size_gb,
+        kv:    m => calcKv(m, state.ctx) * state.sessions,
+        ctx:   m => m.n_ctx_orig || 0,
+        total: m => effectiveTotal(m),
+    };
+
     function colValue(model, col) {
-        switch (col) {
-            case "name":  return model.name.toLowerCase();
-            case "arch":  return model.arch;
-            case "quant": return model.quant || "";
-            case "size":  return model.size_gb;
-            case "kv":    return calcKv(model, state.ctx) * state.sessions;
-            case "ctx":   return model.n_ctx_orig || 0;
-            case "total": return effectiveTotal(model);
-            default:      return model.name.toLowerCase();
-        }
+        return (COLUMN_ACCESSORS[col] || COLUMN_ACCESSORS.name)(model);
     }
 
     // ── Render ───────────────────────────────────────────────
