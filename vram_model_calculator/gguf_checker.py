@@ -115,14 +115,26 @@ def _collect_gguf_files(targets):
     return files
 
 
-def _record(result, path, ok, incomplete, corrupt):
-    reason = result.get("reason", "")
-    if result["status"] == "ok":
-        ok.append(path)
-    elif result["status"] == "incomplete":
-        incomplete.append((path, reason))
-    else:
-        corrupt.append((path, reason))
+class ScanReport:
+    """Accumulates check_file()/check_shard_group() results, partitioned by status."""
+
+    def __init__(self):
+        self.ok = []
+        self.incomplete = []
+        self.corrupt = []
+
+    def add(self, result, path):
+        reason = result.get("reason", "")
+        if result["status"] == "ok":
+            self.ok.append(path)
+        elif result["status"] == "incomplete":
+            self.incomplete.append((path, reason))
+        else:
+            self.corrupt.append((path, reason))
+
+    @property
+    def has_problems(self):
+        return bool(self.incomplete or self.corrupt)
 
 
 def main():
@@ -142,29 +154,29 @@ def main():
         else:
             singles.append(f)
 
-    ok, incomplete, corrupt = [], [], []
+    report = ScanReport()
 
     for f in tqdm(singles, desc="Einzeldateien prüfen", unit="file", colour="green"):
-        _record(check_file(f), f, ok, incomplete, corrupt)
+        report.add(check_file(f), f)
 
     for base, paths in tqdm(shard_groups.items(), desc="Shard-Gruppen prüfen", unit="group", colour="cyan"):
         for p in paths:
-            _record(check_file(p), p, ok, incomplete, corrupt)
+            report.add(check_file(p), p)
         group_result = check_shard_group(paths)
         if group_result["status"] != "ok":
-            incomplete.append((base, group_result.get("reason", "")))
+            report.incomplete.append((base, group_result.get("reason", "")))
 
-    print(f"\n✅ OK: {len(ok)}")
-    if incomplete:
-        print(f"⚠️ Unvollständig: {len(incomplete)}")
-        for path, reason in incomplete:
+    print(f"\n✅ OK: {len(report.ok)}")
+    if report.incomplete:
+        print(f"⚠️ Unvollständig: {len(report.incomplete)}")
+        for path, reason in report.incomplete:
             print(f"  - {path}: {reason}")
-    if corrupt:
-        print(f"❌ Defekt: {len(corrupt)}")
-        for path, reason in corrupt:
+    if report.corrupt:
+        print(f"❌ Defekt: {len(report.corrupt)}")
+        for path, reason in report.corrupt:
             print(f"  - {path}: {reason}")
 
-    return 1 if (incomplete or corrupt) else 0
+    return 1 if report.has_problems else 0
 
 
 if __name__ == "__main__":
