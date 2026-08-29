@@ -1,6 +1,8 @@
 import json
 import os
 
+from ._model import MODEL_TYPE_LLM
+
 CACHE_FILE = "models_cache.json"
 
 GPU_LIMITS = {
@@ -9,6 +11,15 @@ GPU_LIMITS = {
     "16GB (Pro)": 16.0,
     "24GB (Ultra)": 24.0
 }
+
+# KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and one
+# Value tensor. Keep these two in sync with the identical constants in filter.js.
+KV_BYTES_PER_ELEMENT = 2
+KV_TENSORS_PER_LAYER = 2
+
+# A GPU is "tight" once usage crosses this fraction of its VRAM. Keep in sync
+# with the identical constant in filter.js.
+TIGHT_FIT_RATIO = 0.85
 
 USECASES = {
     "Chat (8k)":    8000,
@@ -36,7 +47,7 @@ def to_int(val):
     return 0
 
 def get_color(total, limit):
-    if total <= limit * 0.85:
+    if total <= limit * TIGHT_FIT_RATIO:
         return "\033[92m🟢\033[0m"  # Grün
     if total <= limit:
         return "\033[93m🟡\033[0m"  # Gelb
@@ -53,7 +64,7 @@ def calculate_vram_matrix():
     # Versionseintrag und mmproj-Dateien überspringen
     models = {
         k: v for k, v in loaded.items()
-        if isinstance(v, dict) and v.get("type") == "llm"
+        if isinstance(v, dict) and v.get("type") == MODEL_TYPE_LLM
     }
 
     for name, data in models.items():
@@ -84,7 +95,10 @@ def calculate_vram_matrix():
         for uc_name, ctx in USECASES.items():
             head_dim = embd // (heads if heads > 0 else 1)
             kv_dim = kv_heads * head_dim
-            kv_vram = (2 * layers * kv_dim * ctx * 2) / (1024**3) if not is_ssm and kv_heads > 0 else 0.0
+            kv_vram = (
+                (KV_TENSORS_PER_LAYER * layers * kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024**3)
+                if not is_ssm and kv_heads > 0 else 0.0
+            )
 
             total = base_size + kv_vram
 
