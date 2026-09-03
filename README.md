@@ -35,6 +35,7 @@ Ohne Argument scannt der Scanner automatisch alle bekannten Standard-Verzeichnis
 
 - `~/LMStudio/models/`
 - `~/.lmstudio/models/`
+- `~/.cache/huggingface/hub/`
 - `/models`
 - `/wdblack/models`
 
@@ -109,7 +110,7 @@ Die Seite lädt `models_cache.json` direkt, berechnet alle VRAM-Werte im Browser
 
 ### `gguf_scanner.py` — Metadaten-Scanner
 
-Scannt ein oder mehrere Verzeichnisse rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-Metadaten über den gemeinsamen Parser in [`_model.py`](vram_model_calculator/_model.py). Ohne Argument werden die Standard-Verzeichnisse (`~/LMStudio/models/`, `~/.lmstudio/models/`, `/models`, `/wdblack/models`) gescannt; fehlende Pfade werden dabei stillschweigend übersprungen.
+Scannt ein oder mehrere Verzeichnisse rekursiv nach `.gguf`-Dateien und extrahiert deren GGUF-Metadaten über den gemeinsamen Parser in [`_model.py`](vram_model_calculator/_model.py). Ohne Argument werden die Standard-Verzeichnisse (`~/LMStudio/models/`, `~/.lmstudio/models/`, `~/.cache/huggingface/hub/`, `/models`, `/wdblack/models`) gescannt; fehlende Pfade werden dabei stillschweigend übersprungen.
 
 **Aufruf:**
 

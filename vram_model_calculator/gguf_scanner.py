@@ -16,6 +16,7 @@ SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
 DEFAULT_DIRS = [
     os.path.expanduser("~/LMStudio/models/"),
     os.path.expanduser("~/.lmstudio/models/"),
+    os.path.expanduser("~/.cache/huggingface/hub/"),
     "/models",
     "/wdblack/models",
 ]
