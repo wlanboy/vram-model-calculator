@@ -1,5 +1,5 @@
 {
-    "_version": 32,
+    "_version": 33,
     "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -889,6 +889,28 @@
         "file_size_gb": 6.631,
         "rel_path": "Mistral-Nemo-12B-ArliAI-RPMax-v1.2-i1-GGUF/Mistral-Nemo-12B-ArliAI-RPMax-v1.2.i1-Q4_K_S.gguf"
     },
+    "Muse-Glimmer-30B-UD-Q4_K_XL.gguf": {
+        "type": "llm",
+        "arch": "muse-glimmer",
+        "name": "Muse-Glimmer-30B",
+        "size_label": "28B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": false,
+        "quant": "Q4_K_M",
+        "n_layers": 52,
+        "n_embd": 6656,
+        "n_heads": 32,
+        "n_kv_heads": 2,
+        "n_ff": 19968,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 202048,
+        "n_ctx_orig": 131072,
+        "file_size_bytes": 15878222368,
+        "file_size_gb": 14.788,
+        "rel_path": "Muse-Glimmer-30B-UD-Q4_K_XL.gguf"
+    },
     "Muse-Glimmer-30B/Muse-Glimmer-30B-UD-Q4_K_XL.gguf": {
         "type": "llm",
         "arch": "muse-glimmer",
@@ -1474,7 +1496,7 @@
     "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf": {
         "type": "llm",
         "arch": "qwen35",
-        "name": "Qwen3.5 0.8B",
+        "name": "Qwen3.5-0.8B",
         "size_label": "0.8B",
         "parameter_count": null,
         "mcp": true,
@@ -1489,7 +1511,7 @@
         "n_experts_used": null,
         "vocab_size": 248320,
         "n_ctx_orig": 262144,
-        "file_size_bytes": 811843040,
+        "file_size_bytes": 811843840,
         "file_size_gb": 0.756,
         "rel_path": "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf"
     },
