@@ -5,7 +5,7 @@ import sys
 
 from tqdm import tqdm
 
-from ._model import METADATA_DUMP_FILE, clean_name, get_model_params
+from ._model import METADATA_DUMP_FILE, NotAnLLMError, clean_name, get_model_params
 
 CACHE_FILE = "models_cache.json"
 SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
@@ -20,6 +20,10 @@ DEFAULT_DIRS = [
     "/models",
     "/wdblack/models",
 ]
+
+# Path substrings (case-insensitive) that mark a model as excluded from
+# scanning entirely, e.g. "heretic"-style abliterated/uncensored finetunes.
+SKIP_PATH_SUBSTRINGS = ["heretic"]
 
 
 def get_shard_info(path):
@@ -102,6 +106,7 @@ def update_cache(base_dirs):
             print(f"⚠️ Cache-Datei korrupt, erstelle neu. ({e})")
 
     all_pairs = []
+    skipped_by_filter = 0
     for base_dir in base_dirs:
         if not os.path.exists(base_dir):
             print(f"❌ Pfad nicht gefunden: {base_dir}")
@@ -109,8 +114,16 @@ def update_cache(base_dirs):
         print(f"📂 Scanne: {base_dir}")
         for root, _, files in os.walk(base_dir):
             for f in files:
-                if f.endswith(".gguf"):
-                    all_pairs.append((os.path.join(root, f), base_dir))
+                if not f.endswith(".gguf"):
+                    continue
+                abs_path = os.path.join(root, f)
+                if any(s in abs_path.lower() for s in SKIP_PATH_SUBSTRINGS):
+                    skipped_by_filter += 1
+                    continue
+                all_pairs.append((abs_path, base_dir))
+
+    if skipped_by_filter:
+        print(f"⏭️ {skipped_by_filter} Datei(en) durch Filter übersprungen ({', '.join(SKIP_PATH_SUBSTRINGS)}).")
 
     if not all_pairs:
         print("❌ Keine GGUF-Dateien in den angegebenen Verzeichnissen gefunden.")
@@ -148,6 +161,7 @@ def update_cache(base_dirs):
     print(f"🔍 {len(new_pairs)} Modelle werden analysiert...")
 
     errors = []
+    skipped = []
     if os.path.exists(METADATA_DUMP_FILE):
         open(METADATA_DUMP_FILE, 'w').close()
 
@@ -162,12 +176,19 @@ def update_cache(base_dirs):
                 params = get_model_params(abs_path)
             params["rel_path"] = rel
             cache[rel] = params
+        except NotAnLLMError as e:
+            skipped.append(f"Datei: {rel} | Grund: {e}")
         except Exception as e:  # noqa: BLE001 -- one bad/corrupt GGUF file must not abort the whole batch scan
             errors.append(f"Datei: {rel} | Grund: {e}")
 
     new_version = file_version + 1
     with open(CACHE_FILE, 'w') as f:
         json.dump({"_version": new_version, **dict(sorted(cache.items()))}, f, indent=4)
+
+    if skipped:
+        print(f"\n⏭️ {len(skipped)} Datei(en) übersprungen (kein LLM):")
+        for s in skipped:
+            print(f"  - {s}")
 
     if errors:
         print("\n⚠️ SCAN-FEHLER:")

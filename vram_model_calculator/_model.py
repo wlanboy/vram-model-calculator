@@ -25,6 +25,20 @@ SSM_ARCHS = {
     "qwen3next", "lfm2", "lfm2moe", "nemotron_h", "nemotron_h_moe",
 }
 
+# Image/video diffusion architectures (stable-diffusion.cpp GGUF quantizations,
+# e.g. from HF caches shared with LMStudio/HF hub). These carry no LLM-style
+# block_count/n_layers metadata and are out of scope for this VRAM calculator.
+DIFFUSION_ARCHS = {
+    "flux", "sd1", "sd2", "sd3", "sdxl", "sdxl_refiner", "chroma",
+    "lumina2", "auraflow", "hidream", "hunyuan_video", "wan", "wan2",
+    "ltxv", "cosmos", "qwen_image", "pixart", "kolors", "cascade",
+    "playground",
+}
+
+
+class NotAnLLMError(ValueError):
+    """Raised when a GGUF file is recognized as a non-LLM model (e.g. image diffusion)."""
+
 
 def get_mmproj_params(reader, file_path, file_size_bytes):
     raw_name = clean_name(get_str(reader, "general.name"))
@@ -75,6 +89,9 @@ def get_model_params(file_path, file_size_bytes=None):
         arch = "llama"
 
     arch_lower = arch.lower()
+
+    if arch_lower in DIFFUSION_ARCHS:
+        raise NotAnLLMError(f"kein LLM, Diffusionsmodell (arch={arch})")
 
     n_ctx = (
         get_safe_int(reader, f"{arch}.context_length") or
