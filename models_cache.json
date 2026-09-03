@@ -1,5 +1,5 @@
 {
-    "_version": 33,
+    "_version": 34,
     "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -1496,7 +1496,7 @@
     "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf": {
         "type": "llm",
         "arch": "qwen35",
-        "name": "Qwen3.5-0.8B",
+        "name": "Qwen3.5 0.8B",
         "size_label": "0.8B",
         "parameter_count": null,
         "mcp": true,
@@ -1511,7 +1511,7 @@
         "n_experts_used": null,
         "vocab_size": 248320,
         "n_ctx_orig": 262144,
-        "file_size_bytes": 811843840,
+        "file_size_bytes": 811843040,
         "file_size_gb": 0.756,
         "rel_path": "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf"
     },
@@ -2511,6 +2511,28 @@
         "file_size_bytes": 2099501664,
         "file_size_gb": 1.955,
         "rel_path": "granite-4.1-3b-GGUF/granite-4.1-3b-Q4_K_M.gguf"
+    },
+    "models--unsloth--GLM-4.7-Flash-REAP-23B-A3B-GGUF/snapshots/983a65c63bc7bd37353e5246abc8005b3f72d5ec/GLM-4.7-Flash-REAP-23B-A3B-Q4_K_M.gguf": {
+        "type": "llm",
+        "arch": "deepseek2",
+        "name": "cerebras/GLM-4.7-Flash-REAP-23B-A3B",
+        "size_label": "23B-A3B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": true,
+        "quant": "Q4_K_M",
+        "n_layers": 47,
+        "n_embd": 2048,
+        "n_heads": 20,
+        "n_kv_heads": 1,
+        "n_ff": 10240,
+        "n_experts": 48,
+        "n_experts_used": 4,
+        "vocab_size": 154880,
+        "n_ctx_orig": 202752,
+        "file_size_bytes": 14113838816,
+        "file_size_gb": 13.145,
+        "rel_path": "models--unsloth--GLM-4.7-Flash-REAP-23B-A3B-GGUF/snapshots/983a65c63bc7bd37353e5246abc8005b3f72d5ec/GLM-4.7-Flash-REAP-23B-A3B-Q4_K_M.gguf"
     },
     "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-Q4_K_XL.gguf": {
         "type": "llm",
