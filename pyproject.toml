@@ -26,5 +26,6 @@ packages = ["vram_model_calculator"]
 [dependency-groups]
 dev = [
     "pyright>=1.1.409",
+    "pytest>=9.1.1",
     "ruff>=0.15.12",
 ]
