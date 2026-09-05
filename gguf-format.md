@@ -91,28 +91,56 @@ Alle architekturspezifischen Felder verwenden das Schema `{arch}.feldname`, wobe
 
 Alle klassischen Transformer-Architekturen wie `llama`, `mistral`, `qwen2`, `gemma`, `gemma2`, `gemma3`, `phi`, `phi3`, `falcon`, `starcoder2`, `deepseek2`, `command-r` u.a. verwenden Attention-Layer und benötigen `attention.head_count_kv` für die KV-Cache-VRAM-Berechnung.
 
-### Reine SSM-Architekturen (ohne Attention, kein `n_kv_heads`)
+### SSM- und Hybrid-Architekturen (kein `n_kv_heads`)
 
-State-Space-Modelle (SSMs) verwenden keine klassischen Attention-Layer. Das Feld `attention.head_count_kv` existiert nicht oder ist nicht relevant:
+Diese Architekturen liefern kein global auswertbares `attention.head_count_kv` — entweder weil sie komplett auf State-Space-Blöcken basieren (reine SSMs), oder weil sie SSM- und Attention-Blöcke mischen und der Wert für die Attention-Layer nicht als einzelnes globales Feld vorliegt (Hybrid-Modelle). Beide Gruppen werden vom Scanner identisch behandelt: `n_kv_heads` wird auf `None` gesetzt statt aus der GGUF-Datei gelesen.
+
+| Architektur | Typ | Beschreibung |
+|-------------|-----|--------------|
+| `mamba` | SSM | Mamba (SSM v1) |
+| `mamba2` | SSM | Mamba2 (State Space Model v2) |
+| `rwkv` | SSM | RWKV (ältere Versionen) |
+| `rwkv6` | SSM | RWKV v6 |
+| `rwkv7` | SSM | RWKV v7 (Eagle/Finch) |
+| `rwkv6qwen2` | Hybrid | RWKV6/Qwen2-Hybrid |
+| `arwkv7` | Hybrid | ARWKV v7 |
+| `jamba` | Hybrid | Jamba (AI21 Labs) |
+| `falcon_h1` | Hybrid | Falcon H1 (Hybrid Head) |
+| `granite_hybrid` | Hybrid | IBM Granite Hybrid |
+| `plamo2` | Hybrid | PLaMo 2 |
+| `plamo3` | Hybrid | PLaMo 3 |
+| `qwen3next` | Hybrid | Qwen3-Next |
+| `lfm2` | Hybrid | LiquidAI LFM2 |
+| `lfm2moe` | Hybrid | LiquidAI LFM2 (MoE) |
+| `nemotron_h` | Hybrid | Nvidia Nemotron-H |
+| `nemotron_h_moe` | Hybrid | Nvidia Nemotron-H (MoE) |
+
+Diese Liste (`SSM_ARCHS` in `_model.py`) wächst mit jeder neuen State-Space-/Hybrid-Architektur, die llama.cpp unterstützt, und muss bei Bedarf ergänzt werden.
+
+---
+
+## Nicht unterstützte Architekturen (Diffusionsmodelle)
+
+Bild-/Video-Diffusionsmodelle (aus stable-diffusion.cpp-GGUF-Quantisierungen, z.B. über gemeinsam genutzte HF-Caches) haben keine LLM-typischen `block_count`/`n_layers`-Metadaten und liegen außerhalb des Scopes dieses Rechners. Sie werden anhand von `general.architecture` erkannt und beim Scannen übersprungen (`NotAnLLMError`):
 
 | Architektur | Beschreibung |
 |-------------|--------------|
-| `mamba` | Mamba (SSM v1) |
-| `mamba2` | Mamba2 (State Space Model v2) |
-| `rwkv` | RWKV (ältere Versionen) |
-| `rwkv6` | RWKV v6 |
-| `rwkv7` | RWKV v7 (Eagle/Finch) |
-
-### Hybride Architekturen (SSM + Attention)
-
-Diese Modelle kombinieren SSM-Blöcke und Attention-Blöcke. Sie benötigen `attention.head_count_kv` für ihre Attention-Schichten und dürfen **nicht** als reine SSMs behandelt werden:
-
-| Architektur | Beschreibung |
-|-------------|--------------|
-| `jamba` | Jamba (AI21 Labs) |
-| `zamba` | Zamba |
-| `bamba` | Bamba |
-| `falcon_h1` | Falcon H1 (Hybrid Head) |
+| `flux` | Flux |
+| `sd1`, `sd2`, `sd3` | Stable Diffusion 1/2/3 |
+| `sdxl`, `sdxl_refiner` | Stable Diffusion XL |
+| `chroma` | Chroma |
+| `lumina2` | Lumina 2 |
+| `auraflow` | AuraFlow |
+| `hidream` | HiDream |
+| `hunyuan_video` | Hunyuan Video |
+| `wan`, `wan2` | Wan / Wan2 |
+| `ltxv` | LTX-Video |
+| `cosmos` | Nvidia Cosmos |
+| `qwen_image` | Qwen-Image |
+| `pixart` | PixArt |
+| `kolors` | Kolors |
+| `cascade` | Stable Cascade |
+| `playground` | Playground |
 
 ---
 
@@ -144,6 +172,25 @@ Der Wert von `general.file_type` ist ein Integer, der über die Enum-Klasse `Lla
 | `tokenizer.ggml.merges` | array | BPE-Merge-Regeln |
 | `tokenizer.ggml.vocab_size` | uint32 | Vokabulargröße (Alternative zu `{arch}.vocab_size`) |
 | `tokenizer.chat_template` | string | Jinja2-Chat-Template für Prompt-Formatierung |
+
+---
+
+## Capability-Erkennung (MCP/Tool-Calls, Thinking)
+
+Der Scanner leitet zusätzliche Fähigkeiten heuristisch aus vorhandenen Metadaten ab (`detection.py`), da GGUF dafür keine dedizierten Felder vorsieht:
+
+### Tool-Call- / MCP-Unterstützung (`detect_mcp`)
+
+Erkannt über:
+- `tokenizer.chat_template` enthält `tool_call`, `function_call`, `<|tool|>` oder `[tool_calls]`
+- **oder** `general.tags` enthält `tool`, `function-call` oder `mcp`
+
+### Thinking-/Reasoning-Modus (`detect_thinking`)
+
+Erkannt über (in dieser Reihenfolge):
+1. `tokenizer.chat_template` enthält `<think>`
+2. `general.tags` enthält `think` oder `reason`
+3. Fallback: Name oder Dateiname matcht ein Reasoning-Muster (`think`, `thinking`, `qwq`, `deepseek-r\d+`, `reason`, `reasoning`, `logic`, `reflect`, `chain`, `cog`)
 
 ---
 
