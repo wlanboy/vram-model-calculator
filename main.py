@@ -4,6 +4,8 @@ import sys
 
 from vram_model_calculator.gguf_checker import main as checker_main
 from vram_model_calculator.gguf_scanner import DEFAULT_DIRS, update_cache
+from vram_model_calculator.hf_cache_picker import DEFAULT_DEST
+from vram_model_calculator.hf_cache_picker import main as hf_cache_picker_main
 from vram_model_calculator.vram_calculator import calculate_vram_matrix
 
 
@@ -22,6 +24,17 @@ def main():
 
     subparsers.add_parser("calculate", help="VRAM-Matrix aus models_cache.json berechnen und ausgeben")
 
+    hf_parser = subparsers.add_parser(
+        "hf-copy",
+        help="GGUF-Dateien aus dem HF-Cache nummeriert auflisten und ausgewählte nach /wdblack/models kopieren",
+    )
+    hf_parser.add_argument("--dry-run", action="store_true", help="Nur anzeigen, nicht kopieren")
+    hf_parser.add_argument("--dest", default=None, help=f"Zielverzeichnis (Default: {DEFAULT_DEST})")
+    hf_parser.add_argument(
+        "selection", nargs="*",
+        help="Auswahl ('1,3,5-7' oder 'all'). Ohne Angabe wird interaktiv gefragt.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "scan":
@@ -33,6 +46,14 @@ def main():
     if args.command == "calculate":
         calculate_vram_matrix()
         return 0
+    if args.command == "hf-copy":
+        sys.argv = [
+            sys.argv[0],
+            *(["--dry-run"] if args.dry_run else []),
+            *(["--dest", args.dest] if args.dest else []),
+            *args.selection,
+        ]
+        return hf_cache_picker_main()
     return 1
 
 

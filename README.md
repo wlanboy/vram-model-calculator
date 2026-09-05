@@ -188,6 +188,24 @@ Ohne Argument werden dieselben Standard-Verzeichnisse wie beim Scanner durchsuch
 
 ---
 
+### `hf_cache_picker.py` — GGUF-Dateien aus dem HF-Cache kopieren
+
+Listet alle `.gguf`-Dateien im Huggingface-Hub-Cache (`~/.cache/huggingface/hub/`) nummeriert auf und kopiert eine Auswahl davon nach `/wdblack/models/<org>/<repo>/` — passend zur dort bereits verwendeten Ordnerstruktur (Org/Repo/Datei).
+
+**Aufruf:**
+
+```bash
+uv run main.py hf-copy                    # listet auf, fragt interaktiv nach Auswahl
+uv run main.py hf-copy 1,3,5-7            # kopiert Einträge 1, 3, 5, 6, 7
+uv run main.py hf-copy all                # kopiert alle gefundenen Dateien
+uv run main.py hf-copy --dry-run all      # zeigt nur an, kopiert nichts
+uv run main.py hf-copy --dest /pfad all   # abweichendes Zielverzeichnis
+```
+
+Bereits vorhandene Dateien am Ziel (gleicher Dateiname und gleiche Größe) werden übersprungen, nicht überschrieben.
+
+---
+
 ### `vram_calculator.py` — Terminal-Rechner
 
 Liest `models_cache.json` und gibt für jedes LLM-Modell eine VRAM-Matrix im Terminal aus.
