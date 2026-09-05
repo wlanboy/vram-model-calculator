@@ -21,8 +21,10 @@ MODEL_TYPE_MMPROJ = "mmproj"
 # single global value for the hybrid attention layers)
 SSM_ARCHS = {
     "mamba", "mamba2", "rwkv", "rwkv6", "rwkv7", "rwkv6qwen2", "arwkv7",
-    "jamba", "falcon_h1", "granite_hybrid", "plamo2", "plamo3",
+    "jamba", "falcon-h1", "granitehybrid", "plamo2", "plamo3",
     "qwen3next", "lfm2", "lfm2moe", "nemotron_h", "nemotron_h_moe",
+    "qwen35", "qwen35moe", "qwen4exp", "kimi-linear", "kimi-k3",
+    "bailingmoe3", "minimax-01",
 }
 
 # Image/video diffusion architectures (stable-diffusion.cpp GGUF quantizations,
