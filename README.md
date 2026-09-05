@@ -47,6 +47,9 @@ gguf-scanner
 
 # Direkt aus dem Repo (Option B)
 uv run -m vram_model_calculator.gguf_scanner
+
+# Direkt aus dem Repo, gebündelter Einstiegspunkt (Option C)
+uv run main.py scan
 ```
 
 Ein explizites Verzeichnis überschreibt die Standard-Verzeichnisse:
@@ -55,6 +58,7 @@ Ein explizites Verzeichnis überschreibt die Standard-Verzeichnisse:
 gguf-scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner ~/LMStudio/models/
 uv run -m vram_model_calculator.gguf_scanner /pfad/zu/weiteren/modellen
+uv run main.py scan ~/LMStudio/models/
 ```
 
 Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen. Nur neue, geänderte oder unvollständig ausgewertete Dateien werden aktualisiert.
@@ -80,6 +84,9 @@ vram-calculator
 
 # Direkt aus dem Repo (Option B)
 uv run -m vram_model_calculator.vram_calculator
+
+# Direkt aus dem Repo, gebündelter Einstiegspunkt (Option C)
+uv run main.py calculate
 ```
 
 Gibt für jedes Modell eine Tabelle aus, die zeigt, wie viel VRAM für jeden Anwendungsfall benötigt wird und ob es in die konfigurierten GPUs passt:
@@ -161,6 +168,9 @@ uv run -m vram_model_calculator.gguf_checker [pfad ...]
 uv run -m vram_model_calculator.gguf_checker /models
 uv run -m vram_model_calculator.gguf_checker ~/LMStudio/models/modell.gguf
 uv run -m vram_model_calculator.gguf_checker ~/.lmstudio/models
+
+# Gebündelter Einstiegspunkt (Option C)
+uv run main.py check [pfad ...]
 ```
 
 Ohne Argument werden dieselben Standard-Verzeichnisse wie beim Scanner durchsucht. Einzelne `.gguf`-Dateien können auch direkt angegeben werden.
