@@ -2,8 +2,8 @@
 import argparse
 import sys
 
-from vram_model_calculator.gguf_scanner import DEFAULT_DIRS, update_cache
 from vram_model_calculator.gguf_checker import main as checker_main
+from vram_model_calculator.gguf_scanner import DEFAULT_DIRS, update_cache
 from vram_model_calculator.vram_calculator import calculate_vram_matrix
 
 
