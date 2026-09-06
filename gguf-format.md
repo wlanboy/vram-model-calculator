@@ -276,9 +276,9 @@ Vom Projekt ausgewertete Felder (`get_mmproj_params()` in `_model.py`):
 
 Neuere Vision-Encoder (Qwen2.5-VL, MiMo-VL, Granite4-Vision u.a.) liefern zusätzlich u.a. `image_min_pixels`/`image_max_pixels`, `preproc_min_tiles`/`preproc_max_tiles`/`preproc_image_size`, `image_mean`/`image_std`, `spatial_merge_size`, `expert_count_per_layer`/`expert_used_count` (MoE-Vision-Encoder), `attention.head_count_kv` (GQA im Vision-Encoder), `attention.head_dim`, `window_size`, `is_deepstack_layers`. Diese werden vom Scanner aktuell nicht gelesen.
 
-### Audio-Encoder: `clip.audio.*` / `clip.gen.audio.*` (neuer Namensraum, nicht unterstützt)
+### Audio-Encoder: `clip.audio.*` / `clip.gen.audio.*`
 
-Seit einer neueren llama.cpp-Version existiert analog zu `clip.vision.*` ein eigener Namensraum für Audio-Encoder (Speech-to-Text-Projektoren, z.B. `clip.audio.num_mel_bins`, `.embedding_length`, `.feed_forward_length`, `.block_count`, `.attention.head_count`) sowie `clip.gen.audio.*` für generative Audio-/TTS-Modelle. Ein reiner Audio-`mmproj` (kein `clip.vision.*`) wird von `get_mmproj_params()` aktuell **nicht** erkannt: Die kritischen Felder (`image_size`, `n_embd`, `n_layers`) werden ausschließlich aus `clip.vision.*` gelesen, sodass eine valide Audio-only-Datei fälschlich als „fehlende Felder“ markiert würde. Das Flag `clip.has_audio_encoder` (analog zu `clip.has_llava_projector`) könnte künftig genutzt werden, um Audio-Projektoren zu erkennen und die passenden Felder auszuwerten — bisher nicht implementiert.
+Seit einer neueren llama.cpp-Version existiert analog zu `clip.vision.*` ein eigener Namensraum für Audio-Encoder (Speech-to-Text-Projektoren, z.B. `clip.audio.num_mel_bins`, `.embedding_length`, `.feed_forward_length`, `.block_count`, `.attention.head_count`) sowie `clip.gen.audio.*` für generative Audio-/TTS-Modelle. `get_mmproj_params()` erkennt reine Audio-`mmproj`-Dateien (kein `clip.vision.*`) über das Flag `clip.has_audio_encoder` (analog zu `clip.has_llava_projector`) und wertet dann `clip.audio.*` statt `clip.vision.*` aus (kritische Felder: `num_mel_bins`, `n_embd`, `n_layers`). `clip.gen.audio.*` (generative TTS-Modelle) wird weiterhin nicht ausgewertet.
 
 ---
 

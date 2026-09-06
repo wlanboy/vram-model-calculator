@@ -175,3 +175,34 @@ class TestGetModelParamsMmproj:
         })
         params = get_model_params("/models/MyModel/mmproj-f16.gguf", file_size_bytes=1)
         assert params["has_missing_fields"] is True
+
+    def test_audio_only_projector_uses_clip_audio_fields(self, patch_reader):
+        patch_reader["reader"] = FakeReader({
+            "general.type": str_field("model"),
+            "general.name": str_field("MyModel-mmproj-audio"),
+            "clip.has_audio_encoder": int_field(1),
+            "clip.audio.num_mel_bins": int_field(128),
+            "clip.audio.embedding_length": int_field(1280),
+            "clip.audio.feed_forward_length": int_field(5120),
+            "clip.audio.block_count": int_field(32),
+        })
+        params = get_model_params("/models/MyModel/mmproj-audio-f16.gguf", file_size_bytes=1)
+        assert params["type"] == MODEL_TYPE_MMPROJ
+        assert params["modality"] == "audio"
+        assert params["num_mel_bins"] == 128
+        assert params["n_embd"] == 1280
+        assert params["n_layers"] == 32
+        assert "has_missing_fields" not in params
+
+    def test_vision_projector_ignores_audio_flag_when_vision_present(self, patch_reader):
+        patch_reader["reader"] = FakeReader({
+            "general.type": str_field("model"),
+            "general.name": str_field("MyModel-mmproj"),
+            "clip.has_audio_encoder": int_field(1),
+            "clip.vision.image_size": int_field(336),
+            "clip.vision.embedding_length": int_field(1024),
+            "clip.vision.block_count": int_field(24),
+        })
+        params = get_model_params("/models/MyModel/mmproj-f16.gguf", file_size_bytes=1)
+        assert "modality" not in params
+        assert params["image_size"] == 336

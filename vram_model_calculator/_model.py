@@ -44,20 +44,43 @@ class NotAnLLMError(ValueError):
 
 def get_mmproj_params(reader, file_path, file_size_bytes):
     raw_name = clean_name(get_str(reader, "general.name"))
-    params = {
-        "type": MODEL_TYPE_MMPROJ,
-        "name": resolve_name(raw_name, file_path),
-        "image_size": get_safe_int(reader, "clip.vision.image_size"),
-        "patch_size": get_safe_int(reader, "clip.vision.patch_size"),
-        "n_embd": get_safe_int(reader, "clip.vision.embedding_length"),
-        "n_ff": get_safe_int(reader, "clip.vision.feed_forward_length"),
-        "n_layers": get_nonneg_int(reader, "clip.vision.block_count"),
-        "projection_dim": get_safe_int(reader, "clip.vision.projection_dim"),
-        "has_llava_projector": get_safe_int(reader, "clip.has_llava_projector"),
-        "file_size_bytes": file_size_bytes,
-        "file_size_gb": round(file_size_bytes / (1024**3), 3),
-    }
-    critical = ["image_size", "n_embd", "n_layers"]
+    # Audio-only projectors (e.g. speech-to-text encoders) carry clip.audio.*
+    # metadata instead of clip.vision.*; clip.has_audio_encoder marks those,
+    # and clip.vision.* is absent since there's no vision tower to describe.
+    is_audio = (
+        get_safe_int(reader, "clip.has_audio_encoder")
+        and reader.fields.get("clip.vision.embedding_length") is None
+    )
+    if is_audio:
+        params = {
+            "type": MODEL_TYPE_MMPROJ,
+            "name": resolve_name(raw_name, file_path),
+            "modality": "audio",
+            "num_mel_bins": get_safe_int(reader, "clip.audio.num_mel_bins"),
+            "n_embd": get_safe_int(reader, "clip.audio.embedding_length"),
+            "n_ff": get_safe_int(reader, "clip.audio.feed_forward_length"),
+            "n_layers": get_nonneg_int(reader, "clip.audio.block_count"),
+            "projection_dim": get_safe_int(reader, "clip.audio.projection_dim"),
+            "has_llava_projector": get_safe_int(reader, "clip.has_llava_projector"),
+            "file_size_bytes": file_size_bytes,
+            "file_size_gb": round(file_size_bytes / (1024**3), 3),
+        }
+        critical = ["num_mel_bins", "n_embd", "n_layers"]
+    else:
+        params = {
+            "type": MODEL_TYPE_MMPROJ,
+            "name": resolve_name(raw_name, file_path),
+            "image_size": get_safe_int(reader, "clip.vision.image_size"),
+            "patch_size": get_safe_int(reader, "clip.vision.patch_size"),
+            "n_embd": get_safe_int(reader, "clip.vision.embedding_length"),
+            "n_ff": get_safe_int(reader, "clip.vision.feed_forward_length"),
+            "n_layers": get_nonneg_int(reader, "clip.vision.block_count"),
+            "projection_dim": get_safe_int(reader, "clip.vision.projection_dim"),
+            "has_llava_projector": get_safe_int(reader, "clip.has_llava_projector"),
+            "file_size_bytes": file_size_bytes,
+            "file_size_gb": round(file_size_bytes / (1024**3), 3),
+        }
+        critical = ["image_size", "n_embd", "n_layers"]
     missing = [f for f in critical if params.get(f) is None]
     if missing:
         print(f"  ⚠️ Fehlende Felder {missing} in {os.path.basename(file_path)} → dump nach {METADATA_DUMP_FILE}")
