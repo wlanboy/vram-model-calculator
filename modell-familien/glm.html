@@ -169,6 +169,23 @@
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
 
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 4/48</span>
+      <span class="spec-card-title">GLM-4.7-Flash-REAP-23B-A3B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">~3 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">23 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">4 aktiv / 48 <span class="col-muted">(REAP-gepruned von 64)</span></span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">47</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">2.048</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">200k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">154.880</span></div>
+    <div class="spec-row"><span class="spec-label">Function Calling</span><span class="spec-value">Ja (MCP)</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Cerebras-REAP-Pruning von GLM-4.7-Flash</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">cerebras/GLM-4.7-Flash-REAP-23B-A3B</span></div>
+  </div>
+
 </div>
 
 <h2 class="section-title">VRAM-Kompatibilität — Flaggschiffe (Q4)</h2>
@@ -293,6 +310,17 @@
     <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Q4_K_M knapp über 16 GB RAM; kleinere Quants (Q3/Q2) laufen dank nur ~3 B aktiver Parameter dennoch flott</span></td>
   </tr>
 
+  <tr>
+    <td class="col-name">GLM-4.7-Flash-REAP <span class="col-muted">(23 B, ~3 B aktiv)</span></td>
+    <td><span class="badge badge-moe">MoE 4/48</span></td>
+    <td class="col-mono">~13,1 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Deutlich mehr Puffer als GLM-4.7-Flash bei gleicher Expertenzahl pro Token</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Platz für langen Kontext und parallele Anfragen</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Passt komplett in RAM · nur ~3 B aktive Parameter, dadurch flott</span></td>
+  </tr>
+
 </tbody>
 </table>
 </div>
@@ -391,6 +419,16 @@
     <td class="col-mono">1M</td>
     <td class="col-mono col-muted">ZH · EN</td>
   </tr>
+  <tr>
+    <td class="col-name">GLM-4.7-Flash-REAP</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">200k</td>
+    <td class="col-mono col-muted">ZH · EN</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -468,6 +506,13 @@
     <td class="col-mono">—</td>
     <td class="col-mono">~60 GB</td>
     <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">4.7-Flash-REAP</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">13,1 GB</td>
+    <td class="col-muted">unsloth-Quant · ~22 % kleiner als reguläres 4.7-Flash</td>
   </tr>
   <tr>
     <td class="col-name">4.5-Air</td>
@@ -583,11 +628,12 @@
 <div class="note-box">
   <strong>Hinweise:</strong><br>
   · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem Kontextfenster steigt der Bedarf deutlich, besonders bei GLM-5.2 (1 M Kontext).<br>
-  · Die Flaggschiffe (4.5/4.5-Air/4.6/4.7) nutzen GQA (96 Attention-Heads / 8 KV-Heads) — <strong>keine</strong> Multi-head Latent Attention (MLA), obwohl die MoE-Routing-Strategie (Sigmoid-Gates, "noaux_tc") an DeepSeek-V3 erinnert. Manche GGUF-Tools ordnen kleinere GLM-MoE-Varianten intern trotzdem der "deepseek2"-Architektur zu (strukturelle Ähnlichkeit im Format), die tatsächliche HuggingFace-Architektur heißt <code>glm4_moe</code> bzw. <code>glm4_moe_lite</code>.<br>
+  · Die Flaggschiffe (4.5/4.5-Air/4.6/4.7) nutzen GQA (96 Attention-Heads / 8 KV-Heads), <strong>keine</strong> Multi-head Latent Attention (MLA), obwohl die MoE-Routing-Strategie (Sigmoid-Gates, "noaux_tc") an DeepSeek-V3 erinnert. Manche GGUF-Tools ordnen kleinere GLM-MoE-Varianten intern trotzdem der "deepseek2"-Architektur zu (strukturelle Ähnlichkeit im Format), die tatsächliche HuggingFace-Architektur heißt <code>glm4_moe</code> bzw. <code>glm4_moe_lite</code>.<br>
   · GLM-5.2 führt <strong>DSA (Dynamic Sparse Attention)</strong> mit "IndexShare" ein: Der Indexer wird alle 4 sparsen Layer wiederverwendet und senkt die FLOPs pro Token bei 1-M-Kontext um Faktor 2,9 — die ersten 3 Layer bleiben dense.<br>
   · GLM-4.7-Flash: Kontextangaben schwanken zwischen Quellen (Modell-Konfiguration: 202.752 Token / manche Dokus nennen 128k) — hier wird der Konfigurationswert verwendet.<br>
   · GLM-4.6V-Flash und GLM-4.7-Flash sind sehr aktuelle Releases (Stand: Anfang 2026); ihre Spezifikationen stammen primär aus lokal geladenen GGUF-Metadaten statt aus vollständig dokumentierten offiziellen Modellkarten und können von späteren offiziellen Angaben abweichen.<br>
   · GLM-4.7-Flash: MoE mit nur ~3 B aktiven von 30 B Gesamtparametern — Rechenlast bleibt niedrig, auch wenn das komplette Modell im Speicher liegen muss.<br>
+  · GLM-4.7-Flash-REAP-23B-A3B ist eine von Cerebras per "REAP" (Router-weighted Expert Activation Pruning) verkleinerte Variante von GLM-4.7-Flash. 16 der 64 Experten wurden entfernt (64→48), Layer- und Kontextstruktur bleiben unverändert, weiterhin sind 4 Experten pro Token aktiv. Das Modell wird dadurch rund 22 % kleiner.<br>
   · Zhipu AI firmiert international mittlerweile als "Z.ai".<br>
   · Alle Modelle ab GLM-4.5 stehen unter MIT-Lizenz — keine proprietären Nutzungsbeschränkungen.<br>
   · Wegen der enormen Gesamtparameterzahl der Flaggschiffe (bis 744 B) ist lokale Consumer-Hardware nur für die "Flash"/"Air"-Varianten bzw. die kompakten Vision-Modelle praktikabel; für die großen Modelle sind Multi-GPU-Server, Ollama Cloud oder die offizielle API die realistischen Optionen.
