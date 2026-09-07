@@ -15,7 +15,7 @@
 
 <div class="family-header">
   <h1>Phi-4</h1>
-  <p class="subtitle">Microsoft Research · Dense · Dezember 2024 – Mai 2025 · Lizenz: MIT</p>
+  <p class="subtitle">Microsoft Research · Dense · Dezember 2024 – März 2026 · Lizenz: MIT</p>
   <div class="family-tags">
     <span class="badge badge-arch">phi4</span>
     <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Multimodal</span>
@@ -110,6 +110,24 @@
     <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/Phi-4-reasoning</span></div>
   </div>
 
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Phi-4-reasoning-vision 15B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">15 B</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">16k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">SigLIP-2 (dynamische Auflösung, bis 3.600 Visual Tokens)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Dual-Mode Reasoning (&lt;think&gt;/&lt;nothink&gt;)</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Phi-4-Reasoning</span></div>
+    <div class="spec-row"><span class="spec-label">MMMU</span><span class="spec-value">54,3 %</span></div>
+    <div class="spec-row"><span class="spec-label">MathVista</span><span class="spec-value">75,2 %</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">März 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+    <div class="spec-row"><span class="spec-label">HuggingFace</span><span class="spec-value">microsoft/Phi-4-reasoning-vision-15B</span></div>
+  </div>
+
 </div>
 
 <h2 class="section-title">VRAM-Kompatibilität (Q4-Quantisierung)</h2>
@@ -180,6 +198,17 @@
     <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Empfohlen: genug Puffer für lange Reasoning-Ketten</span></td>
     <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Selbst sehr lange CoT-Ketten problemlos</span></td>
     <td class="fit-detail fit-tight"><strong>Träge / Limit</strong><span>~4–6 Tok/Sek · Lange CoT-Ausgaben sehr langsam</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Phi-4-reasoning-vision <span class="col-muted">(15B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~9–10 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein; Modell passt nicht</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Gewichte + Vision-Encoder sprengen 12 GB</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; wenig Puffer für lange CoT- und Bild-Ausgaben</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Ausreichend Puffer für Reasoning-Ketten und hochauflösende Bilder</span></td>
+    <td class="fit-detail fit-tight"><strong>Träge / Limit</strong><span>~3–5 Tok/Sek · Vision-Encoder und CoT-Ausgaben belasten RAM stark</span></td>
   </tr>
 
 </tbody>
@@ -255,6 +284,17 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">16k</td>
     <td class="col-mono col-muted">23+</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning-vision</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="eingeschränkt">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">16k</td>
+    <td class="col-mono col-muted">EN (primär)</td>
   </tr>
 </tbody>
 </table>
@@ -362,6 +402,27 @@
     <td class="col-mono">~28 GB</td>
     <td class="col-muted">Volles Gewicht</td>
   </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning-vision 15B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~9–10 GB</td>
+    <td class="col-muted">+ SigLIP-2-Encoder im VRAM; Empfehlung für 24-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning-vision 15B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~15 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">Phi-4-reasoning-vision 15B</td>
+    <td>BF16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~30 GB</td>
+    <td class="col-muted">Volles Gewicht; Trainings-Präzision</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -430,13 +491,15 @@
 <div class="note-box">
   <strong>Hinweise:</strong><br>
   · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem 128k-Kontext (Phi-4-mini) steigt der Bedarf erheblich.<br>
-  · Phi-4-multimodal: Vision- und Audio-Encoder belegen zusätzlich ~0,5–1,5 GB VRAM — bei 6-GB-GPUs ist Multimodalität daher kaum nutzbar.<br>
-  · Phi-4 und Phi-4-reasoning teilen dieselbe Architektur — VRAM-Bedarf ist identisch. Der Unterschied liegt ausschließlich im Fine-Tuning.<br>
+  · Phi-4-multimodal: Vision- und Audio-Encoder belegen zusätzlich ~0,5–1,5 GB VRAM. Bei 6-GB-GPUs ist Multimodalität daher kaum nutzbar.<br>
+  · Phi-4 und Phi-4-reasoning teilen dieselbe Architektur. Der VRAM-Bedarf ist identisch, der Unterschied liegt ausschließlich im Fine-Tuning.<br>
   · Phi-4-reasoning gibt vor Antworten intern eine &lt;think&gt;…&lt;/think&gt;-Kette aus, die Token verbraucht und Latenzen erhöht. Bei 16k-Kontext kann diese bei komplexen Aufgaben den Großteil des Kontexts belegen.<br>
   · Phi-4-mini hat trotz nur 3,8B Parameter ein sehr großes Vokabular (200.064 Token), das Embedding-Gewichte kostet; der effektive Rechenvorteil ist daher etwas kleiner als die Parameterzahl suggeriert.<br>
   · Phi-4-mini-reasoning ist für kompakte Reasoning-Aufgaben (Mathe, Logik, STEM) optimiert und schlägt deutlich größere Modelle auf speziellen Benchmarks.<br>
-  · Alle Phi-4-Modelle stehen unter der MIT-Lizenz — kommerzielle Nutzung ohne Einschränkungen.<br>
-  · Ollama-Support: phi4-mini und phi4 sind direkt über den Ollama-Modell-Hub verfügbar; Multimodal und Reasoning-Varianten erfordern manuelle GGUF-Integration.
+  · Alle Phi-4-Modelle stehen unter der MIT-Lizenz. Kommerzielle Nutzung ist ohne Einschränkungen erlaubt.<br>
+  · Ollama-Support: phi4-mini und phi4 sind direkt über den Ollama-Modell-Hub verfügbar; Multimodal und Reasoning-Varianten erfordern manuelle GGUF-Integration.<br>
+  · Phi-4-reasoning-vision (März 2026) ist das erste Vision-Modell der Familie mit Dual-Mode Reasoning. Es entscheidet selbst, ob eine &lt;think&gt;-Kette nötig ist, oder antwortet über &lt;nothink&gt; direkt. Das spart Token bei reinen Wahrnehmungsaufgaben wie Captioning oder Grounding.<br>
+  · Phi-4-reasoning-vision ist primär für Englisch optimiert; andere Sprachen zeigen laut Model Card spürbar schwächere Ergebnisse.
 </div>
 
 </div>

@@ -17,7 +17,7 @@
   <h1>OLMo 3 &amp; Tülu 3</h1>
   <p class="subtitle">Allen Institute for AI (Ai2) · Apache 2.0 · 65k Kontextfenster · Vollständig offen (Gewichte, Daten, Code, Checkpoints)</p>
   <div class="family-tags">
-    <span class="badge badge-arch">olmo3</span>
+    <span class="badge badge-arch">olmo2</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Sliding-Window Attention</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode (RLVR)</span>
     <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Tool Calling</span>
@@ -146,11 +146,11 @@
   <tr>
     <td class="col-name">OLMo 3 32B (Base/Instruct/Think)</td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~19,5 GB</td>
+    <td class="col-mono">~18,1 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Auch Q3 (~15,6 GB) hat kaum Puffer</span></td>
-    <td class="fit-detail fit-tight"><strong>Q3 möglich</strong><span>Q3_K_M (~15,6 GB) passt; Q4 (~19,5 GB) läuft über</span></td>
-    <td class="fit-detail fit-tight"><strong>Knapp möglich (Q4)</strong><span>~19,5 GB + wenig Puffer für KV-Cache bei langem Kontext</span></td>
+    <td class="fit-detail fit-tight"><strong>Q3 möglich</strong><span>Q3_K_M (~15,6 GB) passt; Q4 (~18,1 GB) läuft über</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich (Q4)</strong><span>~18,1 GB + wenig Puffer für KV-Cache bei langem Kontext</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Modell sprengt 16 GB RAM → starker Swap</span></td>
   </tr>
 
@@ -272,12 +272,12 @@
 </div>
 
 <div class="note-box">
-  <strong>OLMo 3 (Ai2):</strong> OLMo 3 ist Allen AI's dritte Generation vollständig offener "glass-box"-Sprachmodelle: nicht nur die Gewichte, sondern auch Trainingsdaten (Dolma 3), Zwischen-Checkpoints, Trainingscode (OlmoCore) und die Post-Training-Pipeline (Dolci/Tülu 3) sind offen einsehbar. Die Familie erscheint in <strong>7B</strong> und <strong>32B</strong>, jeweils als <strong>Base</strong>, <strong>Instruct</strong> und <strong>Think</strong> (Reasoning) sowie zusätzlich als <strong>RL Zero</strong> (7B, reines RL-Bootstrapping ohne SFT-Start). Die GGUF-Architektur-Kennung lautet <code>olmo3</code>.<br><br>
+  <strong>OLMo 3 (Ai2):</strong> OLMo 3 ist Allen AI's dritte Generation vollständig offener "glass-box"-Sprachmodelle: nicht nur die Gewichte, sondern auch Trainingsdaten (Dolma 3), Zwischen-Checkpoints, Trainingscode (OlmoCore) und die Post-Training-Pipeline (Dolci/Tülu 3) sind offen einsehbar. Die Familie erscheint in <strong>7B</strong> und <strong>32B</strong>, jeweils als <strong>Base</strong>, <strong>Instruct</strong> und <strong>Think</strong> (Reasoning) sowie zusätzlich als <strong>RL Zero</strong> (7B, reines RL-Bootstrapping ohne SFT-Start). In llama.cpp/gguf-py (Stand v0.19.0) gibt es keine eigene <code>olmo3</code>-Architektur-Kennung – geladene OLMo-3-GGUFs laufen unter <code>olmo2</code>, da die Kernarchitektur mit OLMo 2 kompatibel bleibt.<br><br>
   <strong>Architektur-Unterschied 7B vs. 32B:</strong> Das 7B-Modell nutzt volle Multi-Head-Attention (32 Query- = 32 KV-Heads), das 32B-Modell dagegen Grouped-Query-Attention (40 Query- / 8 KV-Heads) zur Reduktion des KV-Cache. Beide Größen kombinieren Sliding-Window-Attention (3 von 4 Layern, Fenster 4096 Token) mit vollständiger Attention im jeweils letzten Layer eines Blocks sowie QK-Norm (RMSNorm auf Query/Key) und YaRN-Skalierung (Faktor 8) für ein natives Kontextfenster von 65.536 Token.<br><br>
   <strong>Think-Modelle:</strong> OLMo 3 32B Think gilt laut Ai2 als das stärkste vollständig offene Reasoning-Modell und nähert sich Qwen 3 32B an – bei rund 6× weniger Trainingsdaten. OLMo 3 7B Think erreicht auf MATH etwa das Niveau von Qwen 3 8B.<br><br>
   <strong>Tülu 3 – Post-Training-Rezept:</strong> Tülu 3 ist keine eigene Basisarchitektur, sondern Ai2's offene Post-Training-Pipeline (SFT → DPO → RLVR/RL mit verifizierbaren Belohnungen für Mathe/Code). Sie wurde ursprünglich auf Llama 3.1 (8B/70B/405B, Meta-Lizenz) angewendet und bildet zugleich die Grundlage der OLMo-3-Instruct-/Think-Varianten. Tülu-3-Modelle auf Llama-3.1-Basis unterliegen der Llama-3.1-Community-Lizenz, nicht Apache 2.0.<br><br>
   <strong>Quantisierung:</strong> Q4_K_M gilt für beide Größen als guter Kompromiss aus Qualität und Größe; für 32 GB Consumer-GPUs (RTX 5090) ist bei OLMo 3 32B auch Q6_K (~26,5 GB) praktikabel. Unter Q3 nimmt die Reasoning-Qualität der Think-Varianten spürbar ab.<br><br>
-  <strong>VRAM-Werte</strong> stammen aus GGUF-Quantisierungen von bartowski (Basis: reale Dateigrößen, ohne KV-Cache). Architekturdetails aus Hugging-Face-Modellkarten (allenai/Olmo-3-1125-32B, allenai/Olmo-3-1125-7B) und dem OLMo-3-Technical-Report; Tülu-3-Angaben aus dem Tülu-3-Paper (arXiv:2411.15124) und den offiziellen Ai2-Dokumentationsseiten (<a href="https://allenai.org/olmo" target="_blank" rel="noopener">allenai.org/olmo</a>, <a href="https://docs.allenai.org/models/olmo" target="_blank" rel="noopener">docs.allenai.org/models/olmo</a>, <a href="https://docs.allenai.org/models/tulu" target="_blank" rel="noopener">docs.allenai.org/models/tulu</a>). *Tülu-3-Kontextfenster entspricht dem der jeweiligen Llama-3.1-Basis; für 405B nicht offiziell separat dokumentiert.
+  <strong>VRAM-Werte</strong> stammen aus GGUF-Quantisierungen von bartowski (Basis: reale Dateigrößen, ohne KV-Cache; OLMo 3 32B Think Q4_K_M aus lokal gescanntem <code>models_cache.json</code>). Architekturdetails aus Hugging-Face-Modellkarten (allenai/Olmo-3-1125-32B, allenai/Olmo-3-1125-7B) und dem OLMo-3-Technical-Report; Tülu-3-Angaben aus dem Tülu-3-Paper (arXiv:2411.15124) und den offiziellen Ai2-Dokumentationsseiten (<a href="https://allenai.org/olmo" target="_blank" rel="noopener">allenai.org/olmo</a>, <a href="https://docs.allenai.org/models/olmo" target="_blank" rel="noopener">docs.allenai.org/models/olmo</a>, <a href="https://docs.allenai.org/models/tulu" target="_blank" rel="noopener">docs.allenai.org/models/tulu</a>). *Tülu-3-Kontextfenster entspricht dem der jeweiligen Llama-3.1-Basis; für 405B nicht offiziell separat dokumentiert.
 </div>
 
 </div>
