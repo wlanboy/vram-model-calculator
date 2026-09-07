@@ -15,7 +15,7 @@
 
 <div class="family-header">
   <h1>DeepSeek V3 &amp; R1</h1>
-  <p class="subtitle">DeepSeek AI · Dense Distilled &amp; MoE 8/128 · 128k Kontext · 129k Vokabular · MIT-Lizenz</p>
+  <p class="subtitle">DeepSeek AI · Dense Distilled &amp; MoE 8/128 · 128k–160k Kontext · 129k Vokabular · MIT-Lizenz</p>
   <div class="family-tags">
     <span class="badge badge-moe">MoE 8/128</span>
     <span class="badge badge-arch">Distilled Dense</span>
@@ -82,6 +82,23 @@
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-moe">MoE 8/128</span>
+      <span class="spec-card-title">DeepSeek V3.2-Exp</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">160k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">129.280</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">DSA (DeepSeek Sparse Attention)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Baut auf V3.1-Terminus; günstigere Long-Context-Inferenz</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Sep. 2025</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/128</span>
       <span class="spec-card-title">DeepSeek R1</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
@@ -94,6 +111,24 @@
     <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">MLA (Multi-head Latent)</span></div>
     <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Reines Reasoning-Modell (GRPO-RL)</span></div>
     <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Jan. 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="spec-card-title">DeepSeek R1-0528</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">129.280</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">MLA (Multi-head Latent)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Post-Training-Update von R1; AIME 2025: 70 % → 87,5 %</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Mai 2025</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
 
@@ -227,7 +262,27 @@
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (IQ1_S) = 130+ GB RAM</span></td>
   </tr>
   <tr>
+    <td class="col-name">DeepSeek V3.2-Exp <span class="col-muted">(671 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td class="col-mono">~400 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~25× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~17× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (IQ1_S) = 130+ GB RAM</span></td>
+  </tr>
+  <tr>
     <td class="col-name">DeepSeek R1 <span class="col-muted">(671 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td class="col-mono">~400 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~25× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~17× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (IQ1_S) = 130+ GB RAM</span></td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek R1-0528 <span class="col-muted">(671 B)</span></td>
     <td><span class="badge badge-moe">MoE 8/128</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
@@ -370,11 +425,31 @@
     <td class="col-mono col-muted">Vollmodell</td>
   </tr>
   <tr>
+    <td class="col-name">DeepSeek V3.2-Exp</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Hybrid: schaltbar">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">160k</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
     <td class="col-name">DeepSeek R1</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-part" title="eingeschränkt">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek R1-0528</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">128k</td>
     <td class="col-mono col-muted">Vollmodell</td>
@@ -712,6 +787,8 @@
   · DeepSeek R1 wurde <em>ausschließlich per Reinforcement Learning</em> (GRPO) trainiert, ohne überwachtes Fine-Tuning (SFT) in der ersten Phase — ein für Open-Source ungewöhnlicher Trainingsansatz.<br>
   · V3 0324 (März 2025): Drop-in-Update mit gleicher Architektur, deutlich verbesserten Coding- und Mathematik-Fähigkeiten.<br>
   · V3.1 (Aug. 2025): Hybridmodell — Thinking-Modus ist schaltbar, ohne zwei separate Modelle laden zu müssen.<br>
+  · V3.2-Exp (Sep. 2025): Führt DeepSeek Sparse Attention (DSA) als Nachfolger von MLA ein. Senkt die Inferenzkosten bei langem Kontext (bis 160k Token) spürbar, bei nahezu gleicher Ausgabequalität wie V3.1-Terminus.<br>
+  · R1-0528 (Mai 2025): Post-Training-Update von R1 mit gleicher Architektur, aber deutlich tieferen Reasoning-Chains (AIME 2025: 70 % → 87,5 %) sowie neu unterstütztem Function Calling und JSON-Output.<br>
   · Multi-Token Prediction (MTP) beschleunigt den Durchsatz bei Server-Deployments — nicht alle Inference-Engines unterstützen dies vollständig.<br>
   · FP8 ist die von DeepSeek empfohlene Referenz-Precision (~671 GB VRAM, 8× H100 80 GB). vLLM unterstützt neben NVIDIA CUDA auch AMD ROCm (MI300X/MI325X) für Multi-GPU-Setups.<br>
   · Distilled 32B (Qwen-Basis): Auf einer 16-GB-GPU läuft Q4_K_M (~20 GB) nur mit knappem Puffer — langer Reasoning-Kontext kann zum Überlauf führen; 24 GB empfohlen.<br>
