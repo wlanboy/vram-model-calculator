@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baidu ERNIE 4.5 – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>Baidu ERNIE 4.5</h1>
+  <p class="subtitle">Baidu · Apache 2.0 · 131.072 Token Kontextfenster · Heterogene Multimodal-MoE-Architektur · PaddlePaddle</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">ernie4_5 / ernie4_5-moe</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">MoE (Mixture-of-Experts)</span>
+    <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision (VL-Varianten)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Tool Calling</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">ERNIE 4.5 0.3B (Base / PT)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">0,36 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense Decoder-Transformer</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">18</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Edge / On-Device, Distillations-Ziel für größere Varianten</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="spec-card-title">ERNIE 4.5 21B-A3B (Base / PT)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">21 B (≈ 3 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">28</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size</span><span class="spec-value">2560</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">20 Query- / 4 KV-Heads (GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">64 gesamt · 6 aktiv · 2 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vocab</span><span class="spec-value">103.424 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">ERNIE 4.5 21B-A3B-Thinking</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">21 B (≈ 3 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">ERNIE 4.5 21B-A3B + Reasoning-Post-Training</span></div>
+    <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Chain-of-Thought, Mathematik, Code, Logik</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value">Ja (auch im Thinking-Modus)</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">ERNIE 4.5 VL 28B-A3B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">28 B (≈ 3 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">28</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">20 Query- / 4 KV-Heads (GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">64 Text- + 64 Vision-Experten (je 6 aktiv) · 2 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text + Vision (Bild/Video-Verständnis)</span></div>
+    <div class="spec-row"><span class="spec-label">Varianten</span><span class="spec-value">Base · PT · Thinking</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="spec-card-title">ERNIE 4.5 300B-A47B (Base / PT)</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">300 B (≈ 47 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">54</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size</span><span class="spec-value">8192</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">64 Query- / 8 KV-Heads (GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">64 gesamt · 8 aktiv</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Benchmark</span><span class="spec-value">Übertrifft DeepSeek-V3-671B-A37B-Base auf 22/28 Benchmarks</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">ERNIE 4.5 VL 424B-A47B</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">424 B (≈ 47 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">54</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size</span><span class="spec-value">8192</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">64 Query- / 8 KV-Heads (GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">128 gesamt (Text+Vision) · 16 aktiv</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text + Vision (Bild/Video-Verständnis)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (Q4_K_M-Quantisierung, GGUF)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4_K_M</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. RTX 3090 / 4090</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">ERNIE 4.5 0.3B (Base/PT)</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~0,24 GB</td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Puffer, auch F16 problemlos</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Praktisch beliebig viel Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Für Edge/On-Device gedacht, läuft überall</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut nutzbar</strong><span>&gt;20 Tok/Sek · vernachlässigbarer RAM-Bedarf</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">ERNIE 4.5 21B-A3B (Base/PT/Thinking)</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~13,5 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Auch Q3_K_M (~10,3 GB) hat kaum Puffer für 131k Kontext</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Passt, wenig Puffer bei langem Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Nur ~3 B aktive Parameter → schnelle Inferenz trotz 21 B Gesamtgröße</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>MoE-Routing hält CPU-Inferenz erträglich schnell</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">ERNIE 4.5 VL 28B-A3B (Base/PT/Thinking)</td>
+    <td><span class="badge badge-arch">MoE</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
+    <td class="col-mono">~15–17 GB<br><span style="opacity:0.7;font-size:0.68rem">(Schätzung, kein etabliertes Standard-GGUF)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Text- + Vision-Experten sprengen 12 GB</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kaum Puffer für Vision-Encoder (mmproj) übrig</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Text- + Vision-Gewichte + mmproj passen mit wenig Reserve</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Läuft, aber spürbar langsamer als reine Text-Variante</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">ERNIE 4.5 300B-A47B (Base/PT)</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~180 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Braucht Multi-GPU-Server (z. B. 4–8× A100/H100) oder aggressives Offloading</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM vollständig</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">ERNIE 4.5 VL 424B-A47B</td>
+    <td><span class="badge badge-arch">MoE</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
+    <td class="col-mono">~230+ GB<br><span style="opacity:0.7;font-size:0.68rem">(Schätzung, kein GGUF verfügbar)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Multi-GPU-Cluster (Datacenter-Klasse)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Fähigkeiten &amp; Features</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Vision</th>
+  <th class="cap-cell">Thinking</th>
+  <th class="cap-cell">Tool Calling</th>
+  <th class="cap-cell">MoE</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Aktive Parameter</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">ERNIE 4.5 0.3B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">0,36 B (dense)</td>
+  </tr>
+  <tr>
+    <td class="col-name">ERNIE 4.5 21B-A3B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">≈ 3 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">ERNIE 4.5 21B-A3B-Thinking</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">≈ 3 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">ERNIE 4.5 VL 28B-A3B (Base/PT)</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">≈ 3 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">ERNIE 4.5 VL 28B-A3B-Thinking</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">≈ 3 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">ERNIE 4.5 300B-A47B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">≈ 47 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">ERNIE 4.5 VL 424B-A47B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">131k</td>
+    <td class="col-mono col-muted">≈ 47 B</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-box">
+  <strong>ERNIE 4.5 (Baidu):</strong> Im Juni 2025 hat Baidu die ERNIE-4.5-Familie erstmals unter Apache 2.0 vollständig als Open Weights veröffentlicht – zuvor waren ERNIE-Modelle nur über Baidus API (Wenxiaoyan/Yiyan) verfügbar. Die Familie umfasst 10 Varianten: von einem <strong>0,3B</strong> Dense-Modell über <strong>21B-A3B</strong> (MoE, ≈3B aktiv) bis zum Flaggschiff <strong>300B-A47B</strong> (MoE, ≈47B aktiv), jeweils zusätzlich als multimodale <strong>VL</strong>-Varianten (28B-A3B bzw. 424B-A47B) mit Bild-/Video-Verständnis. In llama.cpp/gguf-py werden die reinen Text-Modelle als eigene Architekturen <code>ernie4_5</code> (dense, 0.3B) bzw. <code>ernie4_5-moe</code> (21B-A3B, 300B-A47B) geführt.<br><br>
+  <strong>Heterogene Multimodal-MoE:</strong> Kernidee der Architektur ist ein gemeinsames Backbone mit modality-isoliertem Routing: Text- und Vision-Token teilen sich Attention-Parameter, werden aber über getrennte Experten-Pools geleitet (bei den VL-Modellen z. B. je 64 Text- und 64 Vision-Experten). Dadurch bleiben die reinen Text-Varianten und die VL-Varianten eines Größensegments architektonisch eng verwandt (gleiche Layer-/Head-Konfiguration bei 21B-A3B vs. VL-28B-A3B), was Distillation und gemeinsames Training über Modalitäten hinweg erleichtert. Trainiert wurde mit PaddlePaddle inkl. FP8-Mixed-Precision, intra-node Expert-Parallelism und der "FlashMask"-Dynamic-Attention-Masking-Technik.<br><br>
+  <strong>Thinking-Varianten:</strong> ERNIE-4.5-21B-A3B-Thinking (und die multimodale VL-28B-A3B-Thinking) wurden nach dem initialen Open-Source-Release im Herbst 2025 nachgereicht und fügen ein Reasoning-Post-Training für Chain-of-Thought bei Mathematik, Code und Logik-Aufgaben hinzu – Tool-Calling bleibt dabei auch im Thinking-Modus aktiv.<br><br>
+  <strong>VL-Modelle &amp; GGUF-Lücke:</strong> Für die reinen Text-MoE-Modelle (0.3B, 21B-A3B, 300B-A47B) existieren etablierte GGUF-Quantisierungen (u. a. von bartowski, unsloth, lmstudio-community). Für die multimodalen VL-Varianten fehlt bei gängigen Quantisierern bislang ein GGUF inkl. Vision-Encoder (mmproj) – die in der Tabelle angegebenen VRAM-Werte für VL-28B-A3B und VL-424B-A47B sind daher Schätzungen basierend auf der Parameterzahl, keine gemessenen Dateigrößen.<br><br>
+  <strong>ERNIE 5.0:</strong> Im November 2025 kündigte Baidu ERNIE 5.0 als natively multimodales "Omni"-Modell an, das Text, Bild, Video und Audio in einer einzigen Architektur versteht und generiert. ERNIE 5.0 ist bislang nicht als Open-Weight-Modell verfügbar (nur über Wenxiaoyan-App/API), weshalb hier keine VRAM-Angaben möglich sind.<br><br>
+  <strong>VRAM-Werte</strong> stammen aus GGUF-Quantisierungen von bartowski und unsloth (Basis: reale Dateigrößen, ohne KV-Cache; 300B-A47B aus unsloth/ERNIE-4.5-300B-A47B-PT-GGUF). Architekturdetails aus den offiziellen Hugging-Face-Modellkarten (baidu/ERNIE-4.5-21B-A3B-PT, baidu/ERNIE-4.5-300B-A47B-PT, baidu/ERNIE-4.5-VL-424B-A47B-PT) und dem ERNIE-4.5-Technical-Report (<a href="https://ernie.baidu.com/blog/posts/ernie4.5/" target="_blank" rel="noopener">ernie.baidu.com/blog/posts/ernie4.5</a>).
+</div>
+
+</div>
+</body>
+</html>
