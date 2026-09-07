@@ -32,6 +32,20 @@
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">LFM2.5-230M</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~230 M</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Hybrid Conv + Attention (lfm2)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">14</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token (GGUF-Header)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">16 Heads / 16 KV-Heads (volle Attn., kein GQA)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Reasoning · Function Calling · MCP</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Liquid-Lizenz (&lt;10 Mio. USD Umsatz frei)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
       <span class="spec-card-title">LFM2.5-1.2B-Instruct</span>
     </div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">1,2 B</span></div>
@@ -54,6 +68,20 @@
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">32k Token (Doku)</span></div>
     <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Mathematik &amp; Logik, Chain-of-Thought</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Reasoning</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Liquid-Lizenz (&lt;10 Mio. USD Umsatz frei)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">LFM2.5-2.6B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~2,6 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Hybrid Conv + Attention (lfm2)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">30</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token (GGUF-Header)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">32 Heads (volle Attention, KV-Head-Zahl im Header nicht gesetzt)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Reasoning · Function Calling · MCP</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Liquid-Lizenz (&lt;10 Mio. USD Umsatz frei)</span></div>
   </div>
 
@@ -104,6 +132,17 @@
 <tbody>
 
   <tr>
+    <td class="col-name">LFM2.5-230M</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~0,18 GB (Q6_K)</td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kleinstes Textmodell der Familie; nicht messbarer Fußabdruck</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Praktisch kostenlos in VRAM</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Dutzende parallele Instanzen möglich</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kein sinnvoller Engpass mehr</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Läuft auch auf schwächster CPU/Edge-Hardware flott</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">LFM2.5-1.2B-Instruct</td>
     <td><span class="badge badge-arch">Dense</span></td>
     <td class="col-mono">~1,16 GB (Q8_0)</td>
@@ -111,7 +150,7 @@
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Praktisch kostenlos in VRAM</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Dutzende parallele Instanzen möglich</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kein sinnvoller Engpass mehr</span></td>
-    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Zielplattform: Wearables/Phones – auch ohne GPU flott</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Zielplattform Wearables/Phones, läuft auch ohne GPU flott</span></td>
   </tr>
 
   <tr>
@@ -123,6 +162,17 @@
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Viel Reserve für langen Kontext</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kein sinnvoller Engpass mehr</span></td>
     <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Reasoning läuft auch CPU-only ausreichend schnell</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">LFM2.5-2.6B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~1,56 GB (Q4_K_M)</td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Passt mehrfach parallel in 6 GB</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kaum messbarer VRAM-Verbrauch</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Viel Reserve für langen Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kein sinnvoller Engpass mehr</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Auch CPU-only flott dank kompakter Größe</span></td>
   </tr>
 
   <tr>
@@ -165,6 +215,15 @@
 </tr></thead>
 <tbody>
   <tr>
+    <td class="col-name">LFM2.5-230M</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">HF · GGUF</td>
+    <td class="col-mono">128k*</td>
+  </tr>
+  <tr>
     <td class="col-name">LFM2.5-1.2B-Instruct</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-no">✗</td>
@@ -181,6 +240,15 @@
     <td class="cap-cell cap-no">✗</td>
     <td class="col-mono col-muted">HF · GGUF · MLX · ONNX</td>
     <td class="col-mono">32k</td>
+  </tr>
+  <tr>
+    <td class="col-name">LFM2.5-2.6B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono col-muted">HF · GGUF</td>
+    <td class="col-mono">128k*</td>
   </tr>
   <tr>
     <td class="col-name">LFM2.5-8B-A1B</td>
@@ -204,7 +272,7 @@
 </table>
 </div>
 
-<h2 class="section-title">Liquid Nanos – spezialisierte Kompaktmodelle</h2>
+<h2 class="section-title">Liquid Nanos: spezialisierte Kompaktmodelle</h2>
 <div class="table-wrap">
 <table>
 <thead><tr>
@@ -248,11 +316,11 @@
 </div>
 
 <div class="note-box">
-  <strong>Liquid AI &amp; LFM:</strong> Liquid Foundation Models (LFM) basieren laut Liquid AI auf einer proprietären, aus Dynamical-Systems-/Signal-Processing-Prinzipien abgeleiteten Architektur ("Liquid Neural Networks") statt einem reinen Transformer. Die GGUF-Architektur-Kennung lautet <code>lfm2</code> (dense) bzw. <code>lfm2moe</code> (MoE). Aus lokal gecachten GGUF-Headern lässt sich ablesen, dass die Attention-Blöcke mit <code>n_heads = n_kv_heads = 32</code> volle Attention ohne Grouped-Query-Attention nutzen – kombiniert mit Convolution-Blöcken laut Hersteller-Doku ("Hybrid").<br><br>
-  <strong>Lizenz:</strong> Alle LFM-Modelle stehen unter der Liquid-Lizenz zum kostenlosen Download, Ausführen und Fine-Tuning – auch kommerziell – solange das einsetzende Unternehmen die Schwelle von 10 Mio. USD Jahresumsatz nicht überschreitet. Für größere Unternehmen ist eine kommerzielle Lizenz erforderlich.<br><br>
-  <strong>Kontextfenster-Diskrepanz (Hinweis):</strong> Die lokal gecachten GGUF-Header der 1.2B-Modelle melden <code>n_ctx_orig = 128.000</code>, die offizielle Liquid-AI-Dokumentation nennt für LFM2.5-1.2B-Instruct/-Thinking jedoch nur <strong>32k Token</strong> als unterstütztes Kontextfenster. Der Header-Wert entspricht vermutlich der RoPE-Trainingsbasis, nicht dem freigegebenen Nutzkontext – oberhalb von 32k ist bei diesen Modellen mit Qualitätsverlust zu rechnen. Für LFM2-24B-A2B liegen keine offiziellen Angaben vor (*), der GGUF-Header nennt ebenfalls 128k.<br><br>
-  <strong>MoE-Effizienz:</strong> Sowohl LFM2.5-8B-A1B (4 von 32 Experten aktiv, ~1,5 B aktive Parameter) als auch LFM2-24B-A2B (4 von 64 Experten aktiv, ~2 B aktive Parameter) laden zwar das volle Gewicht in den VRAM/RAM, benötigen aber wegen der geringen aktiven Parameterzahl pro Token deutlich weniger Rechenleistung als ein dichtes Modell gleicher Gesamtgröße – dadurch bleiben auch CPU-Only-Setups nutzbar.<br><br>
-  <strong>Quellen:</strong> Architektur- und Quant-Größen (LFM2 1.2B, LFM2.5-1.2B-Instruct, LFM2.5-8B-A1B, LFM2-24B-A2B) stammen aus lokal gecachten GGUF-Headern (models_cache.json); Kontextfenster, Lizenzbedingungen, Nanos-Spezialmodelle und Architekturbeschreibung aus der offiziellen Liquid-AI-Dokumentation (liquid.ai/models, docs.liquid.ai/lfm).
+  <strong>Liquid AI &amp; LFM:</strong> Liquid Foundation Models (LFM) basieren laut Liquid AI auf einer proprietären, aus Dynamical-Systems-/Signal-Processing-Prinzipien abgeleiteten Architektur ("Liquid Neural Networks") statt einem reinen Transformer. Die GGUF-Architektur-Kennung lautet <code>lfm2</code> (dense) bzw. <code>lfm2moe</code> (MoE). Aus lokal gecachten GGUF-Headern lässt sich ablesen, dass die Attention-Blöcke mit <code>n_heads = n_kv_heads = 32</code> volle Attention ohne Grouped-Query-Attention nutzen. Laut Hersteller-Doku kommen dazu Convolution-Blöcke ("Hybrid").<br><br>
+  <strong>Lizenz:</strong> Alle LFM-Modelle stehen unter der Liquid-Lizenz zum kostenlosen Download, Ausführen und Fine-Tuning, auch kommerziell, solange das einsetzende Unternehmen die Schwelle von 10 Mio. USD Jahresumsatz nicht überschreitet. Für größere Unternehmen ist eine kommerzielle Lizenz erforderlich.<br><br>
+  <strong>Kontextfenster-Diskrepanz (Hinweis):</strong> Die lokal gecachten GGUF-Header der 1.2B-Modelle melden <code>n_ctx_orig = 128.000</code>, die offizielle Liquid-AI-Dokumentation nennt für LFM2.5-1.2B-Instruct/-Thinking jedoch nur <strong>32k Token</strong> als unterstütztes Kontextfenster. Der Header-Wert entspricht vermutlich der RoPE-Trainingsbasis, nicht dem freigegebenen Nutzkontext. Oberhalb von 32k ist bei diesen Modellen mit Qualitätsverlust zu rechnen. Für LFM2.5-230M, LFM2.5-2.6B und LFM2-24B-A2B liegen keine offiziellen Kontextangaben vor (*), die GGUF-Header nennen jeweils 128k.<br><br>
+  <strong>MoE-Effizienz:</strong> Sowohl LFM2.5-8B-A1B (4 von 32 Experten aktiv, ~1,5 B aktive Parameter) als auch LFM2-24B-A2B (4 von 64 Experten aktiv, ~2 B aktive Parameter) laden zwar das volle Gewicht in den VRAM/RAM, benötigen aber wegen der geringen aktiven Parameterzahl pro Token deutlich weniger Rechenleistung als ein dichtes Modell gleicher Gesamtgröße. Dadurch bleiben auch CPU-Only-Setups nutzbar.<br><br>
+  <strong>Quellen:</strong> Architektur- und Quant-Größen (LFM2 1.2B, LFM2.5-230M, LFM2.5-1.2B-Instruct/-Thinking, LFM2.5-2.6B, LFM2.5-8B-A1B, LFM2-24B-A2B) stammen aus lokal gecachten GGUF-Headern (models_cache.json), Thinking-/MCP-Erkennung aus den GGUF-Chat-Template-Metadaten; Kontextfenster (soweit offiziell dokumentiert), Lizenzbedingungen, Nanos-Spezialmodelle und Architekturbeschreibung aus der offiziellen Liquid-AI-Dokumentation (liquid.ai/models, docs.liquid.ai/lfm).
 </div>
 
 </div>
