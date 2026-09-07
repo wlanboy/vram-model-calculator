@@ -64,6 +64,19 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Gemma 4 12B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~12 B (Unified)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">48</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Kein PLE (voll dicht)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
       <span class="badge badge-moe">MoE 8/128</span>
       <span class="spec-card-title">Gemma 4 26B A4B</span>
     </div>
@@ -134,7 +147,7 @@
   <tr>
     <td class="col-name">Gemma 4 12B <span class="col-muted">(Unified)</span></td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~7–9 GB</td>
+    <td class="col-mono">~6,5–7 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM läuft über; Absturz oder extremer Einbruch</span></td>
     <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für Multimodalität</span></td>
     <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Beste Balance aus Intelligenz, Audio &amp; Kontext</span></td>
@@ -213,7 +226,7 @@
     <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="col-mono">128k</td>
+    <td class="col-mono">256k</td>
     <td class="col-mono col-muted">35+</td>
   </tr>
   <tr>
@@ -308,6 +321,13 @@
     <td class="col-mono">-qat-w4a16-ct</td>
     <td class="col-mono">9,8 GB</td>
     <td class="col-muted">−36 % ggü. BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">12B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">6,9 GB</td>
+    <td></td>
   </tr>
   <tr>
     <td class="col-name">12B</td>
@@ -449,16 +469,16 @@
 <div class="note-box">
   <strong>Hinweise:</strong><br>
   · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem Kontextfenster steigt der Bedarf deutlich (bis zu +50 %).<br>
-  · E2B und E4B nutzen <em>Per-Layer Embeddings (PLE)</em> — ein Großteil der Parameter steckt in Embeddings; die effektive Rechenlast ist wesentlich kleiner als die Gesamtparameter suggerieren.<br>
+  · E2B und E4B nutzen <em>Per-Layer Embeddings (PLE)</em>. Ein Großteil der Parameter steckt in Embeddings; die effektive Rechenlast ist wesentlich kleiner als die Gesamtparameter suggerieren.<br>
   · 26B A4B: MoE mit 1 geteiltem Experten + 8 gerouteten Experten pro Layer (de facto 9 FFN-Blöcke aktiv). GGUF-Metadaten zählen nur die 8 gerouteten; VRAM kann minimal unterschätzt werden.<br>
   · Video wird über einzelne Einzel-Frames unterstützt, kein nativer Video-Stream.<br>
-  · Gemma 4 12B ist in der offiziellen Modellkarte (Stand Juni 2025) nicht enthalten; Spezifikationen können abweichen.<br>
+  · Gemma 4 12B fehlt in der offiziellen Modellkarte (Stand Juni 2025); die Werte hier stammen aus verifizierten GGUF-Metadaten (48 Layer, 256k Kontext), nicht aus Google-Angaben.<br>
   · Alle Modelle teilen dasselbe Vokabular (262k Token) und die Hybrid-Attention-Architektur (lokales Sliding-Window + globale Attention).<br>
   · KV-Cache der 31B ist 2–3× größer als bei vergleichbaren Modellen: ~0,85 MB/Token (BF16), ~0,038 MB/Token mit Q4-KV-Quantisierung.<br>
-  · QAT W4A16-Checkpoints sind offizielle Google-Quantisierungen — Qualitätsverlust geringer als bei nachträglicher GGUF-Quantisierung.<br>
-  · Vision-Token-Budget (Standard: 280 Tokens/Bild): Für OCR und Texterkennung empfehlen sich 560–1120 Tokens pro Bild.<br>
+  · QAT W4A16-Checkpoints sind offizielle Google-Quantisierungen, der Qualitätsverlust ist geringer als bei nachträglicher GGUF-Quantisierung.<br>
+  · Vision-Token-Budget: 280 Tokens/Bild als Standard, für OCR und Texterkennung empfehlen sich 560–1120 Tokens pro Bild.<br>
   · vLLM unterstützt neben NVIDIA CUDA auch AMD ROCm (MI300X/MI325X/MI350X/MI355X), Google Cloud TPUs und Intel Xeon 6 CPUs.<br>
-  · Lizenz: Apache 2.0 — keine proprietären Nutzungsbeschränkungen.
+  · Lizenz: Apache 2.0, keine proprietären Nutzungsbeschränkungen.
 </div>
 
 </div>
