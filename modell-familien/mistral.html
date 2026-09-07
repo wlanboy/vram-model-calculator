@@ -15,18 +15,50 @@
 
 <div class="family-header">
   <h1>Mistral &amp; Mixtral</h1>
-  <p class="subtitle">Mistral AI · Dense &amp; Mixture-of-Experts · seit September 2023 · 100+ Sprachen</p>
+  <p class="subtitle">Mistral AI · Dense, MoE, Vision &amp; Reasoning · seit September 2023 · 100+ Sprachen</p>
   <div class="family-tags">
     <span class="badge badge-arch">mistral</span>
     <span class="badge badge-moe">Mixtral MoE</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Code-Spezialist</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Sliding Window Attention</span>
+    <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Thinking / Reasoning</span>
   </div>
 </div>
 
 <h2 class="section-title">Architektur &amp; Parameter</h2>
 <div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Ministral 3 3B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">3 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">26</span></div>
+    <div class="spec-row"><span class="spec-label">Attention Heads</span><span class="spec-value">32 (GQA: 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Tokenizer</span><span class="spec-value">Tekken (131k Vokabular)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text + Vision</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Dezember 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Mistral Research License</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Ministral 3 14B Reasoning</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">14 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Attention Heads</span><span class="spec-value">32 (GQA: 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Tokenizer</span><span class="spec-value">Tekken (131k Vokabular)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Thinking-Modus + Vision-Encoder</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Dezember 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Mistral Research License</span></div>
+  </div>
 
   <div class="spec-card">
     <div class="spec-card-header">
@@ -40,6 +72,21 @@
     <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">4.096 Token</span></div>
     <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">32.000</span></div>
     <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">September 2023</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">Pixtral 12B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">12 B</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~400 M (eigenständig trainiert)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Bildauflösung</span><span class="spec-value">variabel, native Seitenverhältnisse</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Mistral Nemo 12B</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">September 2024</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
   </div>
 
@@ -61,6 +108,21 @@
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">Mistral Small 3.2 24B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">24 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Attention Heads</span><span class="spec-value">32 (GQA: 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Nachfolger von 3.0/3.1, verbesserte Instruction-Following</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Juni 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
       <span class="spec-card-title">Codestral 22B</span>
     </div>
     <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">22 B</span></div>
@@ -69,6 +131,37 @@
     <div class="spec-row"><span class="spec-label">Fill-in-Middle (FIM)</span><span class="spec-value">Ja</span></div>
     <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Code-Spezialist</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Non-Commercial (MNPL)</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">Devstral Small 2 24B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">24 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Attention Heads</span><span class="spec-value">32 (GQA: 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Agentic Coding · Tool-Use, entwickelt mit All Hands AI</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Dezember 2025 (Nachfolger von 2507)</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Thinking</span>
+      <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span>
+      <span class="spec-card-title">Magistral Small 24B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">24 B</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40</span></div>
+    <div class="spec-row"><span class="spec-label">Attention Heads</span><span class="spec-value">32 (GQA: 8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Erstes Mistral-Reasoning-Modell, Chain-of-Thought</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">September 2025 (2509)</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
   </div>
 
   <div class="spec-card">
@@ -100,6 +193,19 @@
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
   </div>
 
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">Mistral Large 2 123B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">123 B</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Code, Mathematik, Multilingual, Function Calling</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Flaggschiff, nur Datacenter-tauglich</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Juli 2024</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Mistral Research License</span></div>
+  </div>
+
 </div>
 
 <h2 class="section-title">VRAM-Kompatibilität (Q4-Quantisierung)</h2>
@@ -118,6 +224,28 @@
 <tbody>
 
   <tr>
+    <td class="col-name">Ministral 3 3B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~2 GB</td>
+    <td class="fit-detail fit-good"><strong>Perfekt</strong><span>Läuft voll im VRAM, riesiger Puffer für Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Massig Platz, viele parallele Anfragen</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Viel Reserve für lange 256k-Kontexte</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Ideal für Edge/Batch-Betrieb</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~18–22 Tok/Sek · passt locker in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Ministral 3 14B Reasoning</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~8 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein; Modell überschreitet Limit</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; lange Thinking-Ketten brauchen KV-Cache-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Ausreichend Puffer für Reasoning-Ketten</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Puffer für lange Chain-of-Thought</span></td>
+    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~7–9 Tok/Sek · Thinking-Ketten verlängern Antwortzeit spürbar</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">Mistral 7B</td>
     <td><span class="badge badge-arch">Dense</span></td>
     <td class="col-mono">~4 GB</td>
@@ -126,6 +254,17 @@
     <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Viel Reserven für parallele Anfragen</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Ideal für produktive Nutzung, viele parallele Slots</span></td>
     <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~12–15 Tok/Sek · Modell passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Pixtral 12B</td>
+    <td><span class="badge badge-arch">Dense</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
+    <td class="col-mono">~8 GB<br><span style="opacity:0.7;font-size:0.68rem">(inkl. Vision-Encoder)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein für LM + Vision-Encoder</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; wenig Puffer für Bild-Tokens</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Guter Puffer für Multi-Bild-Prompts</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Reserve für hochauflösende Bilder</span></td>
+    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~7–9 Tok/Sek · Bildverarbeitung zusätzlich CPU-lastig</span></td>
   </tr>
 
   <tr>
@@ -140,6 +279,17 @@
   </tr>
 
   <tr>
+    <td class="col-name">Mistral Small 3.2 24B</td>
+    <td><span class="badge badge-arch">Dense</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
+    <td class="col-mono">~14 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für Kontext oder Bilder</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Guter Puffer für Text + Vision-Prompts</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>~5–7 Tok/Sek · Modell + Kontext nahe an 16-GB-RAM-Limit</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">Codestral 22B</td>
     <td><span class="badge badge-arch">Dense</span></td>
     <td class="col-mono">~12 GB</td>
@@ -148,6 +298,28 @@
     <td class="fit-detail fit-tight"><strong>Knapp (Limit)</strong><span>Modell passt, aber bei großen Dateien droht Überlauf</span></td>
     <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Guter Puffer für Code-Completion und FIM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Überschreitet verfügbaren RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Devstral Small 2 24B</td>
+    <td><span class="badge badge-arch">Dense</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
+    <td class="col-mono">~13,4 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; agentische Tool-Loops brauchen Kontext-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Guter Puffer für lange Agenten-Sessions</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>~5–7 Tok/Sek · nahe an 16-GB-RAM-Limit</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Magistral Small 24B</td>
+    <td><span class="badge badge-arch">Dense</span> <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Thinking</span></td>
+    <td class="col-mono">~13,3 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; lange Denk-Ketten benötigen KV-Cache-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Guter Puffer für ausgedehnte Reasoning-Ketten</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Reasoning-Ketten verlangsamen CPU-Betrieb zusätzlich stark</span></td>
   </tr>
 
   <tr>
@@ -172,6 +344,17 @@
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt jeden Consumer-RAM</span></td>
   </tr>
 
+  <tr>
+    <td class="col-name">Mistral Large 2 <span class="col-muted">(123 B)</span></td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~74 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Benötigt mind. 4× 24 GB GPU</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt jeden Consumer-RAM</span></td>
+  </tr>
+
 </tbody>
 </table>
 </div>
@@ -183,7 +366,8 @@
   <th>Modell</th>
   <th class="cap-cell">Text</th>
   <th class="cap-cell">Code</th>
-  <th class="cap-cell">FIM</th>
+  <th class="cap-cell">Vision</th>
+  <th class="cap-cell">Thinking</th>
   <th class="cap-cell">Function Calling</th>
   <th class="cap-cell">Multilingual</th>
   <th style="white-space:nowrap">Kontext</th>
@@ -191,9 +375,32 @@
 </tr></thead>
 <tbody>
   <tr>
+    <td class="col-name">Ministral 3 3B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="generalistisch, kein Spezialist">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">256k</td>
+    <td class="col-mono col-muted">Research License</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ministral 3 14B Reasoning</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">256k</td>
+    <td class="col-mono col-muted">Research License</td>
+  </tr>
+  <tr>
     <td class="col-name">Mistral 7B</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-part" title="generalistisch, kein Spezialist">~</td>
+    <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-part" title="ab v0.3">~</td>
     <td class="cap-cell cap-part" title="primär Englisch">~</td>
@@ -201,7 +408,30 @@
     <td class="col-mono col-muted">Apache 2.0</td>
   </tr>
   <tr>
+    <td class="col-name">Pixtral 12B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="generalistisch, kein Spezialist">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Apache 2.0</td>
+  </tr>
+  <tr>
     <td class="col-name">Mistral Nemo 12B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Apache 2.0</td>
+  </tr>
+  <tr>
+    <td class="col-name">Mistral Small 3.2 24B</td>
+    <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-no">✗</td>
@@ -214,16 +444,40 @@
     <td class="col-name">Codestral 22B</td>
     <td class="cap-cell cap-part" title="sekundär, Text-Fokus gering">~</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-part" title="80+ Programmiersprachen, kein allg. Multilingual">~</td>
     <td class="col-mono">32k</td>
     <td class="col-mono col-muted">Non-Commercial</td>
   </tr>
   <tr>
+    <td class="col-name">Devstral Small 2 24B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes" title="Tool-Use/Agenten-Loops">✓</td>
+    <td class="cap-cell cap-part">~</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Apache 2.0</td>
+  </tr>
+  <tr>
+    <td class="col-name">Magistral Small 24B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Apache 2.0</td>
+  </tr>
+  <tr>
     <td class="col-name">Mixtral 8x7B</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
@@ -235,10 +489,22 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">64k</td>
     <td class="col-mono col-muted">Apache 2.0</td>
+  </tr>
+  <tr>
+    <td class="col-name">Mistral Large 2</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Research License</td>
   </tr>
 </tbody>
 </table>
@@ -255,6 +521,34 @@
   <th>Hinweis</th>
 </tr></thead>
 <tbody>
+  <tr>
+    <td class="col-name">Ministral 3 3B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~2 GB</td>
+    <td class="col-muted">Läuft auch auf Edge-Geräten</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ministral 3 3B</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~6 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ministral 3 14B Reasoning</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~7,7 GB</td>
+    <td class="col-muted">Empfohlen für 12–16-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ministral 3 14B Reasoning</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~28 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
   <tr>
     <td class="col-name">Mistral 7B</td>
     <td>GGUF</td>
@@ -277,6 +571,20 @@
     <td class="col-muted">Volles Gewicht</td>
   </tr>
   <tr>
+    <td class="col-name">Pixtral 12B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~7 GB</td>
+    <td class="col-muted">+ ~1 GB mmproj (Vision-Encoder)</td>
+  </tr>
+  <tr>
+    <td class="col-name">Pixtral 12B</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~24 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
     <td class="col-name">Nemo 12B</td>
     <td>GGUF</td>
     <td class="col-mono">Q4_K_M</td>
@@ -295,6 +603,48 @@
     <td>FP16</td>
     <td class="col-mono">—</td>
     <td class="col-mono">~24 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">Mistral Small 3.2 24B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~14 GB</td>
+    <td class="col-muted">Empfohlen für 16–24-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Mistral Small 3.2 24B</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~48 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">Devstral Small 2 24B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~13,4 GB</td>
+    <td class="col-muted">Empfohlen für 16–24-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Devstral Small 2 24B</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~48 GB</td>
+    <td class="col-muted">Volles Gewicht</td>
+  </tr>
+  <tr>
+    <td class="col-name">Magistral Small 24B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~13,3 GB</td>
+    <td class="col-muted">Empfohlen für 16–24-GB-GPUs</td>
+  </tr>
+  <tr>
+    <td class="col-name">Magistral Small 24B</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~48 GB</td>
     <td class="col-muted">Volles Gewicht</td>
   </tr>
   <tr>
@@ -381,6 +731,20 @@
     <td class="col-mono">~155 GB</td>
     <td class="col-muted">4× 48 GB oder 2× 80 GB GPU</td>
   </tr>
+  <tr>
+    <td class="col-name">Mistral Large 2 123B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~74 GB</td>
+    <td class="col-muted">2× 48 GB oder 4× 24 GB GPU</td>
+  </tr>
+  <tr>
+    <td class="col-name">Mistral Large 2 123B</td>
+    <td>FP16</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~246 GB</td>
+    <td class="col-muted">Nur Multi-GPU-Datacenter</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -425,11 +789,17 @@
       <span class="badge badge-arch">Ollama</span>
       <span class="spec-card-title">Einfachste Option</span>
     </div>
+    <div class="spec-row"><span class="spec-label">Ministral</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run ministral</span></div>
     <div class="spec-row"><span class="spec-label">Mistral 7B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run mistral:7b</span></div>
+    <div class="spec-row"><span class="spec-label">Pixtral</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run pixtral</span></div>
     <div class="spec-row"><span class="spec-label">Nemo 12B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run mistral-nemo</span></div>
+    <div class="spec-row"><span class="spec-label">Mistral Small</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run mistral-small3.2</span></div>
     <div class="spec-row"><span class="spec-label">Codestral</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run codestral</span></div>
+    <div class="spec-row"><span class="spec-label">Devstral</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run devstral</span></div>
+    <div class="spec-row"><span class="spec-label">Magistral</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run magistral</span></div>
     <div class="spec-row"><span class="spec-label">Mixtral 8x7B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run mixtral:8x7b</span></div>
     <div class="spec-row"><span class="spec-label">Mixtral 8x22B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run mixtral:8x22b</span></div>
+    <div class="spec-row"><span class="spec-label">Mistral Large</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run mistral-large</span></div>
   </div>
 
   <div class="spec-card">
@@ -438,6 +808,7 @@
       <span class="spec-card-title">GUI mit GGUF-Auswahl</span>
     </div>
     <div class="spec-row"><span class="spec-label">Alle Modelle</span><span class="spec-value">GGUF direkt wählbar</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Modelle</span><span class="spec-value">mmproj-Datei zusätzlich laden</span></div>
     <div class="spec-row"><span class="spec-label">Mixtral 8x7B Tipp</span><span class="spec-value">Q3_K_M für 24-GB-GPUs wählen</span></div>
   </div>
 
@@ -448,25 +819,28 @@
     </div>
     <div class="spec-row"><span class="spec-label">KV-Quantisierung</span><span class="spec-value col-mono" style="font-size:0.8rem">--cache-type-k q4_0 --cache-type-v q4_0</span></div>
     <div class="spec-row"><span class="spec-label">GPU-Offload</span><span class="spec-value col-mono" style="font-size:0.8rem">-ngl 999</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Modelle</span><span class="spec-value col-mono" style="font-size:0.8rem">--mmproj mmproj-F16.gguf</span></div>
     <div class="spec-row"><span class="spec-label">GGUF-Quelle</span><span class="spec-value">TheBloke / bartowski auf HuggingFace</span></div>
   </div>
 
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">vLLM</span>
-      <span class="spec-card-title">Single-GPU (7B / Nemo)</span>
+      <span class="spec-card-title">Single-GPU (bis 24B)</span>
     </div>
     <div class="spec-row"><span class="spec-label">7B</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve mistralai/Mistral-7B-Instruct-v0.3</span></div>
     <div class="spec-row"><span class="spec-label">Nemo 12B</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve mistralai/Mistral-Nemo-Instruct-2407</span></div>
+    <div class="spec-row"><span class="spec-label">Small 3.2</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve mistralai/Mistral-Small-3.2-24B-Instruct</span></div>
   </div>
 
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">vLLM</span>
-      <span class="spec-card-title">Multi-GPU (Mixtral)</span>
+      <span class="spec-card-title">Multi-GPU (Mixtral / Large)</span>
     </div>
     <div class="spec-row"><span class="spec-label">8x7B (2× GPU)</span><span class="spec-value col-mono" style="font-size:0.8rem">--tensor-parallel-size 2</span></div>
     <div class="spec-row"><span class="spec-label">8x22B (4× GPU)</span><span class="spec-value col-mono" style="font-size:0.8rem">--tensor-parallel-size 4</span></div>
+    <div class="spec-row"><span class="spec-label">Large 2 (4× GPU)</span><span class="spec-value col-mono" style="font-size:0.8rem">--tensor-parallel-size 4</span></div>
     <div class="spec-row"><span class="spec-label">GPU-Auslastung</span><span class="spec-value col-mono" style="font-size:0.8rem">--gpu-memory-utilization 0.90</span></div>
   </div>
 
@@ -485,15 +859,21 @@
 <div class="note-box">
   <strong>Hinweise:</strong><br>
   · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem Kontextfenster steigt der Bedarf deutlich.<br>
-  · Mixtral MoE: Trotz nur 2 aktiver Experten pro Token müssen <em>alle 8 Experten</em> vollständig im VRAM liegen — der VRAM-Bedarf richtet sich nach der Gesamtparameterzahl (46,7 B bzw. 141 B), nicht nach den aktiven Parametern.<br>
-  · Mistral 7B war bei Veröffentlichung (September 2023) das erste Open-Source-Modell, das GPT-3.5 auf mehreren Benchmarks übertroffen hat — mit nur 7 B Parametern durch Sliding Window Attention und GQA.<br>
-  · Mistral Nemo 12B nutzt den <em>Tekken</em>-Tokenizer mit 131.072 Vokabular-Tokens — deutlich besser für Nicht-Latein-Sprachen als das 32k-Vokabular älterer Mistral-Modelle.<br>
-  · Mistral Nemo 12B ist für FP8-Quantisierung optimiert (Quantization-Aware Training) — ideal für NVIDIA Hopper-Architektur (H100, H200).<br>
-  · Codestral 22B ist unter der Mistral AI Non-Production License (MNPL) veröffentlicht — kommerzielle Nutzung erfordert eine separate Lizenz; lokale Nutzung für Entwickler ist erlaubt.<br>
-  · Codestral Fill-in-Middle (FIM) ermöglicht Code-Completion mitten im Dokument — ideal für IDE-Integration (Continue.dev, Cursor).<br>
-  · Mixtral 8x7B mit Q2_K (~18 GB) ist technisch auf einer 16-GB-GPU lauffähig, aber der Qualitätsverlust ist erheblich; neuere Modelle wie Qwen3-14B (Q4, ~9 GB) liefern vergleichbare oder bessere Ergebnisse bei deutlich weniger VRAM.<br>
-  · Mixtral 8x22B ist auf Consumer-Hardware nicht praxistauglich; Cloud-API empfohlen (Mistral AI Platform, Together.ai, Anyscale).<br>
-  · Alle Mistral- und Mixtral-Modelle (außer Codestral) sind unter Apache 2.0 lizenziert — keine proprietären Nutzungsbeschränkungen für kommerzielle Projekte.
+  · Mixtral MoE: Trotz nur 2 aktiver Experten pro Token müssen <em>alle 8 Experten</em> vollständig im VRAM liegen. Der VRAM-Bedarf richtet sich nach der Gesamtparameterzahl (46,7 B bzw. 141 B), nicht nach den aktiven Parametern.<br>
+  · Mistral 7B war bei Veröffentlichung (September 2023) das erste Open-Source-Modell, das GPT-3.5 auf mehreren Benchmarks übertroffen hat, mit nur 7 B Parametern durch Sliding Window Attention und GQA.<br>
+  · Mistral Nemo 12B nutzt den <em>Tekken</em>-Tokenizer mit 131.072 Vokabular-Tokens, deutlich besser für Nicht-Latein-Sprachen als das 32k-Vokabular älterer Mistral-Modelle.<br>
+  · Mistral Nemo 12B ist für FP8-Quantisierung optimiert (Quantization-Aware Training), passend zur NVIDIA-Hopper-Architektur (H100, H200).<br>
+  · Codestral 22B ist unter der Mistral AI Non-Production License (MNPL) veröffentlicht. Kommerzielle Nutzung erfordert eine separate Lizenz, lokale Nutzung für Entwickler ist erlaubt.<br>
+  · Codestral Fill-in-Middle (FIM) ermöglicht Code-Completion mitten im Dokument, nützlich für IDE-Integration (Continue.dev, Cursor).<br>
+  · Mixtral 8x7B mit Q2_K (~18 GB) läuft technisch auf einer 16-GB-GPU, aber der Qualitätsverlust ist erheblich. Neuere Modelle wie Qwen3-14B (Q4, ~9 GB) liefern vergleichbare oder bessere Ergebnisse bei deutlich weniger VRAM.<br>
+  · Mixtral 8x22B ist auf Consumer-Hardware nicht praxistauglich, eine Cloud-API (Mistral AI Platform, Together.ai, Anyscale) ist die realistische Option.<br>
+  · Pixtral 12B war Mistrals erstes multimodales Modell (September 2024) und verarbeitet Bilder in beliebiger Auflösung und beliebigem Seitenverhältnis ohne festes Tiling.<br>
+  · Mistral Small entwickelte sich von 3.0 (Januar 2025, reiner Text) über 3.1 (März 2025, erstmals multimodal) zu 3.2 (Juni 2025, robusteres Instruction-Following). Alle Versionen bleiben unter Apache 2.0.<br>
+  · Devstral Small wurde zusammen mit All Hands AI für agentisches Programmieren entwickelt (SWE-bench-Fokus) und ist trotz starker Coding-Fähigkeiten vollständig unter Apache 2.0 lizenziert; Version 2 (Dezember 2025) ergänzt einen Vision-Encoder.<br>
+  · Magistral Small war im Juni 2025 Mistrals erstes dediziertes Reasoning-Modell mit sichtbarer Denkkette (Chain-of-Thought). Das größere Magistral Medium bleibt proprietär und ist nur über die API verfügbar.<br>
+  · Mistral Large 2 (123 B, Juli 2024) steht unter der Mistral Research License: kostenlos für Forschung und nicht-kommerzielle Nutzung, für den kommerziellen Einsatz ist eine separate Lizenz von Mistral AI nötig.<br>
+  · Ministral 3B/8B (heute Ministral 3) zielen auf Edge- und On-Device-Einsatz: sehr kleiner Speicherbedarf bei gleichzeitig großem 256k-Kontextfenster.<br>
+  · Alle Apache-2.0-lizenzierten Mistral- und Mixtral-Modelle haben keine proprietären Nutzungsbeschränkungen für kommerzielle Projekte; Codestral, Mistral Large und die Ministral-Reihe unterliegen dagegen eingeschränkteren Lizenzen.
 </div>
 
 </div>
