@@ -15,9 +15,10 @@
 
 <div class="family-header">
   <h1>Bonsai</h1>
-  <p class="subtitle">PrismML · Apache 2.0 · 1-Bit &amp; Ternär-Quantisierung · Dense (Qwen3-Basis) · Edge/On-Device-Fokus</p>
+  <p class="subtitle">PrismML · Apache 2.0 · 1-Bit &amp; Ternär-Quantisierung · Dense (Qwen3-/Qwen3.5-Basis) · Edge/On-Device-Fokus</p>
   <div class="family-tags">
     <span class="badge badge-arch">qwen3</span>
+    <span class="badge badge-arch">qwen35 (27B)</span>
     <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">1-bit (Q1_0)</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Ternär (Q2_0)</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode</span>
@@ -81,9 +82,10 @@
     </div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">27 B</span></div>
     <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense (Basis: Qwen 3.6 27B)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">64</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262.144 Token</span></div>
-    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard (kein YaRN nötig)</span></div>
-    <div class="spec-row"><span class="spec-label">Vision-Tower</span><span class="spec-value">~0,9 GiB · 4-bit</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Standard (kein YaRN nötig, GQA 4 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Vision-Tower</span><span class="spec-value">~0,87 GiB · BF16</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild → Text</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
   </div>
@@ -108,7 +110,7 @@
   <tr>
     <td class="col-name">Bonsai 1.7B</td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~0,25 / ~0,43 GB</td>
+    <td class="col-mono">~0,23 / ~0,43 GB</td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Verschwindend kleiner Fußabdruck; massig Puffer</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Praktisch kostenlos in VRAM</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Dutzende parallele Instanzen möglich</span></td>
@@ -119,7 +121,7 @@
   <tr>
     <td class="col-name">Bonsai 4B</td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~0,57 / ~1,0 GB</td>
+    <td class="col-mono">~0,53 / ~1,0 GB</td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Passt mehrfach parallel in 6 GB</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Kaum messbarer VRAM-Verbrauch</span></td>
     <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Viel Reserve für langen Kontext</span></td>
@@ -130,7 +132,7 @@
   <tr>
     <td class="col-name">Bonsai 8B</td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~1,1 / ~2,0–2,3 GB</td>
+    <td class="col-mono">~1,08 / ~2,03–2,25 GB</td>
     <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Auch Ternär-Variante passt locker</span></td>
     <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Reserve für 65k Kontext</span></td>
     <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Volle YaRN-Kontextlänge nutzbar</span></td>
@@ -141,8 +143,8 @@
   <tr>
     <td class="col-name">Bonsai 27B</td>
     <td><span class="badge badge-arch">Dense</span> <span class="badge" style="background:rgba(210,153,34,0.15);color:var(--yellow)">Vision</span></td>
-    <td class="col-mono">~4,4 / ~8,0 GB<br><span style="opacity:0.7;font-size:0.68rem">(inkl. ~0,9 GiB Vision-Tower)</span></td>
-    <td class="fit-detail fit-tight"><strong>Nur 1-bit knapp</strong><span>1-bit passt (~4,4 GB); Ternär (~8 GB) läuft über</span></td>
+    <td class="col-mono">~4,4 / ~7,5 GB*<br><span style="opacity:0.7;font-size:0.68rem">(inkl. ~0,87 GiB BF16-Vision-Tower)</span></td>
+    <td class="fit-detail fit-tight"><strong>Nur 1-bit knapp</strong><span>1-bit passt (~4,4 GB); Ternär (~7,5 GB) läuft über</span></td>
     <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Beide Varianten passen; Reserve für KV-Cache</span></td>
     <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Platz für Bild-Input + langen Kontext</span></td>
     <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Vergleichsweise winzig für ein 27B-Modell</span></td>
@@ -151,6 +153,7 @@
 
 </tbody>
 </table>
+<p style="font-size:0.78rem;color:var(--text-muted);margin:0.5rem 0 0">*Ternär-Größe des 27B geschätzt: Der Cache enthält keine passende Ternär-27B-Backbone-Datei (die im gleichen Ordner abgelegte „dspark"-Datei gehört laut Metadaten zu einem anderen, deutlich kleineren Modell). Hochgerechnet mit dem bei 1.7B/4B/8B gemessenen Q1_0→Q2_0-Skalierungsfaktor von ~1,88× ergibt sich ~6,65 GB Backbone + ~0,87 GiB Vision-Tower.</p>
 </div>
 
 <h2 class="section-title">KV-Cache-Wachstum (fp16-Cache, aus GGUF-Metadaten berechnet)</h2>
@@ -192,10 +195,10 @@
   <tr>
     <td class="col-name">Bonsai 27B</td>
     <td class="col-mono" style="text-align:center">262k</td>
-    <td class="col-mono" style="text-align:center">k. A.*</td>
+    <td class="col-mono" style="text-align:center">~32 GB*</td>
     <td class="col-mono" style="text-align:center">—</td>
     <td class="col-mono" style="text-align:center">—</td>
-    <td style="font-size:0.78rem;color:var(--text-muted)">*Kein YaRN nötig, aber keine eigenen GGUF-Header-Metadaten im Modell-Cache vorhanden – analog Qwen 3.6 27B ist bei 262k Token mit mehreren zusätzlichen GB KV-Cache zu rechnen</td>
+    <td style="font-size:0.78rem;color:var(--yellow)">*Kein YaRN nötig. Der Cache liefert inzwischen 64 Layer und 4 KV-Heads, aber n_embd/n_heads (5120/24) ergibt keine ganzzahlige Head-Dimension – mit der bei den übrigen Bonsai-Modellen üblichen Head-Dim 128 ergäbe sich bei voller 262k-Kontextlänge ein KV-Cache von ~32 GB, ein Vielfaches des ~4,4 GB schweren 1-bit-Gewichts</td>
   </tr>
 </tbody>
 </table>
