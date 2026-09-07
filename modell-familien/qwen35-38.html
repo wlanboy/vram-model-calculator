@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Qwen 3.5 &amp; 3.6 – Modell-Übersicht</title>
+<title>Qwen 3.5 – 3.8 – Modell-Übersicht</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="modelfamilien.css">
@@ -14,8 +14,8 @@
 <a class="nav-back" href="../index.html">← VRAM Calculator</a>
 
 <div class="family-header">
-  <h1>Qwen 3.5 &amp; 3.6</h1>
-  <p class="subtitle">Alibaba Cloud / Qwen Team · Apache 2.0 · 262k Kontextfenster · Hybrid Attention</p>
+  <h1>Qwen 3.5 – 3.8</h1>
+  <p class="subtitle">Alibaba Cloud / Qwen Team · Apache 2.0 · 262k Kontextfenster (bis 1M via YaRN) · Hybrid Attention</p>
   <div class="family-tags">
     <span class="badge badge-arch">qwen35</span>
     <span class="badge badge-moe">MoE verfügbar</span>
@@ -68,6 +68,22 @@
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k Token</span></div>
     <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid (GatedDeltaNet)</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">GatedDeltaNet</span>
+      <span class="spec-card-title">Qwen 3.8 27B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~27,8 B</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Dense · Hybrid</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">64 (48 GatedDeltaNet + 16 Full-Attn)</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size</span><span class="spec-value">5.120</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">262k nativ · bis 1M (YaRN)</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid (75 % GatedDeltaNet)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Video</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
   </div>
 
@@ -152,6 +168,17 @@
   </tr>
 
   <tr>
+    <td class="col-name">Qwen 3.8 27B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~16 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Auch Q3 (~13 GB) kaum Puffer</span></td>
+    <td class="fit-detail fit-tight"><strong>Q3 möglich</strong><span>Q3_K_M (~13 GB) passt; Q4 (~16 GB) ohne Kontext-Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut (Q4–Q6)</strong><span>~34 Tok/Sek · Q6 (~21 GB) empfohlen; langer Kontext (&gt;128k) sprengt 24 GB</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Modell sprengt 16 GB RAM → starker Swap</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">Qwen 3.5 / 3.6 · 35B-A3B</td>
     <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~22 GB</td>
@@ -213,6 +240,14 @@
     <td class="col-mono" style="text-align:center">~25 GB</td>
     <td style="font-size:0.78rem;color:var(--green)">Minimales Wachstum – 75 % der Layer nutzen GatedDeltaNet (kein KV-Cache)</td>
   </tr>
+  <tr>
+    <td class="col-name">Qwen 3.8 27B</td>
+    <td class="col-mono" style="text-align:center">~16 GB</td>
+    <td class="col-mono" style="text-align:center">~18 GB</td>
+    <td class="col-mono" style="text-align:center">~24 GB</td>
+    <td class="col-mono" style="text-align:center">~32 GB</td>
+    <td style="font-size:0.78rem;color:var(--red)">Trotz 75 % GatedDeltaNet-Layern starkes Wachstum – die 16 Full-Attention-Layer nutzen breite Köpfe (4 KV-Heads, 256 Head-Dim) und bauen allein ~16 GB KV-Cache bei 262k auf</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -262,6 +297,16 @@
     <td class="col-mono col-muted">~34 Tok/Sek</td>
   </tr>
   <tr>
+    <td class="col-name">Qwen 3.8 27B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">262k–1M</td>
+    <td class="col-mono col-muted">~34 Tok/Sek (bis ~46 mit MTP)</td>
+  </tr>
+  <tr>
     <td class="col-name">Qwen 3.5 / 3.6 · 35B-A3B</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
@@ -286,8 +331,9 @@
 </div>
 
 <div class="note-box">
-  <strong>Qwen 3.5 vs. Qwen 3.6:</strong> Qwen 3.6 erweitert die Serie um zwei neue Varianten: <strong>Qwen 3.6 27B</strong> (Dense mit Hybrid GatedDeltaNet + Standard-Attention, multimodal) sowie <strong>Qwen 3.6 35B-A3B</strong> (MoE, baugleich mit Qwen 3.5 35B-A3B). Qwen 3.6-27B unterscheidet sich von Qwen 3.5-27B durch Hybrid-Attention und Bildunterstützung. GGUF-Dateien aller Varianten verwenden die Architektur-Kennung <code>qwen35</code>.<br><br>
-  <strong>GatedDeltaNet (Hybrid Attention):</strong> 75 % der Layer im MoE-Modell nutzen lineares GatedDeltaNet statt Standard-Attention. Dadurch entfällt der KV-Cache für diese Layer – das VRAM-Wachstum bei langen Kontexten ist minimal: von 4k auf 262k Token nur +3 GB, beim Dense-Modell hingegen +16 GB.<br><br>
+  <strong>Qwen 3.5 vs. Qwen 3.6 vs. Qwen 3.8:</strong> Qwen 3.6 erweitert die Serie um zwei neue Varianten: <strong>Qwen 3.6 27B</strong> (Dense mit Hybrid GatedDeltaNet + Standard-Attention, multimodal) sowie <strong>Qwen 3.6 35B-A3B</strong> (MoE, baugleich mit Qwen 3.5 35B-A3B). Qwen 3.6-27B unterscheidet sich von Qwen 3.5-27B durch Hybrid-Attention und Bildunterstützung. <strong>Qwen 3.8 27B</strong> (Release 14.08.2026) löst Qwen 3.6 27B als Dense-Flaggschiff ab. Gleiche Parametergröße, aber ein neues 64-Layer-Layout (3× GatedDeltaNet+FFN, dann 1× Full-Attention+FFN, 16× wiederholt), dazu Video-Eingabe und nativ 262k Kontext, der sich per YaRN auf bis zu 1M ausdehnen lässt. GGUF-Dateien aller Varianten verwenden weiterhin die Architektur-Kennung <code>qwen35</code>; für Qwen 3.8 braucht llama.cpp mindestens Build b10419 (Stand Mai 2026).<br><br>
+  <strong>GatedDeltaNet (Hybrid Attention):</strong> 75 % der Layer im MoE-Modell nutzen lineares GatedDeltaNet statt Standard-Attention. Dadurch entfällt der KV-Cache für diese Layer – das VRAM-Wachstum bei langen Kontexten ist minimal: von 4k auf 262k Token nur +3 GB, beim Dense-Modell hingegen +16 GB. <strong>Qwen 3.8 27B bricht dieses Muster.</strong> Trotz identischer 75-%-Hybridquote nutzen seine 16 verbleibenden Full-Attention-Layer sehr breite Köpfe (4 KV-Heads × 256 Head-Dim). Der KV-Cache wächst dadurch genauso stark wie bei einem vollständigen Dense-Modell, rund 16 GB zusätzlich von 4k auf 262k Token. Die Hybrid-Architektur spart hier Rechenleistung, aber kaum VRAM bei langem Kontext.<br><br>
+  <strong>MTP (Multi-Token Prediction):</strong> Qwen 3.8 27B-GGUFs enthalten einen MTP-Head; ein llama.cpp-Flag aktiviert spekulative Mehr-Token-Dekodierung und liefert auf Consumer-GPUs ca. +33–39 % Decode-Speed gegenüber regulärem Sampling.<br><br>
   <strong>Quantisierung:</strong> Q3 und Q4 liefern laut Benchmarks nahezu identische Qualität. Unter Q2 bricht die Ausgabequalität spürbar ein – <em>Q2_K vermeiden</em>. Empfehlung für 24 GB: Q4_K_M oder UD-Q4_K_XL (Unsloth-Format).<br><br>
   <strong>VRAM-Werte</strong> gelten ohne KV-Cache (Basis-Kontext 4k). Speed-Werte gemessen auf RTX 3090 mit Q4_K_M via llama.cpp.
 </div>
