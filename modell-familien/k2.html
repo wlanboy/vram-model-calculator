@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K2 Horizon (IFM / MBZUAI) – Modell-Übersicht</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="modelfamilien.css">
+</head>
+<body>
+<div class="container">
+
+<a class="nav-back" href="../index.html">← VRAM Calculator</a>
+
+<div class="family-header">
+  <h1>K2 Horizon (Institute of Foundation Models / MBZUAI)</h1>
+  <p class="subtitle">Abu Dhabi · Apache 2.0 · vollständig offen (Gewichte, Code, Trainingsdaten, Checkpoints, Logs) · 6 Modelle von 0,9 B bis 375 B · veröffentlicht 03.09.2026</p>
+  <div class="family-tags">
+    <span class="badge badge-arch">Dense &amp; MoE</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">MoVA (Mixture-of-Value-Attention)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Reasoning-Parser</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Tool Calling</span>
+    <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red)">Diffusion-Distillation (3× schneller)</span>
+  </div>
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">K2-Horizon-0.9B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">1,08 B (inkl. Embeddings)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">131.072 Token (128k) nativ</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Constrained-/Edge-Umgebungen, State-of-the-Art in seiner Größenklasse</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">K2-Horizon-3.7B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">3,7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">öffentlich nicht separat bestätigt (vermutlich ≥128k)</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Fine-Tuning-Basis, On-Device (Smartphones)</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">K2-Horizon-7B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">7 B</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">öffentlich nicht separat bestätigt (vermutlich ≥128k)</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">On-Device-Einsatz, State-of-the-Art in seiner Größenklasse</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Dense</span>
+      <span class="spec-card-title">K2-Horizon-32B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">32 B</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">512k (Stage-1-Modellkarte)</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Lokales Hosting auf Single-GPU-Workstations</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">MoVA</span>
+      <span class="spec-card-title">K2-Horizon-MoVA-36B-A4B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">≈ 36 B (≈ 4 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Mixture-of-Value-Attention: Experten-Routing zusätzlich in den Value-Projektionen der Attention</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">524.288 Token (512k) nativ</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Überdurchschnittliche Leistung pro aktivem Parameter, lokal auf einer 24 GB-GPU nutzbar</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="spec-card-title">K2-Horizon-375B-A23B</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">375 B (≈ 23 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Sparse MoE, native 512k-Kontext, Diffusion-Distillation für parallele Token-Blöcke</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">512k nativ</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Flaggschiff, Frontier-Performance, nur Multi-GPU-/Datacenter-Klasse</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">Apache 2.0</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">VRAM-Kompatibilität (Q4_K_M-Quantisierung, GGUF)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th>Typ</th>
+  <th style="white-space:nowrap">VRAM Q4_K_M</th>
+  <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
+  <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
+  <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
+  <th class="gpu-head">24 GB VRAM<small>z. B. RTX 3090 / 4090</small></th>
+  <th class="gpu-head">CPU · 16 GB RAM<small>z. B. Ryzen 7 (AM4)</small></th>
+</tr></thead>
+<tbody>
+
+  <tr>
+    <td class="col-name">K2-Horizon-0.9B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~0,7 GB</td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Puffer, auch bei 128k Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Auch auf schwacher CPU-Hardware flott</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">K2-Horizon-3.7B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~2,3 GB</td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Passt mit Puffer für moderaten Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>—</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">K2-Horizon-7B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~4,4 GB</td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Wenig Puffer bei langem Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>—</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>—</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">K2-Horizon-32B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~20 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Modell selbst passt knapp nicht, 512k-KV-Cache erst recht nicht</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Nur bei stark reduziertem Kontext (weit unter 512k)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">K2-Horizon-MoVA-36B-A4B</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~23 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Knapp zu klein für Gewichte + Kontext</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Passt bei moderatem Kontext, 512k sprengt den Puffer</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Nur ~4 B aktive Parameter → trotz 36 B Gesamtgröße CPU-tauglich</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">K2-Horizon-375B-A23B</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~235 GB<br><span style="opacity:0.7;font-size:0.68rem">(Schätzung aus Parameterzahl)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Braucht Multi-GPU-Cluster (Datacenter-Klasse)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Fähigkeiten &amp; Features</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th class="cap-cell">Text</th>
+  <th class="cap-cell">Reasoning-Parser</th>
+  <th class="cap-cell">Tool Calling</th>
+  <th class="cap-cell">MoE</th>
+  <th style="white-space:nowrap">Kontext</th>
+  <th style="white-space:nowrap">Aktive Parameter</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">K2-Horizon-0.9B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">1,08 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">K2-Horizon-3.7B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">≥128k*</td>
+    <td class="col-mono col-muted">3,7 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">K2-Horizon-7B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">≥128k*</td>
+    <td class="col-mono col-muted">7 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">K2-Horizon-32B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">512k</td>
+    <td class="col-mono col-muted">32 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">K2-Horizon-MoVA-36B-A4B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">512k</td>
+    <td class="col-mono col-muted">≈ 4 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">K2-Horizon-375B-A23B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">512k</td>
+    <td class="col-mono col-muted">≈ 23 B</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-box">
+  <strong>K2 Horizon (Institute of Foundation Models, MBZUAI Abu Dhabi):</strong> Am 03.09.2026 veröffentlichte das IFM sechs zusammengehörige Modelle von 0,9 B bis 375 B Parametern als – nach eigener Darstellung – bislang größte vollständig offene Modell-Flotte: nicht nur Gewichte, sondern auch Trainingsdaten (soweit Lizenzen dies erlauben), Trainingscode, Zwischen-Checkpoints, Trainings-Logs und Evaluationsergebnisse stehen offen. Modelle und Code stehen unter Apache 2.0, einzelne Trainingsdatensätze behalten ihre jeweilige Lizenz (u. a. ODC-BY).<br><br>
+  <strong>Mixture-of-Value-Attention (MoVA):</strong> Die beiden größten Modelle (36B-A4B und das 375B-A23B-Flaggschiff) erweitern die aus MoE bekannte Experten-Sparsity zusätzlich auf die Value-Projektionen der Attention-Köpfe. Das öffnet eine zweite Skalierungsachse neben dem klassischen FFN-Experten-Routing und soll Reasoning-Fähigkeit steigern, ohne zusätzliche Rechenlast pro Token zu erzeugen. Laut IFM liefert das MoVA-36B-A4B-Modell dadurch überdurchschnittliche Leistung im Verhältnis zu seinen nur ~4 B aktiven Parametern.<br><br>
+  <strong>Diffusion-Distillation (≈3× Speedup):</strong> Zusätzlich zu den autoregressiven (eingefrorenen) Basisgewichten wird ein leichtgewichtiger Satz "Diffusions"-Parameter trainiert, der lernt, mehrere Token gleichzeitig als Block zu generieren statt strikt sequentiell eines nach dem anderen. Die Ausgabeverteilung des Basismodells bleibt dabei unverändert. Das beschleunigt die Inferenz laut IFM um etwa das Dreifache bei gleichbleibender Antwortqualität. Für die reine VRAM-Bedarfsrechnung ist dieser Mechanismus neutral (kein zusätzlicher Speicherbedarf in relevanter Größenordnung), wirkt sich aber direkt auf Tokens/Sekunde aus.<br><br>
+  <strong>Sehr große native Kontextfenster:</strong> 32B, MoVA-36B-A4B und das 375B-A23B-Flaggschiff werben mit einem nativen Kontext von 512k (524.288) Token, deutlich mehr als bei den meisten anderen offenen Modellfamilien in dieser Übersicht. Die VRAM-Werte oben decken aber nur die reinen Modellgewichte ab. Der KV-Cache bei tatsächlicher Nutzung von 512k Kontext ist enorm und übersteigt auf Consumer-GPUs (6–24 GB) den verfügbaren Speicher bei weitem, selbst wenn die Gewichte allein noch passen würden.<br><br>
+  <strong>Hinweis zu llama.cpp/GGUF:</strong> Die K2-Horizon-Architektur (<code>k2_horizon</code>) ist in Upstream-llama.cpp zum Zeitpunkt der Veröffentlichung noch nicht gemergt (PR ausstehend). Für GGUF-Inferenz wird aktuell der Fork <code>MBZUAI-IFM/llama.cpp</code> (Branch <code>model/K2Horizon</code>) benötigt. Die VRAM-Zahlen für 3.7B/7B/32B/36B-A4B/375B-A23B sind Schätzungen auf Basis der Gesamtparameterzahl (analog zur Berechnung bei anderen Familien in dieser Übersicht); nur für 0.9B liegt eine offiziell bestätigte Parameterzahl inkl. Embeddings vor. * Für 3.7B und 7B ist keine offiziell bestätigte Kontextlänge auffindbar.
+</div>
+
+</div>
+</body>
+</html>
