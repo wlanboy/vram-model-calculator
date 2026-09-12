@@ -48,6 +48,23 @@ DIFFUSION_ARCHS = {
 # formula wildly overstates their KV-cache VRAM.
 MLA_ARCHS = {"deepseek2", "deepseek2-ocr", "minicpm3", "glm-dsa", "mistral4"}
 
+# Tensor-name prefixes unique to stable-diffusion.cpp checkpoint GGUFs.
+# Some (e.g. dreamshaper-xl-v2-turbo-Q8_0.gguf) carry no metadata at all —
+# not even general.architecture — so DIFFUSION_ARCHS can't catch them.
+# These prefixes never appear in an autoregressive-LLM GGUF (which names
+# tensors "blk.N....."), so they're a reliable fallback signal.
+DIFFUSION_TENSOR_PREFIXES = (
+    "model.diffusion_model.", "first_stage_model.", "conditioner.embedders.",
+    "cond_stage_model.", "double_blocks.", "single_blocks.",
+)
+
+
+def _is_metadata_less_diffusion_checkpoint(reader):
+    return any(
+        t.name.startswith(DIFFUSION_TENSOR_PREFIXES)
+        for t in getattr(reader, "tensors", [])
+    )
+
 # KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and one
 # Value tensor.
 KV_BYTES_PER_ELEMENT = 2
@@ -161,6 +178,11 @@ def get_model_params(file_path, file_size_bytes=None):
 
     arch = get_str(reader, "general.architecture")
     if not arch:
+        if _is_metadata_less_diffusion_checkpoint(reader):
+            raise NotAnLLMError(
+                "kein LLM, Diffusionsmodell (keine general.architecture-Metadaten, "
+                "SD-Tensornamen erkannt)"
+            )
         print(f"  ⚠️ Keine Architektur in {os.path.basename(file_path)}, nutze 'llama' als Fallback.")
         arch = "llama"
 

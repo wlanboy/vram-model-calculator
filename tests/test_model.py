@@ -1,6 +1,6 @@
 import pytest
 
-from tests.conftest import FakeReader, int_field, str_field
+from tests.conftest import FakeReader, FakeTensor, int_field, str_field
 from vram_model_calculator import _model
 from vram_model_calculator._model import (
     MODEL_TYPE_ADAPTER,
@@ -166,6 +166,21 @@ class TestGetModelParamsLlm:
         patch_reader["reader"] = reader
         params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
         assert params["arch"] == "llama"
+
+    def test_missing_architecture_with_sd_tensors_raises_not_an_llm(self, patch_reader):
+        """stable-diffusion.cpp checkpoints like dreamshaper-xl-v2-turbo-Q8_0.gguf
+        carry no metadata at all, not even general.architecture -- so the
+        DIFFUSION_ARCHS check can't catch them. The tensor names must."""
+        patch_reader["reader"] = FakeReader(
+            fields={},
+            tensors=[
+                FakeTensor("conditioner.embedders.0.transformer.text_model.embeddings.token_embedding.weight"),
+                FakeTensor("model.diffusion_model.input_blocks.0.0.weight"),
+                FakeTensor("first_stage_model.decoder.conv_in.weight"),
+            ],
+        )
+        with pytest.raises(NotAnLLMError):
+            get_model_params("/models/dreamshaper-xl-v2-turbo-Q8_0.gguf", file_size_bytes=1)
 
     def test_invalid_layer_count_raises_value_error(self, patch_reader):
         patch_reader["reader"] = llama_reader(**{"llama.block_count": int_field(0)})

@@ -36,8 +36,16 @@ class FakeBytesPart:
 
 
 class FakeReader:
-    def __init__(self, fields=None):
+    def __init__(self, fields=None, tensors=None):
         self.fields = fields or {}
+        self.tensors = tensors or []
+
+
+class FakeTensor:
+    """Stand-in for gguf.gguf_reader.ReaderTensor -- only `.name` is used."""
+
+    def __init__(self, name):
+        self.name = name
 
 
 def str_field(text):
