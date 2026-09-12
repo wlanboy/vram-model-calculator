@@ -8,13 +8,13 @@ gguf==0.19.0
     # via vram-model-calculator (pyproject.toml)
 idna==3.19
     # via requests
-numpy==2.5.2
+numpy==2.5.3
     # via gguf
 pyyaml==6.0.3
     # via gguf
 requests==2.34.2
     # via gguf
-tqdm==4.70.0
+tqdm==4.70.1
     # via
     #   vram-model-calculator (pyproject.toml)
     #   gguf
