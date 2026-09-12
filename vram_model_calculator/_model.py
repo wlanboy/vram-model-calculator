@@ -1,4 +1,5 @@
 import os
+from dataclasses import dataclass
 
 from .detection import METADATA_DUMP_FILE, detect_mcp, detect_thinking, dump_all_fields
 from .gguf_fields import (
@@ -47,9 +48,49 @@ DIFFUSION_ARCHS = {
 # formula wildly overstates their KV-cache VRAM.
 MLA_ARCHS = {"deepseek2", "deepseek2-ocr", "minicpm3", "glm-dsa", "mistral4"}
 
+# KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and one
+# Value tensor.
+KV_BYTES_PER_ELEMENT = 2
+KV_TENSORS_PER_LAYER = 2
+
 
 class NotAnLLMError(ValueError):
     """Raised when a GGUF file is recognized as a non-LLM model (e.g. image diffusion)."""
+
+
+@dataclass(frozen=True)
+class ModelShape:
+    """The handful of GGUF dimensions that determine KV-cache size.
+
+    These fields only ever mean anything together, so they travel as one
+    value instead of five loose parameters. `kv_bytes_per_ctx_token()` is the
+    single source of truth for the KV-cache formula: its result is stored in
+    each cache entry as `kv_bytes_per_ctx_token`, and every consumer
+    (vram_calculator.py, filter.js) just multiplies that by a context length
+    instead of re-deriving the per-architecture math itself.
+    """
+
+    n_layers: int
+    n_embd: int
+    n_heads: int
+    n_kv_heads: int | None  # None => SSM/hybrid: no classic per-head KV cache
+    mla_kv_dim: int | None = None
+
+    @property
+    def is_ssm(self):
+        return self.n_kv_heads is None
+
+    def kv_bytes_per_ctx_token(self):
+        if self.mla_kv_dim:
+            # MLA architectures (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cache
+            # a single shared compressed vector per token/layer instead of a
+            # value per KV-head.
+            return self.n_layers * self.mla_kv_dim * KV_BYTES_PER_ELEMENT
+        if self.is_ssm or not self.n_kv_heads:
+            return 0
+        head_dim = self.n_embd // (self.n_heads or 1)
+        kv_dim = self.n_kv_heads * head_dim
+        return KV_TENSORS_PER_LAYER * self.n_layers * kv_dim * KV_BYTES_PER_ELEMENT
 
 
 def get_mmproj_params(reader, file_path, file_size_bytes):
@@ -179,6 +220,14 @@ def get_model_params(file_path, file_size_bytes=None):
     raw_name = clean_name(get_str(reader, "general.name"))
     name = resolve_name(raw_name, file_path)
 
+    shape = ModelShape(
+        n_layers=n_layers or 0,
+        n_embd=n_embd or 0,
+        n_heads=n_heads or 0,
+        n_kv_heads=n_kv_heads,
+        mla_kv_dim=mla_kv_dim,
+    )
+
     params = {
         "type": MODEL_TYPE_LLM,
         "arch": arch,
@@ -193,6 +242,7 @@ def get_model_params(file_path, file_size_bytes=None):
         "n_heads": n_heads,
         "n_kv_heads": n_kv_heads,
         "mla_kv_dim": mla_kv_dim,
+        "kv_bytes_per_ctx_token": shape.kv_bytes_per_ctx_token(),
         "n_ff": n_ff,
         "n_experts": get_safe_int(reader, f"{arch}.expert_count"),
         "n_experts_used": get_safe_int(reader, f"{arch}.expert_used_count"),

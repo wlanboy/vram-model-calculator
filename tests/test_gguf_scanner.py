@@ -4,6 +4,7 @@ import pytest
 
 from vram_model_calculator import gguf_scanner
 from vram_model_calculator.gguf_scanner import (
+    _backfill_kv_bytes,
     _migrate_cache,
     _migrate_key,
     _refresh_names,
@@ -74,6 +75,32 @@ class TestRefreshNames:
         cache = {"_version": 3}
         refreshed = _refresh_names(cache)
         assert refreshed == cache
+
+
+class TestBackfillKvBytes:
+    def test_computes_missing_field_from_stored_dimensions(self):
+        cache = {
+            "k": {
+                "type": "llm", "n_layers": 32, "n_embd": 4096,
+                "n_heads": 32, "n_kv_heads": 8,
+            },
+        }
+        backfilled = _backfill_kv_bytes(cache)
+        assert backfilled["k"]["kv_bytes_per_ctx_token"] == 2 * 32 * (8 * (4096 // 32)) * 2
+
+    def test_leaves_existing_field_untouched(self):
+        cache = {"k": {"type": "llm", "n_layers": 32, "n_embd": 4096, "kv_bytes_per_ctx_token": 999}}
+        backfilled = _backfill_kv_bytes(cache)
+        assert backfilled["k"]["kv_bytes_per_ctx_token"] == 999
+
+    def test_skips_non_llm_and_incomplete_entries(self):
+        cache = {
+            "adapter": {"type": "adapter", "name": "lora"},
+            "no-dims": {"type": "llm", "n_layers": 32},
+        }
+        backfilled = _backfill_kv_bytes(cache)
+        assert "kv_bytes_per_ctx_token" not in backfilled["adapter"]
+        assert "kv_bytes_per_ctx_token" not in backfilled["no-dims"]
 
 
 class TestNeedsScan:

@@ -138,6 +138,7 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 | `n_layers` | Anzahl der Transformer-Blöcke |
 | `n_embd` | Embedding-Dimension (Hidden Size) |
 | `n_heads` / `n_kv_heads` | Attention-Heads / KV-Heads (`null` bei SSM/Hybrid-Architekturen) |
+| `kv_bytes_per_ctx_token` | Vorberechnete KV-Cache-Größe pro Kontext-Token in Bytes (siehe `ModelShape` in `_model.py`) — einzige Quelle der KV-Cache-Formel, sowohl `vram_calculator.py` als auch `filter.js` multiplizieren dies nur noch mit der Kontextlänge |
 | `n_experts` / `n_experts_used` | MoE-Parameter (falls vorhanden) |
 | `quant` | Quantisierungstyp (`Q4_K_M`, `Q8_0`, `F16`, …), automatisch aus `gguf.constants.LlamaFileType` abgeleitet |
 | `n_ctx_orig` | Trainings-Kontextfenster des Modells |
@@ -241,13 +242,17 @@ USECASES = {
 
 ```
 Gewichte-VRAM  = file_size_gb
-KV-Cache-VRAM  = (2 × n_layers × n_kv_heads × head_dim × ctx_tokens × 2) / 1024³
+KV-Cache-VRAM  = (kv_bytes_per_ctx_token × ctx_tokens) / 1024³
 Gesamt         = Gewichte + KV-Cache
 ```
 
-`head_dim = n_embd / n_heads`
+`kv_bytes_per_ctx_token` wird beim Scan von `_model.py` (`ModelShape.kv_bytes_per_ctx_token()`) berechnet und im Cache gespeichert:
 
-Bei SSM-/Hybrid-Modellen (`n_kv_heads = null`) entfällt der KV-Cache-Term.
+```
+Klassische Attention: 2 × n_layers × n_kv_heads × head_dim × 2   (head_dim = n_embd / n_heads)
+MLA (DeepSeek2 u.a.):  n_layers × mla_kv_dim × 2
+SSM-/Hybrid-Modelle (n_kv_heads = null): 0
+```
 
 **Farbcodierung:**
 

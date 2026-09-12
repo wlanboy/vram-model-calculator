@@ -1,5 +1,5 @@
 {
-    "_version": 35,
+    "_version": 36,
     "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf": {
         "type": "llm",
         "arch": "qwen3",
@@ -20,7 +20,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 248302272,
         "file_size_gb": 0.231,
-        "rel_path": "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf"
+        "rel_path": "Bonsai-1.7B-gguf/Bonsai-1.7B-Q1_0.gguf",
+        "kv_bytes_per_ctx_token": 114688
     },
     "Bonsai-27B-GGUF/Bonsai-27B-Q1_0.gguf": {
         "type": "llm",
@@ -42,7 +43,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 3803452576,
         "file_size_gb": 3.542,
-        "rel_path": "Bonsai-27B-GGUF/Bonsai-27B-Q1_0.gguf"
+        "rel_path": "Bonsai-27B-GGUF/Bonsai-27B-Q1_0.gguf",
+        "kv_bytes_per_ctx_token": 218112
     },
     "Bonsai-27B-GGUF/mmproj-Bonsai-27B-BF16.gguf": {
         "type": "mmproj",
@@ -78,7 +80,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 572270624,
         "file_size_gb": 0.533,
-        "rel_path": "Bonsai-4B-gguf/Bonsai-4B-Q1_0.gguf"
+        "rel_path": "Bonsai-4B-gguf/Bonsai-4B-Q1_0.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "Bonsai-8B-TQ2_0.gguf": {
         "type": "llm",
@@ -100,7 +103,8 @@
         "n_ctx_orig": 65536,
         "file_size_bytes": 2414272288,
         "file_size_gb": 2.248,
-        "rel_path": "Bonsai-8B-TQ2_0.gguf"
+        "rel_path": "Bonsai-8B-TQ2_0.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "Bonsai-8B-gguf/Bonsai-8B-Q1_0.gguf": {
         "type": "llm",
@@ -122,29 +126,8 @@
         "n_ctx_orig": 65536,
         "file_size_bytes": 1158654496,
         "file_size_gb": 1.079,
-        "rel_path": "Bonsai-8B-gguf/Bonsai-8B-Q1_0.gguf"
-    },
-    "Bonsai-8B-llama.cpp/Bonsai-8B-TQ2_0.gguf": {
-        "type": "llm",
-        "arch": "qwen3",
-        "name": "Bonsai-8B-TQ2_0-Q4out-llamacpp",
-        "size_label": "8B",
-        "parameter_count": null,
-        "mcp": true,
-        "thinking": true,
-        "quant": "TQ2_0",
-        "n_layers": 36,
-        "n_embd": 4096,
-        "n_heads": 32,
-        "n_kv_heads": 8,
-        "n_ff": 12288,
-        "n_experts": null,
-        "n_experts_used": null,
-        "vocab_size": 151669,
-        "n_ctx_orig": 65536,
-        "file_size_bytes": 2414272288,
-        "file_size_gb": 2.248,
-        "rel_path": "Bonsai-8B-llama.cpp/Bonsai-8B-TQ2_0.gguf"
+        "rel_path": "Bonsai-8B-gguf/Bonsai-8B-Q1_0.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "Codestral-22B-v0.1-GGUF/Codestral-22B-v0.1-Q4_K_M.gguf": {
         "type": "llm",
@@ -166,7 +149,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 12717129728,
         "file_size_gb": 11.844,
-        "rel_path": "Codestral-22B-v0.1-GGUF/Codestral-22B-v0.1-Q4_K_M.gguf"
+        "rel_path": "Codestral-22B-v0.1-GGUF/Codestral-22B-v0.1-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 229376
     },
     "DeepSeek-R1-0528-Qwen3-8B-GGUF/DeepSeek-R1-0528-Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
@@ -187,7 +171,8 @@
         "file_size_bytes": 0,
         "file_size_gb": 4.127,
         "rel_path": "DeepSeek-R1-0528-Qwen3-8B-GGUF/DeepSeek-R1-0528-Qwen3-8B-Q3_K_L.gguf",
-        "thinking": true
+        "thinking": true,
+        "kv_bytes_per_ctx_token": 147456
     },
     "DeepSeek-R1-0528-Qwen3-8B-GGUF/DeepSeek-R1-0528-Qwen3-8B-Q4_K_M.gguf": {
         "type": "llm",
@@ -209,7 +194,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 5027782720,
         "file_size_gb": 4.682,
-        "rel_path": "DeepSeek-R1-0528-Qwen3-8B-GGUF/DeepSeek-R1-0528-Qwen3-8B-Q4_K_M.gguf"
+        "rel_path": "DeepSeek-R1-0528-Qwen3-8B-GGUF/DeepSeek-R1-0528-Qwen3-8B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "DeepSeek-R1-Distill-Qwen-1.5B-GGUF/DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf": {
         "type": "llm",
@@ -231,7 +217,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 1894531904,
         "file_size_gb": 1.764,
-        "rel_path": "DeepSeek-R1-Distill-Qwen-1.5B-GGUF/DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf"
+        "rel_path": "DeepSeek-R1-Distill-Qwen-1.5B-GGUF/DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 28672
     },
     "DeepSeek-V4-Pro-Qwen3.5-4B-MTP-GGUF/DeepSeek-V4-Pro-Qwen3.5-4B-MTP-Q4_K_S.gguf": {
         "type": "llm",
@@ -253,7 +240,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2631772832,
         "file_size_gb": 2.451,
-        "rel_path": "DeepSeek-V4-Pro-Qwen3.5-4B-MTP-GGUF/DeepSeek-V4-Pro-Qwen3.5-4B-MTP-Q4_K_S.gguf"
+        "rel_path": "DeepSeek-V4-Pro-Qwen3.5-4B-MTP-GGUF/DeepSeek-V4-Pro-Qwen3.5-4B-MTP-Q4_K_S.gguf",
+        "kv_bytes_per_ctx_token": 84480
     },
     "DeepSeek-V4-Pro-Qwen3.5-4B-MTP-GGUF/mmproj-F32.gguf": {
         "type": "mmproj",
@@ -289,7 +277,8 @@
         "n_ctx_orig": 393216,
         "file_size_bytes": 14334437504,
         "file_size_gb": 13.35,
-        "rel_path": "Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf"
+        "rel_path": "Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 204800
     },
     "Devstral-Small-2-24B-Instruct-2512-GGUF/mmproj-Devstral-Small-2-24B-Instruct-2512-F16.gguf": {
         "type": "mmproj",
@@ -325,7 +314,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 14333916160,
         "file_size_gb": 13.349,
-        "rel_path": "Devstral-Small-2507-GGUF/Devstral-Small-2507-Q4_K_M.gguf"
+        "rel_path": "Devstral-Small-2507-GGUF/Devstral-Small-2507-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 204800
     },
     "ERNIE-4.5-21B-A3B-PT-GGUF/ERNIE-4.5-21B-A3B-PT-Q4_K_M.gguf": {
         "type": "llm",
@@ -347,7 +337,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 13499267904,
         "file_size_gb": 12.572,
-        "rel_path": "ERNIE-4.5-21B-A3B-PT-GGUF/ERNIE-4.5-21B-A3B-PT-Q4_K_M.gguf"
+        "rel_path": "ERNIE-4.5-21B-A3B-PT-GGUF/ERNIE-4.5-21B-A3B-PT-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 57344
     },
     "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf": {
         "type": "llm",
@@ -369,7 +360,8 @@
         "n_ctx_orig": 65536,
         "file_size_bytes": 4592039616,
         "file_size_gb": 4.277,
-        "rel_path": "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf"
+        "rel_path": "GLM-4.1V-9B-Thinking-GGUF/GLM-4.1V-9B-Thinking-Q3_K_S.gguf",
+        "kv_bytes_per_ctx_token": 40960
     },
     "GLM-4.6V-Flash-GGUF/GLM-4.6V-Flash-Q4_K_M.gguf": {
         "type": "llm",
@@ -391,7 +383,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 6166577888,
         "file_size_gb": 5.743,
-        "rel_path": "GLM-4.6V-Flash-GGUF/GLM-4.6V-Flash-Q4_K_M.gguf"
+        "rel_path": "GLM-4.6V-Flash-GGUF/GLM-4.6V-Flash-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 40960
     },
     "GLM-4.6V-Flash-GGUF/mmproj-GLM-4.6V-Flash-F16.gguf": {
         "type": "mmproj",
@@ -427,7 +420,8 @@
         "n_ctx_orig": 202752,
         "file_size_bytes": 18132721120,
         "file_size_gb": 16.887,
-        "rel_path": "GLM-4.7-Flash-GGUF/GLM-4.7-Flash-Q4_K_M.gguf"
+        "rel_path": "GLM-4.7-Flash-GGUF/GLM-4.7-Flash-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 19176
     },
     "Hermes-3-Llama-3.2-3B-GGUF/Hermes-3-Llama-3.2-3B.Q4_K_M.gguf": {
         "type": "llm",
@@ -449,7 +443,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2019373888,
         "file_size_gb": 1.881,
-        "rel_path": "Hermes-3-Llama-3.2-3B-GGUF/Hermes-3-Llama-3.2-3B.Q4_K_M.gguf"
+        "rel_path": "Hermes-3-Llama-3.2-3B-GGUF/Hermes-3-Llama-3.2-3B.Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 114688
     },
     "KAT-Coder-V2.5-Dev-APEX-GGUF/KAT-Coder-V2.5-Dev-APEX-I-Compact.gguf": {
         "type": "llm",
@@ -471,7 +466,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 16538851712,
         "file_size_gb": 15.403,
-        "rel_path": "KAT-Coder-V2.5-Dev-APEX-GGUF/KAT-Coder-V2.5-Dev-APEX-I-Compact.gguf"
+        "rel_path": "KAT-Coder-V2.5-Dev-APEX-GGUF/KAT-Coder-V2.5-Dev-APEX-I-Compact.gguf",
+        "kv_bytes_per_ctx_token": 40960
     },
     "LFM2-1.2B-GGUF/LFM2-1.2B-Q8_0.gguf": {
         "type": "llm",
@@ -493,7 +489,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 1246251968,
         "file_size_gb": 1.161,
-        "rel_path": "LFM2-1.2B-GGUF/LFM2-1.2B-Q8_0.gguf"
+        "rel_path": "LFM2-1.2B-GGUF/LFM2-1.2B-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "LFM2-24B-A2B-GGUF/LFM2-24B-A2B-Q4_K_M.gguf": {
         "type": "llm",
@@ -515,7 +512,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 14415473952,
         "file_size_gb": 13.425,
-        "rel_path": "LFM2-24B-A2B-GGUF/LFM2-24B-A2B-Q4_K_M.gguf"
+        "rel_path": "LFM2-24B-A2B-GGUF/LFM2-24B-A2B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 327680
     },
     "LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf": {
         "type": "llm",
@@ -537,7 +535,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 1246253888,
         "file_size_gb": 1.161,
-        "rel_path": "LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf"
+        "rel_path": "LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 0
     },
     "LFM2.5-1.2B-Thinking-GGUF/LFM2.5-1.2B-Thinking-Q8_0.gguf": {
         "type": "llm",
@@ -559,7 +558,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 1246254080,
         "file_size_gb": 1.161,
-        "rel_path": "LFM2.5-1.2B-Thinking-GGUF/LFM2.5-1.2B-Thinking-Q8_0.gguf"
+        "rel_path": "LFM2.5-1.2B-Thinking-GGUF/LFM2.5-1.2B-Thinking-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "LFM2.5-2.6B-GGUF/LFM2.5-2.6B-Q4_K_M.gguf": {
         "type": "llm",
@@ -581,7 +581,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 1674454368,
         "file_size_gb": 1.559,
-        "rel_path": "LFM2.5-2.6B-GGUF/LFM2.5-2.6B-Q4_K_M.gguf"
+        "rel_path": "LFM2.5-2.6B-GGUF/LFM2.5-2.6B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 0
     },
     "LFM2.5-230M-GGUF/LFM2.5-230M-Q6_K.gguf": {
         "type": "llm",
@@ -603,7 +604,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 190983008,
         "file_size_gb": 0.178,
-        "rel_path": "LFM2.5-230M-GGUF/LFM2.5-230M-Q6_K.gguf"
+        "rel_path": "LFM2.5-230M-GGUF/LFM2.5-230M-Q6_K.gguf",
+        "kv_bytes_per_ctx_token": 57344
     },
     "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-Q4_0.gguf": {
         "type": "llm",
@@ -625,7 +627,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 4844678368,
         "file_size_gb": 4.512,
-        "rel_path": "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-Q4_0.gguf"
+        "rel_path": "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-Q4_0.gguf",
+        "kv_bytes_per_ctx_token": 196608
     },
     "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-UD-Q3_K_M.gguf": {
         "type": "llm",
@@ -647,7 +650,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 3939626592,
         "file_size_gb": 3.669,
-        "rel_path": "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-UD-Q3_K_M.gguf"
+        "rel_path": "LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-UD-Q3_K_M.gguf",
+        "kv_bytes_per_ctx_token": 196608
     },
     "LFM2.5-Queen-Opus-4.7-8B-A1B-GGUF/LFM2.5-Queen-Opus-4.7-8B-A1B.Q4_K_S.gguf": {
         "type": "llm",
@@ -669,7 +673,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 4863553536,
         "file_size_gb": 4.53,
-        "rel_path": "LFM2.5-Queen-Opus-4.7-8B-A1B-GGUF/LFM2.5-Queen-Opus-4.7-8B-A1B.Q4_K_S.gguf"
+        "rel_path": "LFM2.5-Queen-Opus-4.7-8B-A1B-GGUF/LFM2.5-Queen-Opus-4.7-8B-A1B.Q4_K_S.gguf",
+        "kv_bytes_per_ctx_token": 0
     },
     "LFM2.5-VL-450M-GGUF/LFM2.5-VL-450M-Q6_K.gguf": {
         "type": "llm",
@@ -691,7 +696,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 293383200,
         "file_size_gb": 0.273,
-        "rel_path": "LFM2.5-VL-450M-GGUF/LFM2.5-VL-450M-Q6_K.gguf"
+        "rel_path": "LFM2.5-VL-450M-GGUF/LFM2.5-VL-450M-Q6_K.gguf",
+        "kv_bytes_per_ctx_token": 65536
     },
     "LFM2.5-VL-450M-GGUF/mmproj-LFM2.5-VL-450m-F32.gguf": {
         "type": "mmproj",
@@ -727,7 +733,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 17914203936,
         "file_size_gb": 16.684,
-        "rel_path": "Laguna-XS-2.1-i1-GGUF/Laguna-XS-2.1.i1-IQ4_XS.gguf"
+        "rel_path": "Laguna-XS-2.1-i1-GGUF/Laguna-XS-2.1.i1-IQ4_XS.gguf",
+        "kv_bytes_per_ctx_token": 40960
     },
     "Ling-3.0-tiny-GGUF/Ling-3.0-tiny-Q4_K_M.gguf": {
         "type": "llm",
@@ -749,7 +756,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 4823894880,
         "file_size_gb": 4.493,
-        "rel_path": "Ling-3.0-tiny-GGUF/Ling-3.0-tiny-Q4_K_M.gguf"
+        "rel_path": "Ling-3.0-tiny-GGUF/Ling-3.0-tiny-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 9216
     },
     "Llama-3.2-3B-Instruct-GGUF/Llama-3.2-3B-Instruct-Q4_K_M.gguf": {
         "type": "llm",
@@ -771,7 +779,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2019377440,
         "file_size_gb": 1.881,
-        "rel_path": "Llama-3.2-3B-Instruct-GGUF/Llama-3.2-3B-Instruct-Q4_K_M.gguf"
+        "rel_path": "Llama-3.2-3B-Instruct-GGUF/Llama-3.2-3B-Instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 114688
     },
     "MN-12b-RP-Ink-GGUF/MN-12b-RP-Ink-Q4_K_S.gguf": {
         "type": "llm",
@@ -793,7 +802,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 7120200384,
         "file_size_gb": 6.631,
-        "rel_path": "MN-12b-RP-Ink-GGUF/MN-12b-RP-Ink-Q4_K_S.gguf"
+        "rel_path": "MN-12b-RP-Ink-GGUF/MN-12b-RP-Ink-Q4_K_S.gguf",
+        "kv_bytes_per_ctx_token": 204800
     },
     "Magistral-Small-2509-GGUF/Magistral-Small-2509-Q4_K_M.gguf": {
         "type": "llm",
@@ -815,7 +825,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 14333911104,
         "file_size_gb": 13.349,
-        "rel_path": "Magistral-Small-2509-GGUF/Magistral-Small-2509-Q4_K_M.gguf"
+        "rel_path": "Magistral-Small-2509-GGUF/Magistral-Small-2509-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 204800
     },
     "Magistral-Small-2509-GGUF/mmproj-Magistral-Small-2509-F16.gguf": {
         "type": "mmproj",
@@ -851,7 +862,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 4920739168,
         "file_size_gb": 4.583,
-        "rel_path": "Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+        "rel_path": "Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf": {
         "type": "llm",
@@ -873,7 +885,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 1153529792,
         "file_size_gb": 1.074,
-        "rel_path": "MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf"
+        "rel_path": "MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 18432
     },
     "MiniCPM5-1B-GGUF/MiniCPM5-1B-Q8_0.gguf": {
         "type": "llm",
@@ -895,7 +908,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 1153529216,
         "file_size_gb": 1.074,
-        "rel_path": "MiniCPM5-1B-GGUF/MiniCPM5-1B-Q8_0.gguf"
+        "rel_path": "MiniCPM5-1B-GGUF/MiniCPM5-1B-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 18432
     },
     "Ministral-3-14B-Reasoning-2512-GGUF/Ministral-3-14B-Reasoning-2512-Q4_K_M.gguf": {
         "type": "llm",
@@ -917,7 +931,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 8239066144,
         "file_size_gb": 7.673,
-        "rel_path": "Ministral-3-14B-Reasoning-2512-GGUF/Ministral-3-14B-Reasoning-2512-Q4_K_M.gguf"
+        "rel_path": "Ministral-3-14B-Reasoning-2512-GGUF/Ministral-3-14B-Reasoning-2512-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 204800
     },
     "Ministral-3-14B-Reasoning-2512-GGUF/mmproj-Ministral-3-14B-Reasoning-2512-F16.gguf": {
         "type": "mmproj",
@@ -953,7 +968,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2146498240,
         "file_size_gb": 1.999,
-        "rel_path": "Ministral-3-3B-Instruct-2512-GGUF/Ministral-3-3B-Instruct-2512-Q4_K_M.gguf"
+        "rel_path": "Ministral-3-3B-Instruct-2512-GGUF/Ministral-3-3B-Instruct-2512-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 79872
     },
     "Ministral-3-3B-Instruct-2512-GGUF/mmproj-Ministral-3-3B-Instruct-2512-F16.gguf": {
         "type": "mmproj",
@@ -989,7 +1005,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 4372812000,
         "file_size_gb": 4.072,
-        "rel_path": "Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf"
+        "rel_path": "Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "Mistral-Nemo-12B-ArliAI-RPMax-v1.2-i1-GGUF/Mistral-Nemo-12B-ArliAI-RPMax-v1.2.i1-Q4_K_S.gguf": {
         "type": "llm",
@@ -1011,7 +1028,8 @@
         "n_ctx_orig": 1024000,
         "file_size_bytes": 7120200864,
         "file_size_gb": 6.631,
-        "rel_path": "Mistral-Nemo-12B-ArliAI-RPMax-v1.2-i1-GGUF/Mistral-Nemo-12B-ArliAI-RPMax-v1.2.i1-Q4_K_S.gguf"
+        "rel_path": "Mistral-Nemo-12B-ArliAI-RPMax-v1.2-i1-GGUF/Mistral-Nemo-12B-ArliAI-RPMax-v1.2.i1-Q4_K_S.gguf",
+        "kv_bytes_per_ctx_token": 204800
     },
     "Muse-Glimmer-30B-UD-Q4_K_XL.gguf": {
         "type": "llm",
@@ -1033,7 +1051,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 15878222368,
         "file_size_gb": 14.788,
-        "rel_path": "Muse-Glimmer-30B-UD-Q4_K_XL.gguf"
+        "rel_path": "Muse-Glimmer-30B-UD-Q4_K_XL.gguf",
+        "kv_bytes_per_ctx_token": 86528
     },
     "NVIDIA-Nemotron-3-Nano-30B-A3B-GGUF/NVIDIA-Nemotron-3-Nano-30B-A3B-Q3_K_L.gguf": {
         "type": "llm",
@@ -1055,7 +1074,8 @@
         "n_ctx_orig": 1048576,
         "file_size_bytes": 20749435168,
         "file_size_gb": 19.324,
-        "rel_path": "NVIDIA-Nemotron-3-Nano-30B-A3B-GGUF/NVIDIA-Nemotron-3-Nano-30B-A3B-Q3_K_L.gguf"
+        "rel_path": "NVIDIA-Nemotron-3-Nano-30B-A3B-GGUF/NVIDIA-Nemotron-3-Nano-30B-A3B-Q3_K_L.gguf",
+        "kv_bytes_per_ctx_token": 559104
     },
     "NVIDIA-Nemotron-3-Nano-4B-GGUF/NVIDIA-Nemotron-3-Nano-4B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1077,7 +1097,8 @@
         "n_ctx_orig": 1048576,
         "file_size_bytes": 2837072896,
         "file_size_gb": 2.642,
-        "rel_path": "NVIDIA-Nemotron-3-Nano-4B-GGUF/NVIDIA-Nemotron-3-Nano-4B-Q4_K_M.gguf"
+        "rel_path": "NVIDIA-Nemotron-3-Nano-4B-GGUF/NVIDIA-Nemotron-3-Nano-4B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 524160
     },
     "OREAL-DeepSeek-R1-Distill-Qwen-7B-GGUF/OREAL-DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1099,7 +1120,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 4683073856,
         "file_size_gb": 4.361,
-        "rel_path": "OREAL-DeepSeek-R1-Distill-Qwen-7B-GGUF/OREAL-DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf"
+        "rel_path": "OREAL-DeepSeek-R1-Distill-Qwen-7B-GGUF/OREAL-DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 57344
     },
     "Olmo-3-32B-Think-GGUF/Olmo-3-32B-Think-Q4_K_M.gguf": {
         "type": "llm",
@@ -1121,7 +1143,8 @@
         "n_ctx_orig": 65536,
         "file_size_bytes": 19482033568,
         "file_size_gb": 18.144,
-        "rel_path": "Olmo-3-32B-Think-GGUF/Olmo-3-32B-Think-Q4_K_M.gguf"
+        "rel_path": "Olmo-3-32B-Think-GGUF/Olmo-3-32B-Think-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 262144
     },
     "Ornith-1.0-9B-GGUF/ornith-1.0-9b-Q4_K_M.gguf": {
         "type": "llm",
@@ -1143,7 +1166,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 5629108704,
         "file_size_gb": 5.243,
-        "rel_path": "Ornith-1.0-9B-GGUF/ornith-1.0-9b-Q4_K_M.gguf"
+        "rel_path": "Ornith-1.0-9B-GGUF/ornith-1.0-9b-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf": {
         "type": "llm",
@@ -1165,7 +1189,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2491874272,
         "file_size_gb": 2.321,
-        "rel_path": "Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf"
+        "rel_path": "Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-Q4_K_M.gguf": {
         "type": "llm",
@@ -1187,7 +1212,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2491874560,
         "file_size_gb": 2.321,
-        "rel_path": "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-Q4_K_M.gguf"
+        "rel_path": "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-UD-Q4_K_XL.gguf": {
         "type": "llm",
@@ -1209,7 +1235,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2462678944,
         "file_size_gb": 2.294,
-        "rel_path": "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-UD-Q4_K_XL.gguf"
+        "rel_path": "Phi-4-mini-reasoning-GGUF/Phi-4-mini-reasoning-UD-Q4_K_XL.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "Qwen2.5-Coder-0.5B-Instruct-GGUF/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf": {
         "type": "llm",
@@ -1231,7 +1258,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 491400064,
         "file_size_gb": 0.458,
-        "rel_path": "Qwen2.5-Coder-0.5B-Instruct-GGUF/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf"
+        "rel_path": "Qwen2.5-Coder-0.5B-Instruct-GGUF/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 12288
     },
     "Qwen2.5-Coder-1.5B-Instruct-GGUF/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf": {
         "type": "llm",
@@ -1253,7 +1281,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 1117320768,
         "file_size_gb": 1.041,
-        "rel_path": "Qwen2.5-Coder-1.5B-Instruct-GGUF/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"
+        "rel_path": "Qwen2.5-Coder-1.5B-Instruct-GGUF/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 28672
     },
     "Qwen2.5-Coder-14B-Instruct-GGUF/qwen2.5-coder-14b-instruct-q4_k_m.gguf": {
         "type": "llm",
@@ -1275,7 +1304,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 8988110272,
         "file_size_gb": 8.371,
-        "rel_path": "Qwen2.5-Coder-14B-Instruct-GGUF/qwen2.5-coder-14b-instruct-q4_k_m.gguf"
+        "rel_path": "Qwen2.5-Coder-14B-Instruct-GGUF/qwen2.5-coder-14b-instruct-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 196608
     },
     "Qwen2.5-Coder-3B-Instruct-GGUF/qwen2.5-coder-3b-instruct-q4_k_m.gguf": {
         "type": "llm",
@@ -1297,7 +1327,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 2104932800,
         "file_size_gb": 1.96,
-        "rel_path": "Qwen2.5-Coder-3B-Instruct-GGUF/qwen2.5-coder-3b-instruct-q4_k_m.gguf"
+        "rel_path": "Qwen2.5-Coder-3B-Instruct-GGUF/qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 36864
     },
     "Qwen2.5-Coder-7B-Instruct-GGUF/qwen2.5-coder-7b-instruct-q4_k_m.gguf": {
         "type": "llm",
@@ -1319,7 +1350,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 4683073536,
         "file_size_gb": 4.361,
-        "rel_path": "Qwen2.5-Coder-7B-Instruct-GGUF/qwen2.5-coder-7b-instruct-q4_k_m.gguf"
+        "rel_path": "Qwen2.5-Coder-7B-Instruct-GGUF/qwen2.5-coder-7b-instruct-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 57344
     },
     "Qwen3-1.7B-GGUF/Qwen3-1.7B-Q6_K.gguf": {
         "type": "llm",
@@ -1341,7 +1373,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 1673007264,
         "file_size_gb": 1.558,
-        "rel_path": "Qwen3-1.7B-GGUF/Qwen3-1.7B-Q6_K.gguf"
+        "rel_path": "Qwen3-1.7B-GGUF/Qwen3-1.7B-Q6_K.gguf",
+        "kv_bytes_per_ctx_token": 114688
     },
     "Qwen3-14B-GGUF/Qwen3-14B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1363,7 +1396,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 9001753376,
         "file_size_gb": 8.384,
-        "rel_path": "Qwen3-14B-GGUF/Qwen3-14B-Q4_K_M.gguf"
+        "rel_path": "Qwen3-14B-GGUF/Qwen3-14B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 163840
     },
     "Qwen3-15B-A2B-Base-GGUF/Qwen3-15B-A2B-Base.Q4_K_M.gguf": {
         "type": "llm",
@@ -1385,7 +1419,8 @@
         "n_ctx_orig": 4096,
         "file_size_bytes": 9496453792,
         "file_size_gb": 8.844,
-        "rel_path": "Qwen3-15B-A2B-Base-GGUF/Qwen3-15B-A2B-Base.Q4_K_M.gguf"
+        "rel_path": "Qwen3-15B-A2B-Base-GGUF/Qwen3-15B-A2B-Base.Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 24576
     },
     "Qwen3-30B-A3B-GGUF/Qwen3-30B-A3B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1407,7 +1442,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 18632183808,
         "file_size_gb": 17.353,
-        "rel_path": "Qwen3-30B-A3B-GGUF/Qwen3-30B-A3B-Q4_K_M.gguf"
+        "rel_path": "Qwen3-30B-A3B-GGUF/Qwen3-30B-A3B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 49152
     },
     "Qwen3-4B-GGUF/Qwen3-4B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1429,7 +1465,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 2497280704,
         "file_size_gb": 2.326,
-        "rel_path": "Qwen3-4B-GGUF/Qwen3-4B-Q4_K_M.gguf"
+        "rel_path": "Qwen3-4B-GGUF/Qwen3-4B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "Qwen3-4B-Instruct-2507-GGUF/Qwen3-4B-Instruct-2507-Q4_K_M.gguf": {
         "type": "llm",
@@ -1451,7 +1488,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2497280448,
         "file_size_gb": 2.326,
-        "rel_path": "Qwen3-4B-Instruct-2507-GGUF/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+        "rel_path": "Qwen3-4B-Instruct-2507-GGUF/Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "Qwen3-4B-Thinking-2507-GGUF/Qwen3-4B-Thinking-2507-Q4_K_M.gguf": {
         "type": "llm",
@@ -1473,7 +1511,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2497280448,
         "file_size_gb": 2.326,
-        "rel_path": "Qwen3-4B-Thinking-2507-GGUF/Qwen3-4B-Thinking-2507-Q4_K_M.gguf"
+        "rel_path": "Qwen3-4B-Thinking-2507-GGUF/Qwen3-4B-Thinking-2507-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf": {
         "type": "llm",
@@ -1493,7 +1532,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 0,
         "file_size_gb": 4.127,
-        "rel_path": "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf"
+        "rel_path": "Qwen3-8B-GGUF/Qwen3-8B-Q3_K_L.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1515,7 +1555,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 5027783968,
         "file_size_gb": 4.682,
-        "rel_path": "Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf"
+        "rel_path": "Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "Qwen3-Coder-30B-A3B-Instruct-GGUF/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf": {
         "type": "llm",
@@ -1537,7 +1578,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 18632186176,
         "file_size_gb": 17.353,
-        "rel_path": "Qwen3-Coder-30B-A3B-Instruct-GGUF/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf"
+        "rel_path": "Qwen3-Coder-30B-A3B-Instruct-GGUF/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 49152
     },
     "Qwen3-VL-4B-Instruct-GGUF/Qwen3-VL-4B-Instruct-Q4_K_M.gguf": {
         "type": "llm",
@@ -1559,7 +1601,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2497281568,
         "file_size_gb": 2.326,
-        "rel_path": "Qwen3-VL-4B-Instruct-GGUF/Qwen3-VL-4B-Instruct-Q4_K_M.gguf"
+        "rel_path": "Qwen3-VL-4B-Instruct-GGUF/Qwen3-VL-4B-Instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "Qwen3-VL-4B-Instruct-GGUF/mmproj-Qwen3-VL-4B-Instruct-F16.gguf": {
         "type": "mmproj",
@@ -1593,7 +1636,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 0,
         "file_size_gb": 4.682,
-        "rel_path": "Qwen3-VL-8B-Instruct-GGUF/Qwen3-VL-8B-Instruct-Q4_K_M.gguf"
+        "rel_path": "Qwen3-VL-8B-Instruct-GGUF/Qwen3-VL-8B-Instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf": {
         "type": "llm",
@@ -1615,7 +1659,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 811843840,
         "file_size_gb": 0.756,
-        "rel_path": "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf"
+        "rel_path": "Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 24576
     },
     "Qwen3.5-0.8B-GGUF/mmproj-F32.gguf": {
         "type": "mmproj",
@@ -1664,7 +1709,8 @@
         "file_size_bytes": 0,
         "file_size_gb": 14.499,
         "rel_path": "Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF/Qwen3.5-27B.Q4_K_S.gguf",
-        "thinking": true
+        "thinking": true,
+        "kv_bytes_per_ctx_token": 218112
     },
     "Qwen3.5-2B-GGUF/Qwen3.5-2B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1686,7 +1732,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 1270808032,
         "file_size_gb": 1.184,
-        "rel_path": "Qwen3.5-2B-GGUF/Qwen3.5-2B-Q4_K_M.gguf"
+        "rel_path": "Qwen3.5-2B-GGUF/Qwen3.5-2B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 49152
     },
     "Qwen3.5-2B-GGUF/mmproj-Qwen3.5-2B-BF16.gguf": {
         "type": "mmproj",
@@ -1722,7 +1769,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2707513696,
         "file_size_gb": 2.522,
-        "rel_path": "Qwen3.5-4B-GGUF/Qwen3.5-4B-Q4_K_M.gguf"
+        "rel_path": "Qwen3.5-4B-GGUF/Qwen3.5-4B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 81920
     },
     "Qwen3.5-4B-GGUF/Qwen3.5-4B-Q4_K_S.gguf": {
         "type": "llm",
@@ -1744,7 +1792,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2590430368,
         "file_size_gb": 2.413,
-        "rel_path": "Qwen3.5-4B-GGUF/Qwen3.5-4B-Q4_K_S.gguf"
+        "rel_path": "Qwen3.5-4B-GGUF/Qwen3.5-4B-Q4_K_S.gguf",
+        "kv_bytes_per_ctx_token": 81920
     },
     "Qwen3.5-4B-GGUF/mmproj-F32.gguf": {
         "type": "mmproj",
@@ -1794,7 +1843,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 5627044256,
         "file_size_gb": 5.241,
-        "rel_path": "Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf"
+        "rel_path": "Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "Qwen3.5-9B-GGUF/mmproj-Qwen3.5-9B-BF16.gguf": {
         "type": "mmproj",
@@ -1830,7 +1880,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 16547398784,
         "file_size_gb": 15.411,
-        "rel_path": "Qwen3.6-27B-GGUF/Qwen3.6-27B-Q4_K_M.gguf"
+        "rel_path": "Qwen3.6-27B-GGUF/Qwen3.6-27B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 218112
     },
     "Qwen3.6-27B-GGUF/mmproj-Qwen3.6-27B-BF16.gguf": {
         "type": "mmproj",
@@ -1866,7 +1917,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 15705861088,
         "file_size_gb": 14.627,
-        "rel_path": "Qwen3.8-27B-GGUF/Qwen3.8-27B-IQ4_XS.gguf"
+        "rel_path": "Qwen3.8-27B-GGUF/Qwen3.8-27B-IQ4_XS.gguf",
+        "kv_bytes_per_ctx_token": 221520
     },
     "Qwen3.8-27B-GGUF/mmproj-F16.gguf": {
         "type": "mmproj",
@@ -1916,29 +1968,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 2786204800,
         "file_size_gb": 2.595,
-        "rel_path": "Qwen3.8-Flash-Next-GGUF/mtp-Qwen3.8-Flash-Next-Q4_K_M.gguf"
-    },
-    "Qwen3.8_4B_Distilled_GGUF/qwen3-4b-thinking-2507.Q8_0.gguf": {
-        "type": "llm",
-        "arch": "qwen3",
-        "name": "Gguf_Cp7Qdprx",
-        "size_label": "4.0B",
-        "parameter_count": null,
-        "mcp": true,
-        "thinking": true,
-        "quant": "Q8_0",
-        "n_layers": 36,
-        "n_embd": 2560,
-        "n_heads": 32,
-        "n_kv_heads": 8,
-        "n_ff": 9728,
-        "n_experts": null,
-        "n_experts_used": null,
-        "vocab_size": 151936,
-        "n_ctx_orig": 262144,
-        "file_size_bytes": 4280404800,
-        "file_size_gb": 3.986,
-        "rel_path": "Qwen3.8_4B_Distilled_GGUF/qwen3-4b-thinking-2507.Q8_0.gguf"
+        "rel_path": "Qwen3.8-Flash-Next-GGUF/mtp-Qwen3.8-Flash-Next-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 41552
     },
     "SmolLM3-3B-GGUF/SmolLM3-3B-Q4_K_M.gguf": {
         "type": "llm",
@@ -1960,7 +1991,8 @@
         "n_ctx_orig": 65536,
         "file_size_bytes": 1915305216,
         "file_size_gb": 1.784,
-        "rel_path": "SmolLM3-3B-GGUF/SmolLM3-3B-Q4_K_M.gguf"
+        "rel_path": "SmolLM3-3B-GGUF/SmolLM3-3B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 73728
     },
     "Ternary-Bonsai-1.7B-gguf/Ternary-Bonsai-1.7B-Q2_0.gguf": {
         "type": "llm",
@@ -1982,7 +2014,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 463290464,
         "file_size_gb": 0.431,
-        "rel_path": "Ternary-Bonsai-1.7B-gguf/Ternary-Bonsai-1.7B-Q2_0.gguf"
+        "rel_path": "Ternary-Bonsai-1.7B-gguf/Ternary-Bonsai-1.7B-Q2_0.gguf",
+        "kv_bytes_per_ctx_token": 114688
     },
     "Ternary-Bonsai-27B-gguf/Ternary-Bonsai-27B-dspark-Q4_1.gguf": {
         "type": "llm",
@@ -2004,7 +2037,8 @@
         "n_ctx_orig": 4096,
         "file_size_bytes": 1946393568,
         "file_size_gb": 1.813,
-        "rel_path": "Ternary-Bonsai-27B-gguf/Ternary-Bonsai-27B-dspark-Q4_1.gguf"
+        "rel_path": "Ternary-Bonsai-27B-gguf/Ternary-Bonsai-27B-dspark-Q4_1.gguf",
+        "kv_bytes_per_ctx_token": 12288
     },
     "Ternary-Bonsai-27B-gguf/Ternary-Bonsai-27B-mmproj-BF16.gguf": {
         "type": "mmproj",
@@ -2040,7 +2074,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 1074969344,
         "file_size_gb": 1.001,
-        "rel_path": "Ternary-Bonsai-4B-gguf/Ternary-Bonsai-4B-Q2_0.gguf"
+        "rel_path": "Ternary-Bonsai-4B-gguf/Ternary-Bonsai-4B-Q2_0.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "Ternary-Bonsai-8B-gguf/Ternary-Bonsai-8B-Q2_0.gguf": {
         "type": "llm",
@@ -2062,7 +2097,8 @@
         "n_ctx_orig": 65536,
         "file_size_bytes": 2182184672,
         "file_size_gb": 2.032,
-        "rel_path": "Ternary-Bonsai-8B-gguf/Ternary-Bonsai-8B-Q2_0.gguf"
+        "rel_path": "Ternary-Bonsai-8B-gguf/Ternary-Bonsai-8B-Q2_0.gguf",
+        "kv_bytes_per_ctx_token": 147456
     },
     "deepseek-coder-1.3B-kexer-GGUF/deepseek-coder-1.3B-kexer-Q8_0.gguf": {
         "type": "llm",
@@ -2084,7 +2120,8 @@
         "n_ctx_orig": 16384,
         "file_size_bytes": 1432090624,
         "file_size_gb": 1.334,
-        "rel_path": "deepseek-coder-1.3B-kexer-GGUF/deepseek-coder-1.3B-kexer-Q8_0.gguf"
+        "rel_path": "deepseek-coder-1.3B-kexer-GGUF/deepseek-coder-1.3B-kexer-Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 196608
     },
     "gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf": {
         "type": "llm",
@@ -2106,7 +2143,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 720425472,
         "file_size_gb": 0.671,
-        "rel_path": "gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf"
+        "rel_path": "gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf",
+        "kv_bytes_per_ctx_token": 29952
     },
     "gemma-3-4b-it-GGUF/gemma-3-4b-it-Q4_K_M.gguf": {
         "type": "llm",
@@ -2128,7 +2166,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2489757856,
         "file_size_gb": 2.319,
-        "rel_path": "gemma-3-4b-it-GGUF/gemma-3-4b-it-Q4_K_M.gguf"
+        "rel_path": "gemma-3-4b-it-GGUF/gemma-3-4b-it-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 174080
     },
     "gemma-3-4b-it-GGUF/mmproj-model-f16.gguf": {
         "type": "mmproj",
@@ -2164,7 +2203,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 7381384864,
         "file_size_gb": 6.874,
-        "rel_path": "gemma-4-12B-it-GGUF/gemma-4-12B-it-Q4_K_M.gguf"
+        "rel_path": "gemma-4-12B-it-GGUF/gemma-4-12B-it-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 46080
     },
     "gemma-4-12B-it-GGUF/mmproj-gemma-4-12B-it-BF16.gguf": {
         "type": "mmproj",
@@ -2200,7 +2240,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 6975878560,
         "file_size_gb": 6.497,
-        "rel_path": "gemma-4-12B-it-QAT-GGUF/gemma-4-12B-it-QAT-Q4_0.gguf"
+        "rel_path": "gemma-4-12B-it-QAT-GGUF/gemma-4-12B-it-QAT-Q4_0.gguf",
+        "kv_bytes_per_ctx_token": 46080
     },
     "gemma-4-12B-it-QAT-GGUF/mmproj-gemma-4-12B-it-QAT-BF16.gguf": {
         "type": "mmproj",
@@ -2236,7 +2277,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 12291399328,
         "file_size_gb": 11.447,
-        "rel_path": "gemma-4-19b-a4b-it-REAP-i1-GGUF/gemma-4-19b-a4b-it-REAP.i1-Q4_K_M.gguf"
+        "rel_path": "gemma-4-19b-a4b-it-REAP-i1-GGUF/gemma-4-19b-a4b-it-REAP.i1-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 42240
     },
     "gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf": {
         "type": "llm",
@@ -2258,7 +2300,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 16796010624,
         "file_size_gb": 15.643,
-        "rel_path": "gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf"
+        "rel_path": "gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 42240
     },
     "gemma-4-26B-A4B-it-GGUF/mmproj-gemma-4-26B-A4B-it-BF16.gguf": {
         "type": "mmproj",
@@ -2294,7 +2337,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 14439362752,
         "file_size_gb": 13.448,
-        "rel_path": "gemma-4-26B-A4B-it-QAT-GGUF/gemma-4-26B-A4B-it-QAT-Q4_0.gguf"
+        "rel_path": "gemma-4-26B-A4B-it-QAT-GGUF/gemma-4-26B-A4B-it-QAT-Q4_0.gguf",
+        "kv_bytes_per_ctx_token": 42240
     },
     "gemma-4-26B-A4B-it-QAT-GGUF/mmproj-gemma-4-26B-A4B-it-QAT-BF16.gguf": {
         "type": "mmproj",
@@ -2330,7 +2374,8 @@
         "n_ctx_orig": 262144,
         "file_size_bytes": 17651000768,
         "file_size_gb": 16.439,
-        "rel_path": "gemma-4-31B-it-QAT-GGUF/gemma-4-31B-it-QAT-Q4_0.gguf"
+        "rel_path": "gemma-4-31B-it-QAT-GGUF/gemma-4-31B-it-QAT-Q4_0.gguf",
+        "kv_bytes_per_ctx_token": 161280
     },
     "gemma-4-31B-it-QAT-GGUF/mmproj-gemma-4-31B-it-QAT-BF16.gguf": {
         "type": "mmproj",
@@ -2366,7 +2411,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2445650048,
         "file_size_gb": 2.278,
-        "rel_path": "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q3_K_S.gguf"
+        "rel_path": "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q3_K_S.gguf",
+        "kv_bytes_per_ctx_token": 26880
     },
     "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q4_K_M.gguf": {
         "type": "llm",
@@ -2388,7 +2434,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 3427873312,
         "file_size_gb": 3.192,
-        "rel_path": "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q4_K_M.gguf"
+        "rel_path": "gemma-4-E2B-it-GGUF/gemma-4-E2B-it-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 26880
     },
     "gemma-4-E2B-it-GGUF/mmproj-F32.gguf": {
         "type": "mmproj",
@@ -2438,7 +2485,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 3349515424,
         "file_size_gb": 3.119,
-        "rel_path": "gemma-4-E2B-it-QAT-GGUF/gemma-4-E2B-it-QAT-Q4_0.gguf"
+        "rel_path": "gemma-4-E2B-it-QAT-GGUF/gemma-4-E2B-it-QAT-Q4_0.gguf",
+        "kv_bytes_per_ctx_token": 26880
     },
     "gemma-4-E2B-it-QAT-GGUF/mmproj-gemma-4-E2B-it-QAT-BF16.gguf": {
         "type": "mmproj",
@@ -2474,7 +2522,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 5335289664,
         "file_size_gb": 4.969,
-        "rel_path": "gemma-4-E4B-it-GGUF/gemma-4-E4B-it-Q4_K_M.gguf"
+        "rel_path": "gemma-4-E4B-it-GGUF/gemma-4-E4B-it-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 107520
     },
     "gemma-4-E4B-it-GGUF/mmproj-gemma-4-E4B-it-BF16.gguf": {
         "type": "mmproj",
@@ -2510,7 +2559,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 98670464,
         "file_size_gb": 0.092,
-        "rel_path": "gemma-4-E4B-it-qat-GGUF/gemma-4-E4B-it-Q8_0-MTP.gguf"
+        "rel_path": "gemma-4-E4B-it-qat-GGUF/gemma-4-E4B-it-Q8_0-MTP.gguf",
+        "kv_bytes_per_ctx_token": 2048
     },
     "gemma-4-E4B-it-qat-GGUF/mmproj-F32.gguf": {
         "type": "mmproj",
@@ -2546,7 +2596,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 5154941280,
         "file_size_gb": 4.801,
-        "rel_path": "gemma-4-E4B-it-qat-q4_0-gguf/gemma-4-E4B_q4_0-it.gguf"
+        "rel_path": "gemma-4-E4B-it-qat-q4_0-gguf/gemma-4-E4B_q4_0-it.gguf",
+        "kv_bytes_per_ctx_token": 107520
     },
     "gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf": {
         "type": "llm",
@@ -2568,7 +2619,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 12109565632,
         "file_size_gb": 11.278,
-        "rel_path": "gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf"
+        "rel_path": "gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf",
+        "kv_bytes_per_ctx_token": 34560
     },
     "granite-3.1-8b-instruct-GGUF/granite-3.1-8b-instruct-Q3_K_L.gguf": {
         "type": "llm",
@@ -2590,7 +2642,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 4349429952,
         "file_size_gb": 4.051,
-        "rel_path": "granite-3.1-8b-instruct-GGUF/granite-3.1-8b-instruct-Q3_K_L.gguf"
+        "rel_path": "granite-3.1-8b-instruct-GGUF/granite-3.1-8b-instruct-Q3_K_L.gguf",
+        "kv_bytes_per_ctx_token": 163840
     },
     "granite-4.0-h-tiny-GGUF/granite-4.0-h-tiny-Q4_K_M.gguf": {
         "type": "llm",
@@ -2612,7 +2665,8 @@
         "n_ctx_orig": 1048576,
         "file_size_bytes": 4230975936,
         "file_size_gb": 3.94,
-        "rel_path": "granite-4.0-h-tiny-GGUF/granite-4.0-h-tiny-Q4_K_M.gguf"
+        "rel_path": "granite-4.0-h-tiny-GGUF/granite-4.0-h-tiny-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 245760
     },
     "granite-4.1-3b-GGUF/granite-4.1-3b-Q4_K_M.gguf": {
         "type": "llm",
@@ -2634,7 +2688,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2099501664,
         "file_size_gb": 1.955,
-        "rel_path": "granite-4.1-3b-GGUF/granite-4.1-3b-Q4_K_M.gguf"
+        "rel_path": "granite-4.1-3b-GGUF/granite-4.1-3b-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 81920
     },
     "models--isaiahbjork--orpheus-3b-0.1-ft-Q4_K_M-GGUF/snapshots/af161b11022b996f8ae2f54d79b8ff71c5a3fb58/orpheus-3b-0.1-ft-q4_k_m.gguf": {
         "type": "llm",
@@ -2656,7 +2711,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 2363760768,
         "file_size_gb": 2.201,
-        "rel_path": "models--isaiahbjork--orpheus-3b-0.1-ft-Q4_K_M-GGUF/snapshots/af161b11022b996f8ae2f54d79b8ff71c5a3fb58/orpheus-3b-0.1-ft-q4_k_m.gguf"
+        "rel_path": "models--isaiahbjork--orpheus-3b-0.1-ft-Q4_K_M-GGUF/snapshots/af161b11022b996f8ae2f54d79b8ff71c5a3fb58/orpheus-3b-0.1-ft-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 114688
     },
     "models--unsloth--GLM-4.7-Flash-REAP-23B-A3B-GGUF/snapshots/983a65c63bc7bd37353e5246abc8005b3f72d5ec/GLM-4.7-Flash-REAP-23B-A3B-Q4_K_M.gguf": {
         "type": "llm",
@@ -2678,7 +2734,8 @@
         "n_ctx_orig": 202752,
         "file_size_bytes": 14113838816,
         "file_size_gb": 13.145,
-        "rel_path": "models--unsloth--GLM-4.7-Flash-REAP-23B-A3B-GGUF/snapshots/983a65c63bc7bd37353e5246abc8005b3f72d5ec/GLM-4.7-Flash-REAP-23B-A3B-Q4_K_M.gguf"
+        "rel_path": "models--unsloth--GLM-4.7-Flash-REAP-23B-A3B-GGUF/snapshots/983a65c63bc7bd37353e5246abc8005b3f72d5ec/GLM-4.7-Flash-REAP-23B-A3B-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 19176
     },
     "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-IQ4_XS.gguf": {
         "type": "llm",
@@ -2700,7 +2757,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 4264996448,
         "file_size_gb": 3.972,
-        "rel_path": "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-IQ4_XS.gguf"
+        "rel_path": "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-IQ4_XS.gguf",
+        "kv_bytes_per_ctx_token": 0
     },
     "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-Q4_K_XL.gguf": {
         "type": "llm",
@@ -2722,7 +2780,8 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 5351583328,
         "file_size_gb": 4.984,
-        "rel_path": "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-Q4_K_XL.gguf"
+        "rel_path": "models--unsloth--LFM2.5-8B-A1B-GGUF/snapshots/37563684c4a625e9958906fd924e15095cf9c896/LFM2.5-8B-A1B-UD-Q4_K_XL.gguf",
+        "kv_bytes_per_ctx_token": 0
     },
     "models--unsloth--NVIDIA-Nemotron-3-Nano-4B-GGUF/snapshots/8e81be55c5aa3d63bb82b6ceec62d50805d9e1bb/NVIDIA-Nemotron-3-Nano-4B-UD-Q4_K_XL.gguf": {
         "type": "llm",
@@ -2744,7 +2803,8 @@
         "n_ctx_orig": 1048576,
         "file_size_bytes": 3133118624,
         "file_size_gb": 2.918,
-        "rel_path": "models--unsloth--NVIDIA-Nemotron-3-Nano-4B-GGUF/snapshots/8e81be55c5aa3d63bb82b6ceec62d50805d9e1bb/NVIDIA-Nemotron-3-Nano-4B-UD-Q4_K_XL.gguf"
+        "rel_path": "models--unsloth--NVIDIA-Nemotron-3-Nano-4B-GGUF/snapshots/8e81be55c5aa3d63bb82b6ceec62d50805d9e1bb/NVIDIA-Nemotron-3-Nano-4B-UD-Q4_K_XL.gguf",
+        "kv_bytes_per_ctx_token": 0
     },
     "models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/8c5a9e4fd5482e2be20fe0bf013b4c262a8f4265/gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf": {
         "type": "llm",
@@ -2766,7 +2826,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 4215695776,
         "file_size_gb": 3.926,
-        "rel_path": "models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/8c5a9e4fd5482e2be20fe0bf013b4c262a8f4265/gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf"
+        "rel_path": "models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/8c5a9e4fd5482e2be20fe0bf013b4c262a8f4265/gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf",
+        "kv_bytes_per_ctx_token": 107520
     },
     "models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/8c5a9e4fd5482e2be20fe0bf013b4c262a8f4265/mmproj-F16.gguf": {
         "type": "mmproj",
@@ -2802,7 +2863,8 @@
         "n_ctx_orig": 131072,
         "file_size_bytes": 59678016,
         "file_size_gb": 0.056,
-        "rel_path": "models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/8c5a9e4fd5482e2be20fe0bf013b4c262a8f4265/mtp-gemma-4-E4B-it.gguf"
+        "rel_path": "models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/8c5a9e4fd5482e2be20fe0bf013b4c262a8f4265/mtp-gemma-4-E4B-it.gguf",
+        "kv_bytes_per_ctx_token": 2048
     },
     "olmOCR-2-7B-1025-GGUF/mmproj-olmOCR-2-7B-1025-F16.gguf": {
         "type": "mmproj",
@@ -2838,7 +2900,31 @@
         "n_ctx_orig": 128000,
         "file_size_bytes": 4683072032,
         "file_size_gb": 4.361,
-        "rel_path": "olmOCR-2-7B-1025-GGUF/olmOCR-2-7B-1025-Q4_K_M.gguf"
+        "rel_path": "olmOCR-2-7B-1025-GGUF/olmOCR-2-7B-1025-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 57344
+    },
+    "qwen3-4b-thinking-2507.Q8_0.gguf": {
+        "type": "llm",
+        "arch": "qwen3",
+        "name": "Cp7Qdprx",
+        "size_label": "4.0B",
+        "parameter_count": null,
+        "mcp": true,
+        "thinking": true,
+        "quant": "Q8_0",
+        "n_layers": 36,
+        "n_embd": 2560,
+        "n_heads": 32,
+        "n_kv_heads": 8,
+        "n_ff": 9728,
+        "n_experts": null,
+        "n_experts_used": null,
+        "vocab_size": 151936,
+        "n_ctx_orig": 262144,
+        "file_size_bytes": 4280404800,
+        "file_size_gb": 3.986,
+        "rel_path": "qwen3-4b-thinking-2507.Q8_0.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "rnj-1-instruct-GGUF/rnj-1-instruct-Q4_K_M.gguf": {
         "type": "llm",
@@ -2860,7 +2946,8 @@
         "n_ctx_orig": 32768,
         "file_size_bytes": 5113914368,
         "file_size_gb": 4.763,
-        "rel_path": "rnj-1-instruct-GGUF/rnj-1-instruct-Q4_K_M.gguf"
+        "rel_path": "rnj-1-instruct-GGUF/rnj-1-instruct-Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 131072
     },
     "samuel-k8s-3-4b.Q4_K_M.gguf": {
         "type": "llm",
@@ -2882,7 +2969,8 @@
         "n_ctx_orig": 40960,
         "file_size_bytes": 2497280960,
         "file_size_gb": 2.326,
-        "rel_path": "samuel-k8s-3-4b.Q4_K_M.gguf"
+        "rel_path": "samuel-k8s-3-4b.Q4_K_M.gguf",
+        "kv_bytes_per_ctx_token": 92160
     },
     "tiny-aya-global-GGUF/tiny-aya-global-q4_k_m.gguf": {
         "type": "llm",
@@ -2904,6 +2992,7 @@
         "n_ctx_orig": 500000,
         "file_size_bytes": 2143977056,
         "file_size_gb": 1.997,
-        "rel_path": "tiny-aya-global-GGUF/tiny-aya-global-q4_k_m.gguf"
+        "rel_path": "tiny-aya-global-GGUF/tiny-aya-global-q4_k_m.gguf",
+        "kv_bytes_per_ctx_token": 73728
     }
 }

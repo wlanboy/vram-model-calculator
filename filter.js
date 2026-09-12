@@ -20,12 +20,6 @@
 
     const MODEL_TYPE_LLM = "llm";
 
-    // KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and
-    // one Value tensor. Keep these two in sync with the identical constants
-    // in vram_calculator.py.
-    const KV_BYTES_PER_ELEMENT = 2;
-    const KV_TENSORS_PER_LAYER = 2;
-
     // A GPU is "tight" once usage crosses this fraction of its VRAM. Keep in
     // sync with the identical constant in vram_calculator.py.
     const TIGHT_FIT_RATIO = 0.85;
@@ -50,16 +44,11 @@ function activeGpuLimits() {
 
     // ── VRAM calculation ─────────────────────────────────────
 
+    // Bytes/token kommt vorberechnet aus models_cache.json (siehe
+    // ModelShape.kv_bytes_per_ctx_token in _model.py) - einzige Quelle der
+    // KV-Cache-Formel, hier nur noch mit ctx multipliziert.
     function calcKv(model, ctx) {
-        if (!model.n_layers) return 0;
-        // MLA-Modelle (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cachen einen einzigen
-        // komprimierten Vektor/Token/Layer statt eines Werts pro KV-Head.
-        if (model.mla_kv_dim) {
-            return (model.n_layers * model.mla_kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024 ** 3);
-        }
-        if (model.isSSM || !model.n_kv_heads || !model.n_embd) return 0;
-        const headDim = Math.floor(model.n_embd / (model.n_heads || 1));
-        return (KV_TENSORS_PER_LAYER * model.n_layers * model.n_kv_heads * headDim * ctx * KV_BYTES_PER_ELEMENT) / (1024 ** 3);
+        return (model.kvBytesPerCtxToken * ctx) / (1024 ** 3);
     }
 
     function buildModels(raw) {
@@ -82,11 +71,7 @@ function activeGpuLimits() {
                 thinking: !!data.thinking,
                 moe,
                 isSSM,
-                n_layers:   data.n_layers || 0,
-                n_embd:     data.n_embd   || 0,
-                n_heads:    data.n_heads  || 1,
-                n_kv_heads: kvHeads,
-                mla_kv_dim: data.mla_kv_dim || null,
+                kvBytesPerCtxToken: data.kv_bytes_per_ctx_token || 0,
             });
         }
         return result;
@@ -96,7 +81,7 @@ function activeGpuLimits() {
 
     function fmtCtx(tokens) {
         if (!tokens) return "—";
-        if (tokens >= 1000000) return (tokens / 1000000) + "M";
+        if (tokens >= 1000000) return (Math.round(tokens / 100000) / 10) + "M";
         return Math.round(tokens / 1000) + "k";
     }
 

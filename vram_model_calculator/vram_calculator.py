@@ -12,11 +12,6 @@ GPU_LIMITS = {
     "24GB (Ultra)": 24.0
 }
 
-# KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and one
-# Value tensor. Keep these two in sync with the identical constants in filter.js.
-KV_BYTES_PER_ELEMENT = 2
-KV_TENSORS_PER_LAYER = 2
-
 # A GPU is "tight" once usage crosses this fraction of its VRAM. Keep in sync
 # with the identical constant in filter.js.
 TIGHT_FIT_RATIO = 0.85
@@ -31,15 +26,18 @@ USECASES = {
     "Agent (1M)":   1000000,
 }
 
-def to_int(val):
-    """Konvertiert ASCII-Steuerzeichen oder Strings sicher in Integer."""
+def coerce_legacy_cache_int(val):
+    """Reads an int field from models_cache.json, tolerating pre-typed
+    entries: a single-character string is read as its ord() value (e.g. '('
+    means 40), other strings are parsed as decimal, and anything else
+    unparseable becomes 0."""
     if val is None:
         return 0
     if isinstance(val, int):
         return val
     if isinstance(val, str):
         if len(val) == 1:
-            return ord(val)  # Wandelt z.B. '(' in 40 um
+            return ord(val)
         try:
             return int(val)
         except ValueError:
@@ -68,16 +66,13 @@ def calculate_vram_matrix():
     }
 
     for name, data in models.items():
-        layers = to_int(data.get("n_layers"))
-        embd = to_int(data.get("n_embd"))
-        heads = to_int(data.get("n_heads"))
+        layers = coerce_legacy_cache_int(data.get("n_layers"))
+        embd = coerce_legacy_cache_int(data.get("n_embd"))
         # SSM-Modelle (LFM2, Nemotron-H) haben n_kv_heads=null → kein klassischer KV-Cache
-        raw_kv = data.get("n_kv_heads")
-        is_ssm = raw_kv is None
-        kv_heads = to_int(raw_kv)
-        # MLA-Modelle (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cachen einen einzigen
-        # komprimierten Vektor/Token/Layer statt eines Werts pro KV-Head.
-        mla_kv_dim = to_int(data.get("mla_kv_dim")) or None
+        is_ssm = data.get("n_kv_heads") is None
+        # Von _model.py vorberechnet (siehe ModelShape.kv_bytes_per_ctx_token):
+        # einzige Quelle der KV-Cache-Formel, hier nur noch mit ctx multipliziert.
+        kv_bytes_per_ctx_token = coerce_legacy_cache_int(data.get("kv_bytes_per_ctx_token"))
         base_size = data.get("file_size_gb", 0)
 
         if layers == 0 or embd == 0:
@@ -96,17 +91,7 @@ def calculate_vram_matrix():
         print("-" * len(header))
 
         for uc_name, ctx in USECASES.items():
-            if mla_kv_dim:
-                # Ein gemeinsamer komprimierter Vektor pro Token/Layer, kein
-                # separater V-Tensor (siehe llama.cpp deepseek2.cpp MLA-Cache).
-                kv_vram = (layers * mla_kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024**3)
-            elif not is_ssm and kv_heads > 0:
-                head_dim = embd // (heads if heads > 0 else 1)
-                kv_dim = kv_heads * head_dim
-                kv_vram = (KV_TENSORS_PER_LAYER * layers * kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024**3)
-            else:
-                kv_vram = 0.0
-
+            kv_vram = (kv_bytes_per_ctx_token * ctx) / (1024**3)
             total = base_size + kv_vram
 
             status_row = []

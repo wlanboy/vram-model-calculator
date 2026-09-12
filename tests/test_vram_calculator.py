@@ -4,8 +4,8 @@ import re
 from vram_model_calculator import vram_calculator
 from vram_model_calculator.vram_calculator import (
     calculate_vram_matrix,
+    coerce_legacy_cache_int,
     get_color,
-    to_int,
 )
 
 ANSI_RE = re.compile(r"\033\[[0-9;]*m")
@@ -15,25 +15,25 @@ def strip_ansi(text):
     return ANSI_RE.sub("", text)
 
 
-class TestToInt:
+class TestCoerceLegacyCacheInt:
     def test_none_is_zero(self):
-        assert to_int(None) == 0
+        assert coerce_legacy_cache_int(None) == 0
 
     def test_int_passthrough(self):
-        assert to_int(42) == 42
+        assert coerce_legacy_cache_int(42) == 42
 
     def test_single_char_string_is_ord(self):
-        assert to_int("(") == 40
+        assert coerce_legacy_cache_int("(") == 40
 
     def test_numeric_string_is_parsed(self):
-        assert to_int("128") == 128
+        assert coerce_legacy_cache_int("128") == 128
 
     def test_non_numeric_multichar_string_is_zero(self):
-        assert to_int("abc") == 0
+        assert coerce_legacy_cache_int("abc") == 0
 
     def test_other_types_are_zero(self):
-        assert to_int(3.5) == 0
-        assert to_int([1, 2]) == 0
+        assert coerce_legacy_cache_int(3.5) == 0
+        assert coerce_legacy_cache_int([1, 2]) == 0
 
 
 class TestGetColor:
@@ -83,8 +83,8 @@ class TestCalculateVramMatrix:
                 "arch": "llama",
                 "n_layers": 32,
                 "n_embd": 4096,
-                "n_heads": 32,
                 "n_kv_heads": 8,
+                "kv_bytes_per_ctx_token": 131072,
                 "file_size_gb": 4.5,
             },
         }
@@ -107,8 +107,8 @@ class TestCalculateVramMatrix:
                 "arch": "qwen3moe",
                 "n_layers": 24,
                 "n_embd": 2048,
-                "n_heads": 16,
                 "n_kv_heads": 4,
+                "kv_bytes_per_ctx_token": 49152,
                 "file_size_gb": 8.0,
                 "n_experts": 8,
                 "n_experts_used": 2,
@@ -122,19 +122,19 @@ class TestCalculateVramMatrix:
         out = strip_ansi(capsys.readouterr().out)
         assert "MoE 2/8" in out
 
-    def test_mla_model_uses_combined_kv_dim_not_heads_formula(self, tmp_path, monkeypatch, capsys):
-        # A DeepSeek2-style model where the naive n_kv_heads * head_dim formula
-        # (32 * 128 = 4096) would hugely overstate the real MLA cache dim (576).
+    def test_kv_vram_is_precomputed_bytes_times_ctx(self, tmp_path, monkeypatch, capsys):
+        # The KV-cache formula itself (classic vs. MLA vs. SSM) lives entirely
+        # in _model.py's ModelShape now; calculate_vram_matrix's only job is
+        # to multiply the cache's precomputed kv_bytes_per_ctx_token by ctx.
         cache = {
             "_version": 1,
-            "MlaModel": {
+            "AnyModel": {
                 "type": "llm",
                 "arch": "deepseek2",
                 "n_layers": 32,
                 "n_embd": 4096,
-                "n_heads": 32,
                 "n_kv_heads": 32,
-                "mla_kv_dim": 576,  # kv_lora_rank(512) + rope.dimension_count(64)
+                "kv_bytes_per_ctx_token": 36864,  # e.g. 32 layers * 576 mla_kv_dim * 2 bytes
                 "file_size_gb": 1.0,
             },
         }
@@ -146,44 +146,8 @@ class TestCalculateVramMatrix:
         out = strip_ansi(capsys.readouterr().out)
 
         ctx = vram_calculator.USECASES["Chat (8k)"]
-        expected_kv = (32 * 576 * ctx * vram_calculator.KV_BYTES_PER_ELEMENT) / (1024**3)
-        naive_kv = (
-            vram_calculator.KV_TENSORS_PER_LAYER * 32 * 32 * (4096 // 32) * ctx
-            * vram_calculator.KV_BYTES_PER_ELEMENT
-        ) / (1024**3)
-
+        expected_kv = (36864 * ctx) / (1024**3)
         assert f"{expected_kv:>8.2f}" in out
-        assert f"{naive_kv:>8.2f}" not in out
-
-    def test_mla_arch_with_falsy_kv_dim_falls_back_to_heads_formula(self, tmp_path, monkeypatch, capsys):
-        # If mla_kv_dim couldn't be determined (0/null), fall back to the
-        # generic n_kv_heads formula instead of silently reporting 0 VRAM.
-        cache = {
-            "_version": 1,
-            "MlaModelNoLoraRank": {
-                "type": "llm",
-                "arch": "deepseek2",
-                "n_layers": 32,
-                "n_embd": 4096,
-                "n_heads": 32,
-                "n_kv_heads": 32,
-                "mla_kv_dim": None,
-                "file_size_gb": 1.0,
-            },
-        }
-        cache_file = tmp_path / "cache.json"
-        cache_file.write_text(json.dumps(cache))
-        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
-
-        calculate_vram_matrix()
-        out = strip_ansi(capsys.readouterr().out)
-
-        ctx = vram_calculator.USECASES["Chat (8k)"]
-        naive_kv = (
-            vram_calculator.KV_TENSORS_PER_LAYER * 32 * 32 * (4096 // 32) * ctx
-            * vram_calculator.KV_BYTES_PER_ELEMENT
-        ) / (1024**3)
-        assert f"{naive_kv:>8.2f}" in out
 
     def test_ssm_model_shows_ssm_label_and_no_kv_growth(self, tmp_path, monkeypatch, capsys):
         cache = {
@@ -193,8 +157,8 @@ class TestCalculateVramMatrix:
                 "arch": "mamba",
                 "n_layers": 24,
                 "n_embd": 2048,
-                "n_heads": 16,
                 "n_kv_heads": None,
+                "kv_bytes_per_ctx_token": 0,
                 "file_size_gb": 2.0,
             },
         }

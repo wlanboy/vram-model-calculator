@@ -5,7 +5,14 @@ import sys
 
 from tqdm import tqdm
 
-from ._model import METADATA_DUMP_FILE, NotAnLLMError, clean_name, get_model_params
+from ._model import (
+    METADATA_DUMP_FILE,
+    MODEL_TYPE_LLM,
+    ModelShape,
+    NotAnLLMError,
+    clean_name,
+    get_model_params,
+)
 
 CACHE_FILE = "models_cache.json"
 SHARD_RE = re.compile(r'-(\d{5})-of-(\d{5})\.gguf$', re.IGNORECASE)
@@ -77,6 +84,30 @@ def _refresh_names(cache):
     return cache
 
 
+def _backfill_kv_bytes(cache):
+    """Adds kv_bytes_per_ctx_token to entries scanned before that field
+    existed, computed from the dimensions already stored in the cache (no
+    GGUF file access needed, so no rescan is required)."""
+    backfilled = 0
+    for key, entry in cache.items():
+        if not isinstance(entry, dict) or entry.get("type") != MODEL_TYPE_LLM:
+            continue
+        if "kv_bytes_per_ctx_token" in entry or not entry.get("n_layers") or not entry.get("n_embd"):
+            continue
+        shape = ModelShape(
+            n_layers=entry["n_layers"],
+            n_embd=entry["n_embd"],
+            n_heads=entry.get("n_heads") or 0,
+            n_kv_heads=entry.get("n_kv_heads"),
+            mla_kv_dim=entry.get("mla_kv_dim"),
+        )
+        cache[key] = {**entry, "kv_bytes_per_ctx_token": shape.kv_bytes_per_ctx_token()}
+        backfilled += 1
+    if backfilled:
+        print(f"🧮 {backfilled} Cache-Einträge um kv_bytes_per_ctx_token ergänzt.")
+    return cache
+
+
 def needs_scan(rel_key, abs_path, cache):
     if rel_key not in cache:
         return True
@@ -101,7 +132,7 @@ def update_cache(base_dirs):
                 loaded = json.load(f)
             file_version = loaded.get("_version", 0)
             raw = {k: v for k, v in loaded.items() if k != "_version"}
-            cache = _refresh_names(_migrate_cache(raw))
+            cache = _backfill_kv_bytes(_refresh_names(_migrate_cache(raw)))
         except (json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError) as e:
             print(f"⚠️ Cache-Datei korrupt, erstelle neu. ({e})")
 

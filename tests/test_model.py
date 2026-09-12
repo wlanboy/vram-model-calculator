@@ -6,6 +6,7 @@ from vram_model_calculator._model import (
     MODEL_TYPE_ADAPTER,
     MODEL_TYPE_LLM,
     MODEL_TYPE_MMPROJ,
+    ModelShape,
     NotAnLLMError,
     get_model_params,
 )
@@ -62,6 +63,8 @@ class TestGetModelParamsLlm:
         assert params["quant"] == "F16"
         assert params["vocab_size"] == 32000
         assert params["file_size_gb"] == 1.0
+        # head_dim = 4096/32 = 128, kv_dim = 8*128 = 1024, 2 tensors * 32 layers * 1024 * 2 bytes
+        assert params["kv_bytes_per_ctx_token"] == 2 * 32 * 1024 * 2
         assert "has_missing_fields" not in params
 
     def test_gqa_zero_kv_heads_means_same_as_heads(self, patch_reader):
@@ -83,6 +86,7 @@ class TestGetModelParamsLlm:
         })
         params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
         assert params["n_kv_heads"] is None
+        assert params["kv_bytes_per_ctx_token"] == 0
         assert "has_missing_fields" not in params
 
     def test_diffusion_arch_raises_not_an_llm(self, patch_reader):
@@ -117,6 +121,9 @@ class TestGetModelParamsLlm:
         })
         params = get_model_params("/models/DeepSeek/model.gguf", file_size_bytes=1)
         assert params["mla_kv_dim"] == 512 + 64
+        # MLA path: 32 layers * 576 combined dim * 2 bytes, not the naive
+        # n_kv_heads*head_dim formula (which would hugely overstate it here).
+        assert params["kv_bytes_per_ctx_token"] == 32 * 576 * 2
 
     def test_mla_arch_without_lora_rank_leaves_kv_dim_none(self, patch_reader):
         patch_reader["reader"] = llama_reader(**{
@@ -186,6 +193,31 @@ class TestGetModelParamsLlm:
         params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
         assert params["n_experts"] == 8
         assert params["n_experts_used"] == 2
+
+
+class TestModelShapeKvBytesPerCtxToken:
+    """Direct unit tests for the one place the KV-cache formula lives: every
+    other consumer (vram_calculator.py, filter.js) just multiplies this
+    precomputed value by a context length."""
+
+    def test_classic_attention_formula(self):
+        shape = ModelShape(n_layers=32, n_embd=4096, n_heads=32, n_kv_heads=8)
+        head_dim = 4096 // 32
+        kv_dim = 8 * head_dim
+        assert shape.kv_bytes_per_ctx_token() == 2 * 32 * kv_dim * 2
+
+    def test_mla_dim_overrides_classic_formula(self):
+        shape = ModelShape(n_layers=32, n_embd=4096, n_heads=32, n_kv_heads=32, mla_kv_dim=576)
+        assert shape.kv_bytes_per_ctx_token() == 32 * 576 * 2
+
+    def test_ssm_has_no_kv_cache(self):
+        shape = ModelShape(n_layers=24, n_embd=2048, n_heads=16, n_kv_heads=None)
+        assert shape.is_ssm is True
+        assert shape.kv_bytes_per_ctx_token() == 0
+
+    def test_zero_kv_heads_has_no_kv_cache(self):
+        shape = ModelShape(n_layers=24, n_embd=2048, n_heads=16, n_kv_heads=0)
+        assert shape.kv_bytes_per_ctx_token() == 0
 
 
 class TestGetModelParamsAdapter:
