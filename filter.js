@@ -51,7 +51,13 @@ function activeGpuLimits() {
     // ── VRAM calculation ─────────────────────────────────────
 
     function calcKv(model, ctx) {
-        if (model.isSSM || !model.n_kv_heads || !model.n_layers || !model.n_embd) return 0;
+        if (!model.n_layers) return 0;
+        // MLA-Modelle (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cachen einen einzigen
+        // komprimierten Vektor/Token/Layer statt eines Werts pro KV-Head.
+        if (model.mla_kv_dim) {
+            return (model.n_layers * model.mla_kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024 ** 3);
+        }
+        if (model.isSSM || !model.n_kv_heads || !model.n_embd) return 0;
         const headDim = Math.floor(model.n_embd / (model.n_heads || 1));
         return (KV_TENSORS_PER_LAYER * model.n_layers * model.n_kv_heads * headDim * ctx * KV_BYTES_PER_ELEMENT) / (1024 ** 3);
     }
@@ -80,6 +86,7 @@ function activeGpuLimits() {
                 n_embd:     data.n_embd   || 0,
                 n_heads:    data.n_heads  || 1,
                 n_kv_heads: kvHeads,
+                mla_kv_dim: data.mla_kv_dim || null,
             });
         }
         return result;
