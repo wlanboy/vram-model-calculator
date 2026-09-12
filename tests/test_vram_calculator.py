@@ -155,6 +155,36 @@ class TestCalculateVramMatrix:
         assert f"{expected_kv:>8.2f}" in out
         assert f"{naive_kv:>8.2f}" not in out
 
+    def test_mla_arch_with_falsy_kv_dim_falls_back_to_heads_formula(self, tmp_path, monkeypatch, capsys):
+        # If mla_kv_dim couldn't be determined (0/null), fall back to the
+        # generic n_kv_heads formula instead of silently reporting 0 VRAM.
+        cache = {
+            "_version": 1,
+            "MlaModelNoLoraRank": {
+                "type": "llm",
+                "arch": "deepseek2",
+                "n_layers": 32,
+                "n_embd": 4096,
+                "n_heads": 32,
+                "n_kv_heads": 32,
+                "mla_kv_dim": None,
+                "file_size_gb": 1.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix()
+        out = strip_ansi(capsys.readouterr().out)
+
+        ctx = vram_calculator.USECASES["Chat (8k)"]
+        naive_kv = (
+            vram_calculator.KV_TENSORS_PER_LAYER * 32 * 32 * (4096 // 32) * ctx
+            * vram_calculator.KV_BYTES_PER_ELEMENT
+        ) / (1024**3)
+        assert f"{naive_kv:>8.2f}" in out
+
     def test_ssm_model_shows_ssm_label_and_no_kv_growth(self, tmp_path, monkeypatch, capsys):
         cache = {
             "_version": 1,
