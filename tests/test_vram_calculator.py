@@ -122,6 +122,39 @@ class TestCalculateVramMatrix:
         out = strip_ansi(capsys.readouterr().out)
         assert "MoE 2/8" in out
 
+    def test_mla_model_uses_combined_kv_dim_not_heads_formula(self, tmp_path, monkeypatch, capsys):
+        # A DeepSeek2-style model where the naive n_kv_heads * head_dim formula
+        # (32 * 128 = 4096) would hugely overstate the real MLA cache dim (576).
+        cache = {
+            "_version": 1,
+            "MlaModel": {
+                "type": "llm",
+                "arch": "deepseek2",
+                "n_layers": 32,
+                "n_embd": 4096,
+                "n_heads": 32,
+                "n_kv_heads": 32,
+                "mla_kv_dim": 576,  # kv_lora_rank(512) + rope.dimension_count(64)
+                "file_size_gb": 1.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix()
+        out = strip_ansi(capsys.readouterr().out)
+
+        ctx = vram_calculator.USECASES["Chat (8k)"]
+        expected_kv = (32 * 576 * ctx * vram_calculator.KV_BYTES_PER_ELEMENT) / (1024**3)
+        naive_kv = (
+            vram_calculator.KV_TENSORS_PER_LAYER * 32 * 32 * (4096 // 32) * ctx
+            * vram_calculator.KV_BYTES_PER_ELEMENT
+        ) / (1024**3)
+
+        assert f"{expected_kv:>8.2f}" in out
+        assert f"{naive_kv:>8.2f}" not in out
+
     def test_ssm_model_shows_ssm_label_and_no_kv_growth(self, tmp_path, monkeypatch, capsys):
         cache = {
             "_version": 1,

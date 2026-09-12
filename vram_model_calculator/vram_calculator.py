@@ -75,6 +75,9 @@ def calculate_vram_matrix():
         raw_kv = data.get("n_kv_heads")
         is_ssm = raw_kv is None
         kv_heads = to_int(raw_kv)
+        # MLA-Modelle (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cachen einen einzigen
+        # komprimierten Vektor/Token/Layer statt eines Werts pro KV-Head.
+        mla_kv_dim = to_int(data.get("mla_kv_dim")) or None
         base_size = data.get("file_size_gb", 0)
 
         if layers == 0 or embd == 0:
@@ -93,12 +96,16 @@ def calculate_vram_matrix():
         print("-" * len(header))
 
         for uc_name, ctx in USECASES.items():
-            head_dim = embd // (heads if heads > 0 else 1)
-            kv_dim = kv_heads * head_dim
-            kv_vram = (
-                (KV_TENSORS_PER_LAYER * layers * kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024**3)
-                if not is_ssm and kv_heads > 0 else 0.0
-            )
+            if mla_kv_dim:
+                # Ein gemeinsamer komprimierter Vektor pro Token/Layer, kein
+                # separater V-Tensor (siehe llama.cpp deepseek2.cpp MLA-Cache).
+                kv_vram = (layers * mla_kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024**3)
+            elif not is_ssm and kv_heads > 0:
+                head_dim = embd // (heads if heads > 0 else 1)
+                kv_dim = kv_heads * head_dim
+                kv_vram = (KV_TENSORS_PER_LAYER * layers * kv_dim * ctx * KV_BYTES_PER_ELEMENT) / (1024**3)
+            else:
+                kv_vram = 0.0
 
             total = base_size + kv_vram
 
