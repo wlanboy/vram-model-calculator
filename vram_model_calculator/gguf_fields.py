@@ -12,8 +12,8 @@ try:
         for e in LlamaFileType
     }
 except ImportError:
-    # Mirrors gguf-py's LlamaFileType enum (checked against llama.cpp
-    # gguf-py/gguf/constants.py, commit 6a1a922d, 2026-09). IDs 4-6 and
+    # Mirrors gguf-py's LlamaFileType enum (checked against installed
+    # gguf==0.19.0, gguf-py/gguf/constants.py, 2026-09). IDs 4-6 and
     # 33-35 are retired/reserved (old Q4_1_SOME_F16/Q4_2/Q4_3 and the
     # Q4_0_4_4/4_8/8_8 repack formats, respectively) and left unmapped.
     FILE_TYPE_MAP = {
@@ -24,7 +24,7 @@ except ImportError:
         23: "IQ3_XXS", 24: "IQ1_S", 25: "IQ4_NL", 26: "IQ3_S", 27: "IQ3_M",
         28: "IQ2_S", 29: "IQ2_M", 30: "IQ4_XS", 31: "IQ1_M", 32: "BF16",
         36: "TQ1_0", 37: "TQ2_0", 38: "MXFP4_MOE", 39: "NVFP4",
-        40: "Q1_0", 41: "Q2_0",
+        40: "Q1_0", 1024: "GUESSED",
     }
 
 try:
