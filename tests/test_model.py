@@ -93,6 +93,49 @@ class TestGetModelParamsLlm:
         with pytest.raises(NotAnLLMError):
             get_model_params("/models/Flux/model.gguf", file_size_bytes=1)
 
+    def test_text_diffusion_llm_arch_raises_not_an_llm(self, patch_reader):
+        patch_reader["reader"] = FakeReader({
+            "general.type": str_field("model"),
+            "general.architecture": str_field("llada"),
+        })
+        with pytest.raises(NotAnLLMError):
+            get_model_params("/models/LLaDA/model.gguf", file_size_bytes=1)
+
+    def test_mla_arch_computes_combined_kv_cache_dim(self, patch_reader):
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("deepseek2"),
+            "deepseek2.context_length": int_field(4096),
+            "deepseek2.block_count": int_field(32),
+            "deepseek2.embedding_length": int_field(4096),
+            "deepseek2.attention.head_count": int_field(32),
+            "deepseek2.feed_forward_length": int_field(11008),
+            "deepseek2.attention.head_count_kv": int_field(32),
+            "deepseek2.vocab_size": int_field(32000),
+            "deepseek2.attention.kv_lora_rank": int_field(512),
+            "deepseek2.rope.dimension_count": int_field(64),
+        })
+        params = get_model_params("/models/DeepSeek/model.gguf", file_size_bytes=1)
+        assert params["mla_kv_dim"] == 512 + 64
+
+    def test_mla_arch_without_lora_rank_leaves_kv_dim_none(self, patch_reader):
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("mistral4"),
+            "mistral4.context_length": int_field(4096),
+            "mistral4.block_count": int_field(32),
+            "mistral4.embedding_length": int_field(4096),
+            "mistral4.attention.head_count": int_field(32),
+            "mistral4.feed_forward_length": int_field(11008),
+            "mistral4.attention.head_count_kv": int_field(32),
+            "mistral4.vocab_size": int_field(32000),
+        })
+        params = get_model_params("/models/Mistral4/model.gguf", file_size_bytes=1)
+        assert params["mla_kv_dim"] is None
+
+    def test_non_mla_arch_leaves_kv_dim_none(self, patch_reader):
+        patch_reader["reader"] = llama_reader()
+        params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
+        assert params["mla_kv_dim"] is None
+
     def test_missing_architecture_falls_back_to_llama(self, patch_reader):
         reader = llama_reader()
         del reader.fields["general.architecture"]

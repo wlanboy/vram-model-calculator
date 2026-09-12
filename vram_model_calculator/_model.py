@@ -30,12 +30,22 @@ SSM_ARCHS = {
 # Image/video diffusion architectures (stable-diffusion.cpp GGUF quantizations,
 # e.g. from HF caches shared with LMStudio/HF hub). These carry no LLM-style
 # block_count/n_layers metadata and are out of scope for this VRAM calculator.
+# Also includes text-diffusion LLMs (Dream, LLaDA, RND1): unlike autoregressive
+# models they don't decode token-by-token with a growing KV cache, so the
+# KV-cache VRAM estimate below doesn't apply to them either.
 DIFFUSION_ARCHS = {
     "flux", "sd1", "sd2", "sd3", "sdxl", "sdxl_refiner", "chroma",
     "lumina2", "auraflow", "hidream", "hunyuan_video", "wan", "wan2",
     "ltxv", "cosmos", "qwen_image", "pixart", "kolors", "cascade",
-    "playground",
+    "playground", "dream", "llada", "llada-moe", "rnd1",
 }
+
+# Multi-head Latent Attention (MLA) architectures (DeepSeek-V2/V3-style):
+# instead of a per-head KV cache, they cache a single shared compressed
+# vector per token per layer, sized kv_lora_rank + rope.dimension_count
+# (see llama.cpp src/models/deepseek2.cpp). The generic n_kv_heads * head_dim
+# formula wildly overstates their KV-cache VRAM.
+MLA_ARCHS = {"deepseek2", "deepseek2-ocr", "minicpm3", "glm-dsa", "mistral4"}
 
 
 class NotAnLLMError(ValueError):
@@ -159,6 +169,13 @@ def get_model_params(file_path, file_size_bytes=None):
         # 0 means "same as n_heads" in llama.cpp convention
         n_kv_heads = n_heads if (raw_kv is not None and raw_kv == 0) else raw_kv
 
+    mla_kv_dim = None
+    if arch_lower in MLA_ARCHS:
+        kv_lora_rank = get_safe_int(reader, f"{arch}.attention.kv_lora_rank")
+        rope_dim = get_safe_int(reader, f"{arch}.rope.dimension_count")
+        if kv_lora_rank and rope_dim:
+            mla_kv_dim = kv_lora_rank + rope_dim
+
     raw_name = clean_name(get_str(reader, "general.name"))
     name = resolve_name(raw_name, file_path)
 
@@ -175,6 +192,7 @@ def get_model_params(file_path, file_size_bytes=None):
         "n_embd": n_embd,
         "n_heads": n_heads,
         "n_kv_heads": n_kv_heads,
+        "mla_kv_dim": mla_kv_dim,
         "n_ff": n_ff,
         "n_experts": get_safe_int(reader, f"{arch}.expert_count"),
         "n_experts_used": get_safe_int(reader, f"{arch}.expert_used_count"),
