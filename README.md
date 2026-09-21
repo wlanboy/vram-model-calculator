@@ -138,7 +138,8 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 | `n_layers` | Anzahl der Transformer-Blöcke |
 | `n_embd` | Embedding-Dimension (Hidden Size) |
 | `n_heads` / `n_kv_heads` | Attention-Heads / KV-Heads (`null` bei SSM/Hybrid-Architekturen) |
-| `kv_bytes_per_ctx_token` | Vorberechnete KV-Cache-Größe pro Kontext-Token in Bytes (siehe `ModelShape` in `_model.py`) — einzige Quelle der KV-Cache-Formel, sowohl `vram_calculator.py` als auch `filter.js` multiplizieren dies nur noch mit der Kontextlänge |
+| `kv_bytes_per_ctx_token` | Vorberechnete KV-Cache-Größe pro Kontext-Token in Bytes für die vollen/globalen Attention-Layer (siehe `ModelShape` in `_model.py`) — einzige Quelle der KV-Cache-Formel, sowohl `vram_calculator.py` als auch `filter.js` multiplizieren dies nur noch mit der Kontextlänge |
+| `kv_bytes_per_ctx_token_swa` / `swa_window` / `swa_layers` | Bei Sliding-Window-Attention (Gemma3/4, Cohere2, gpt-oss, …): Bytes/Token für die lokalen Layer, gedeckelt auf `min(ctx, swa_window)` statt der vollen Kontextlänge |
 | `n_experts` / `n_experts_used` | MoE-Parameter (falls vorhanden) |
 | `quant` | Quantisierungstyp (`Q4_K_M`, `Q8_0`, `F16`, …), automatisch aus `gguf.constants.LlamaFileType` abgeleitet |
 | `n_ctx_orig` | Trainings-Kontextfenster des Modells |
@@ -242,14 +243,16 @@ USECASES = {
 
 ```
 Gewichte-VRAM  = file_size_gb
-KV-Cache-VRAM  = (kv_bytes_per_ctx_token × ctx_tokens) / 1024³
+KV-Cache-VRAM  = (kv_bytes_per_ctx_token × ctx_tokens
+                  + kv_bytes_per_ctx_token_swa × min(ctx_tokens, swa_window)) / 1024³
 Gesamt         = Gewichte + KV-Cache
 ```
 
-`kv_bytes_per_ctx_token` wird beim Scan von `_model.py` (`ModelShape.kv_bytes_per_ctx_token()`) berechnet und im Cache gespeichert:
+Der zweite Summand entfällt (`swa_window` ist `null`), solange das Modell keine Sliding-Window-Attention nutzt. `kv_bytes_per_ctx_token`/`kv_bytes_per_ctx_token_swa` werden beim Scan von `_model.py` (`ModelShape.kv_bytes_per_ctx_token()`/`kv_bytes_per_ctx_token_swa()`) berechnet und im Cache gespeichert:
 
 ```
-Klassische Attention: 2 × n_layers × n_kv_heads × head_dim × 2   (head_dim = n_embd / n_heads)
+Klassische Attention (globale Layer): 2 × n_globale_layer × n_kv_heads × head_dim × 2   (head_dim = n_embd / n_heads)
+Sliding-Window-Layer (falls vorhanden): 2 × swa_layers × n_kv_heads × head_dim × 2, gedeckelt auf swa_window Tokens
 MLA (DeepSeek2 u.a.):  n_layers × mla_kv_dim × 2
 SSM-/Hybrid-Modelle (n_kv_heads = null): 0
 ```

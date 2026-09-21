@@ -45,10 +45,16 @@ function activeGpuLimits() {
     // ── VRAM calculation ─────────────────────────────────────
 
     // Bytes/token kommt vorberechnet aus models_cache.json (siehe
-    // ModelShape.kv_bytes_per_ctx_token in _model.py) - einzige Quelle der
-    // KV-Cache-Formel, hier nur noch mit ctx multipliziert.
+    // ModelShape.kv_bytes_per_ctx_token/_swa in _model.py) - einzige Quelle
+    // der KV-Cache-Formel. kvBytesPerCtxTokenSwa gilt nur bis swaWindow Tokens
+    // (Sliding-Window-Attention-Layer wie bei Gemma3/4, Cohere2, gpt-oss
+    // cachen nie mehr als das Fenster, unabhängig vom gewählten Kontext).
     function calcKv(model, ctx) {
-        return (model.kvBytesPerCtxToken * ctx) / (1024 ** 3);
+        let bytes = model.kvBytesPerCtxToken * ctx;
+        if (model.swaWindow) {
+            bytes += model.kvBytesPerCtxTokenSwa * Math.min(ctx, model.swaWindow);
+        }
+        return bytes / (1024 ** 3);
     }
 
     function buildModels(raw) {
@@ -72,6 +78,8 @@ function activeGpuLimits() {
                 moe,
                 isSSM,
                 kvBytesPerCtxToken: data.kv_bytes_per_ctx_token || 0,
+                kvBytesPerCtxTokenSwa: data.kv_bytes_per_ctx_token_swa || 0,
+                swaWindow: data.swa_window || null,
             });
         }
         return result;
