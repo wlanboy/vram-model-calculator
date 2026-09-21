@@ -127,6 +127,24 @@ class TestNeedsScan:
         cache = {"key": {"file_size_bytes": 10, "has_missing_fields": True}}
         assert needs_scan("key", str(f), cache) is True
 
+    def test_true_for_llm_entry_scanned_before_swa_support(self, tmp_path):
+        f = tmp_path / "model.gguf"
+        f.write_bytes(b"x" * 10)
+        cache = {"key": {"file_size_bytes": 10, "type": "llm"}}
+        assert needs_scan("key", str(f), cache) is True
+
+    def test_false_for_llm_entry_with_swa_window_already_scanned(self, tmp_path):
+        f = tmp_path / "model.gguf"
+        f.write_bytes(b"x" * 10)
+        cache = {"key": {"file_size_bytes": 10, "type": "llm", "swa_window": None}}
+        assert needs_scan("key", str(f), cache) is False
+
+    def test_false_for_non_llm_entry_without_swa_window(self, tmp_path):
+        f = tmp_path / "model.gguf"
+        f.write_bytes(b"x" * 10)
+        cache = {"key": {"file_size_bytes": 10, "type": "adapter"}}
+        assert needs_scan("key", str(f), cache) is False
+
 
 class TestUpdateCache:
     def test_scans_new_files_and_writes_cache(self, tmp_path, monkeypatch, capsys):

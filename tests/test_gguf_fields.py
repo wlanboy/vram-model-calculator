@@ -1,11 +1,13 @@
 
-from tests.conftest import FakeBytesPart, FakeField, FakeReader, int_field, str_field
+from tests.conftest import FakeBytesPart, FakeField, FakeReader, array_field, int_field, str_field
 from vram_model_calculator.gguf_fields import (
     FILE_TYPE_MAP,
     decode_bytes,
     field_is_string,
+    get_int_list,
     get_nonneg_int,
     get_safe_int,
+    get_sliding_window,
     get_str,
     get_vocab_size,
     iter_decoded_parts,
@@ -130,3 +132,60 @@ def test_file_type_map_has_known_entries():
     assert FILE_TYPE_MAP[0] == "F32"
     assert FILE_TYPE_MAP[1] == "F16"
     assert 38 in FILE_TYPE_MAP
+
+
+class TestGetIntList:
+    def test_missing_key_returns_none(self):
+        reader = FakeReader({})
+        assert get_int_list(reader, "k") is None
+
+    def test_scalar_field_returns_single_element_list(self):
+        reader = FakeReader({"k": int_field(6)})
+        assert get_int_list(reader, "k") == [6]
+
+    def test_array_field_returns_all_elements(self):
+        reader = FakeReader({"k": array_field([1, 0, 0, 1])})
+        assert get_int_list(reader, "k") == [1, 0, 0, 1]
+
+    def test_unparseable_value_returns_none(self):
+        reader = FakeReader({"k": FakeField(parts=["not-an-int"])})
+        assert get_int_list(reader, "k") is None
+
+
+class TestGetSlidingWindow:
+    def test_no_window_returns_none_zero(self):
+        reader = FakeReader({})
+        assert get_sliding_window(reader, "gemma3", 32) == (None, 0)
+
+    def test_zero_layers_returns_none_zero(self):
+        reader = FakeReader({"gemma3.attention.sliding_window": int_field(1024)})
+        assert get_sliding_window(reader, "gemma3", 0) == (None, 0)
+
+    def test_window_without_pattern_marks_every_layer_local(self):
+        reader = FakeReader({"mistral.attention.sliding_window": int_field(4096)})
+        assert get_sliding_window(reader, "mistral", 32) == (4096, 32)
+
+    def test_periodic_pattern_every_6th_layer_is_global(self):
+        # Gemma3-style: pattern=6 -> 1 global layer per 6, rest local.
+        reader = FakeReader({
+            "gemma3.attention.sliding_window": int_field(1024),
+            "gemma3.attention.sliding_window_pattern": int_field(6),
+        })
+        window, swa_layers = get_sliding_window(reader, "gemma3", 12)
+        assert window == 1024
+        assert swa_layers == 10  # 2 global (layers 6, 12), 10 local
+
+    def test_nonpositive_pattern_marks_every_layer_local(self):
+        reader = FakeReader({
+            "arch.attention.sliding_window": int_field(2048),
+            "arch.attention.sliding_window_pattern": int_field(0),
+        })
+        assert get_sliding_window(reader, "arch", 8) == (2048, 8)
+
+    def test_explicit_per_layer_array(self):
+        # true (1) = local/SWA, false (0) = full/global attention.
+        reader = FakeReader({
+            "arch.attention.sliding_window": int_field(512),
+            "arch.attention.sliding_window_pattern": array_field([1, 1, 0, 1, 1, 0]),
+        })
+        assert get_sliding_window(reader, "arch", 6) == (512, 4)

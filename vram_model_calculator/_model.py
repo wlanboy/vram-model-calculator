@@ -6,6 +6,7 @@ from .gguf_fields import (
     FILE_TYPE_MAP,
     get_nonneg_int,
     get_safe_int,
+    get_sliding_window,
     get_str,
     get_vocab_size,
     open_gguf_reader,
@@ -80,10 +81,12 @@ class ModelShape:
     """The handful of GGUF dimensions that determine KV-cache size.
 
     These fields only ever mean anything together, so they travel as one
-    value instead of five loose parameters. `kv_bytes_per_ctx_token()` is the
-    single source of truth for the KV-cache formula: its result is stored in
-    each cache entry as `kv_bytes_per_ctx_token`, and every consumer
-    (vram_calculator.py, filter.js) just multiplies that by a context length
+    value instead of loose parameters. `kv_bytes_per_ctx_token()` and
+    `kv_bytes_per_ctx_token_swa()` are the single source of truth for the
+    KV-cache formula: their results are stored in each cache entry as
+    `kv_bytes_per_ctx_token`/`kv_bytes_per_ctx_token_swa`, and every consumer
+    (vram_calculator.py, filter.js) computes
+    `kv_bytes_per_ctx_token * ctx + kv_bytes_per_ctx_token_swa * min(ctx, swa_window)`
     instead of re-deriving the per-architecture math itself.
     """
 
@@ -92,22 +95,47 @@ class ModelShape:
     n_heads: int
     n_kv_heads: int | None  # None => SSM/hybrid: no classic per-head KV cache
     mla_kv_dim: int | None = None
+    # Sliding-window attention (Gemma2/3/4, Cohere2, gpt-oss, ...): swa_layers
+    # of the model's n_layers cache only swa_window tokens each, regardless of
+    # context length, instead of scaling with the full context like the rest.
+    swa_layers: int = 0
+    swa_window: int | None = None
 
     @property
     def is_ssm(self):
         return self.n_kv_heads is None
 
-    def kv_bytes_per_ctx_token(self):
-        if self.mla_kv_dim:
-            # MLA architectures (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cache
-            # a single shared compressed vector per token/layer instead of a
-            # value per KV-head.
-            return self.n_layers * self.mla_kv_dim * KV_BYTES_PER_ELEMENT
+    def _kv_dim_bytes_per_layer(self):
         if self.is_ssm or not self.n_kv_heads:
             return 0
         head_dim = self.n_embd // (self.n_heads or 1)
         kv_dim = self.n_kv_heads * head_dim
-        return KV_TENSORS_PER_LAYER * self.n_layers * kv_dim * KV_BYTES_PER_ELEMENT
+        return KV_TENSORS_PER_LAYER * kv_dim * KV_BYTES_PER_ELEMENT
+
+    def kv_bytes_per_ctx_token(self):
+        """Bytes of KV-cache per context token contributed by the model's
+        full/global-attention layers (all layers, unless swa_layers carves
+        some out into kv_bytes_per_ctx_token_swa instead)."""
+        if self.mla_kv_dim:
+            # MLA architectures (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cache
+            # a single shared compressed vector per token/layer instead of a
+            # value per KV-head. They don't combine with sliding-window
+            # attention in practice, so swa_layers is ignored here.
+            return self.n_layers * self.mla_kv_dim * KV_BYTES_PER_ELEMENT
+        # swa_layers only comes out of the global count once swa_window is
+        # set too, so a caller that leaves swa_window unset (or 0) still gets
+        # the correct total: every layer counted as full/global attention.
+        swa_layers = self.swa_layers if self.swa_window else 0
+        global_layers = self.n_layers - swa_layers
+        return global_layers * self._kv_dim_bytes_per_layer()
+
+    def kv_bytes_per_ctx_token_swa(self):
+        """Bytes of KV-cache per context token contributed by the model's
+        local/sliding-window-attention layers, to be multiplied by
+        min(ctx, swa_window) rather than the raw context length."""
+        if self.mla_kv_dim or not self.swa_window:
+            return 0
+        return self.swa_layers * self._kv_dim_bytes_per_layer()
 
 
 def get_mmproj_params(reader, file_path, file_size_bytes):
@@ -239,6 +267,8 @@ def get_model_params(file_path, file_size_bytes=None):
         if kv_lora_rank and rope_dim:
             mla_kv_dim = kv_lora_rank + rope_dim
 
+    swa_window, swa_layers = get_sliding_window(reader, arch, n_layers or 0)
+
     raw_name = clean_name(get_str(reader, "general.name"))
     name = resolve_name(raw_name, file_path)
 
@@ -248,6 +278,8 @@ def get_model_params(file_path, file_size_bytes=None):
         n_heads=n_heads or 0,
         n_kv_heads=n_kv_heads,
         mla_kv_dim=mla_kv_dim,
+        swa_layers=swa_layers,
+        swa_window=swa_window,
     )
 
     params = {
@@ -265,6 +297,9 @@ def get_model_params(file_path, file_size_bytes=None):
         "n_kv_heads": n_kv_heads,
         "mla_kv_dim": mla_kv_dim,
         "kv_bytes_per_ctx_token": shape.kv_bytes_per_ctx_token(),
+        "kv_bytes_per_ctx_token_swa": shape.kv_bytes_per_ctx_token_swa(),
+        "swa_layers": swa_layers,
+        "swa_window": swa_window,
         "n_ff": n_ff,
         "n_experts": get_safe_int(reader, f"{arch}.expert_count"),
         "n_experts_used": get_safe_int(reader, f"{arch}.expert_used_count"),

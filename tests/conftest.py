@@ -7,7 +7,7 @@ model just that surface without needing real GGUF binary files.
 """
 import pytest
 
-from vram_model_calculator.gguf_fields import _STRING_TYPE
+from vram_model_calculator.gguf_fields import _ARRAY_TYPE, _STRING_TYPE
 
 
 class FakeField:
@@ -54,6 +54,13 @@ def str_field(text):
 
 def int_field(value):
     return FakeField(parts=[value], types=[0])
+
+
+def array_field(values):
+    """Stand-in for a GGUF array field (e.g. sliding_window_pattern as a
+    per-layer bool array): one raw value per element, identity-mapped."""
+    values = list(values)
+    return FakeField(parts=values, types=[_ARRAY_TYPE, 0], data=list(range(len(values))))
 
 
 @pytest.fixture

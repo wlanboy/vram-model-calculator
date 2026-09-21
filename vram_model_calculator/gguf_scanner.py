@@ -114,7 +114,11 @@ def needs_scan(rel_key, abs_path, cache):
     entry = cache[rel_key]
     if entry.get("file_size_bytes") != os.path.getsize(abs_path):
         return True
-    return entry.get("has_missing_fields", False)
+    if entry.get("has_missing_fields", False):
+        return True
+    # Entries scanned before sliding-window-attention support existed lack
+    # this key; rescanning (once) picks it up without needing a cache wipe.
+    return entry.get("type") == MODEL_TYPE_LLM and "swa_window" not in entry
 
 
 def update_cache(base_dirs):

@@ -30,8 +30,10 @@ except ImportError:
 try:
     from gguf.constants import GGUFValueType as _GVT
     _STRING_TYPE = _GVT.STRING
+    _ARRAY_TYPE = _GVT.ARRAY
 except ImportError:
     _STRING_TYPE = None
+    _ARRAY_TYPE = None
 
 
 def open_gguf_reader(file_path):
@@ -113,6 +115,62 @@ def get_safe_int(reader, *keys):
 def get_nonneg_int(reader, *keys):
     """Try multiple keys in order, return first parsable integer found (0 is valid)."""
     return _get_int(reader, keys, lambda v: True)
+
+
+def _to_int(val):
+    if hasattr(val, 'tolist'):
+        val = val.tolist()
+    if isinstance(val, list):
+        val = val[0]
+    return int(val)
+
+
+def get_int_list(reader, key):
+    """Reads a field's values as a list of ints, whether it's stored as a
+    GGUF array (one int per element) or a plain scalar (a one-element list).
+    Returns None if the key is absent or unparsable."""
+    field = reader.fields.get(key)
+    if not field:
+        return None
+    try:
+        if field.types and field.types[0] == _ARRAY_TYPE:
+            return [_to_int(field.parts[idx]) for idx in field.data]
+        return [_to_int(field.parts[-1])]
+    except (AttributeError, IndexError, TypeError, ValueError):
+        return None
+
+
+def get_sliding_window(reader, arch, n_layers):
+    """Reads {arch}.attention.sliding_window(_pattern) and returns
+    (window_size, swa_layer_count): how many tokens the model's
+    local/sliding-window-attention layers cache, and how many of its
+    n_layers use that local attention (the rest use full/global attention
+    with an uncapped, ctx-sized KV cache). Returns (None, 0) if the model
+    doesn't use sliding-window attention at all.
+    """
+    window = get_safe_int(reader, f"{arch}.attention.sliding_window")
+    if not window or not n_layers:
+        return None, 0
+
+    pattern = get_int_list(reader, f"{arch}.attention.sliding_window_pattern")
+    if pattern is None:
+        # A window with no pattern override: every layer is local
+        # (continuous sliding-window attention, e.g. early Mistral-7B-style
+        # models).
+        return window, n_layers
+
+    if len(pattern) > 1:
+        # Explicit per-layer array (gguf_writer.add_sliding_window_pattern):
+        # a nonzero value means this layer is local/SWA, 0 means full/global.
+        return window, sum(1 for v in pattern[:n_layers] if v)
+
+    period = pattern[0]
+    if period <= 0:
+        return window, n_layers
+
+    # Periodic pattern (llama.cpp convention, e.g. Gemma3/Cohere2): every
+    # period-th layer (1-indexed) is full/global attention, the rest local.
+    return window, sum(1 for i in range(n_layers) if (i + 1) % period != 0)
 
 
 def get_vocab_size(reader, arch):

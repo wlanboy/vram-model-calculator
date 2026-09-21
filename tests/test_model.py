@@ -209,6 +209,35 @@ class TestGetModelParamsLlm:
         assert params["n_experts"] == 8
         assert params["n_experts_used"] == 2
 
+    def test_sliding_window_attention_splits_kv_cache(self, patch_reader):
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("gemma3"),
+            "gemma3.context_length": int_field(32768),
+            "gemma3.block_count": int_field(6),
+            "gemma3.embedding_length": int_field(4096),
+            "gemma3.attention.head_count": int_field(32),
+            "gemma3.feed_forward_length": int_field(11008),
+            "gemma3.attention.head_count_kv": int_field(8),
+            "gemma3.vocab_size": int_field(32000),
+            "gemma3.attention.sliding_window": int_field(1024),
+            "gemma3.attention.sliding_window_pattern": int_field(6),
+        })
+        params = get_model_params("/models/Gemma3/model.gguf", file_size_bytes=1)
+        head_dim = 4096 // 32
+        per_layer = 2 * (8 * head_dim) * 2
+        # pattern=6 over 6 layers -> 1 global (layer 6), 5 local/SWA.
+        assert params["swa_window"] == 1024
+        assert params["swa_layers"] == 5
+        assert params["kv_bytes_per_ctx_token"] == per_layer * 1
+        assert params["kv_bytes_per_ctx_token_swa"] == per_layer * 5
+
+    def test_no_sliding_window_leaves_new_fields_empty(self, patch_reader):
+        patch_reader["reader"] = llama_reader()
+        params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
+        assert params["swa_window"] is None
+        assert params["swa_layers"] == 0
+        assert params["kv_bytes_per_ctx_token_swa"] == 0
+
 
 class TestModelShapeKvBytesPerCtxToken:
     """Direct unit tests for the one place the KV-cache formula lives: every
@@ -233,6 +262,33 @@ class TestModelShapeKvBytesPerCtxToken:
     def test_zero_kv_heads_has_no_kv_cache(self):
         shape = ModelShape(n_layers=24, n_embd=2048, n_heads=16, n_kv_heads=0)
         assert shape.kv_bytes_per_ctx_token() == 0
+
+    def test_swa_splits_global_and_local_contribution(self):
+        shape = ModelShape(
+            n_layers=6, n_embd=4096, n_heads=32, n_kv_heads=8,
+            swa_layers=5, swa_window=1024,
+        )
+        head_dim = 4096 // 32
+        per_layer = 2 * (8 * head_dim) * 2
+        assert shape.kv_bytes_per_ctx_token() == per_layer * 1
+        assert shape.kv_bytes_per_ctx_token_swa() == per_layer * 5
+
+    def test_swa_layers_without_window_falls_back_to_full_attention(self):
+        # swa_window unset means the pattern info wasn't usable; treat every
+        # layer as global rather than silently dropping swa_layers' KV cache.
+        shape = ModelShape(n_layers=6, n_embd=4096, n_heads=32, n_kv_heads=8, swa_layers=5, swa_window=None)
+        head_dim = 4096 // 32
+        per_layer = 2 * (8 * head_dim) * 2
+        assert shape.kv_bytes_per_ctx_token() == per_layer * 6
+        assert shape.kv_bytes_per_ctx_token_swa() == 0
+
+    def test_mla_arch_ignores_swa_layers(self):
+        shape = ModelShape(
+            n_layers=32, n_embd=4096, n_heads=32, n_kv_heads=32, mla_kv_dim=576,
+            swa_layers=10, swa_window=1024,
+        )
+        assert shape.kv_bytes_per_ctx_token() == 32 * 576 * 2
+        assert shape.kv_bytes_per_ctx_token_swa() == 0
 
 
 class TestGetModelParamsAdapter:

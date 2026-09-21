@@ -70,9 +70,13 @@ def calculate_vram_matrix():
         embd = coerce_legacy_cache_int(data.get("n_embd"))
         # SSM-Modelle (LFM2, Nemotron-H) haben n_kv_heads=null → kein klassischer KV-Cache
         is_ssm = data.get("n_kv_heads") is None
-        # Von _model.py vorberechnet (siehe ModelShape.kv_bytes_per_ctx_token):
-        # einzige Quelle der KV-Cache-Formel, hier nur noch mit ctx multipliziert.
+        # Von _model.py vorberechnet (siehe ModelShape.kv_bytes_per_ctx_token/
+        # _swa): einzige Quelle der KV-Cache-Formel. kv_bytes_per_ctx_token_swa
+        # gilt nur bis swa_window Tokens (Sliding-Window-Attention-Layer wie
+        # bei Gemma3/4, Cohere2, gpt-oss cachen nie mehr als das Fenster).
         kv_bytes_per_ctx_token = coerce_legacy_cache_int(data.get("kv_bytes_per_ctx_token"))
+        kv_bytes_per_ctx_token_swa = coerce_legacy_cache_int(data.get("kv_bytes_per_ctx_token_swa"))
+        swa_window = data.get("swa_window")
         base_size = data.get("file_size_gb", 0)
 
         if layers == 0 or embd == 0:
@@ -91,7 +95,10 @@ def calculate_vram_matrix():
         print("-" * len(header))
 
         for uc_name, ctx in USECASES.items():
-            kv_vram = (kv_bytes_per_ctx_token * ctx) / (1024**3)
+            kv_vram_bytes = kv_bytes_per_ctx_token * ctx
+            if swa_window:
+                kv_vram_bytes += kv_bytes_per_ctx_token_swa * min(ctx, swa_window)
+            kv_vram = kv_vram_bytes / (1024**3)
             total = base_size + kv_vram
 
             status_row = []

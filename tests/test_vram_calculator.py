@@ -149,6 +149,34 @@ class TestCalculateVramMatrix:
         expected_kv = (36864 * ctx) / (1024**3)
         assert f"{expected_kv:>8.2f}" in out
 
+    def test_swa_kv_vram_caps_local_layers_at_window(self, tmp_path, monkeypatch, capsys):
+        # 1 global layer (scales with ctx) + 5 local/SWA layers (capped at
+        # swa_window=1024 tokens regardless of the usecase's context length).
+        cache = {
+            "_version": 1,
+            "Gemma3Like": {
+                "type": "llm",
+                "arch": "gemma3",
+                "n_layers": 6,
+                "n_embd": 4096,
+                "n_kv_heads": 8,
+                "kv_bytes_per_ctx_token": 2048,       # 1 global layer's per-token bytes
+                "kv_bytes_per_ctx_token_swa": 10240,  # 5 local layers' per-token bytes
+                "swa_window": 1024,
+                "file_size_gb": 1.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix()
+        out = strip_ansi(capsys.readouterr().out)
+
+        ctx = vram_calculator.USECASES["Doc (64k)"]  # far beyond the 1024-token window
+        expected_kv = (2048 * ctx + 10240 * 1024) / (1024**3)
+        assert f"{expected_kv:>8.2f}" in out
+
     def test_ssm_model_shows_ssm_label_and_no_kv_growth(self, tmp_path, monkeypatch, capsys):
         cache = {
             "_version": 1,
