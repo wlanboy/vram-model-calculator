@@ -1,5 +1,12 @@
 
-from tests.conftest import FakeBytesPart, FakeField, FakeReader, array_field, int_field, str_field
+from tests.conftest import (
+    FakeBytesPart,
+    FakeField,
+    FakeReader,
+    array_field,
+    int_field,
+    str_field,
+)
 from vram_model_calculator.gguf_fields import (
     FILE_TYPE_MAP,
     decode_bytes,
