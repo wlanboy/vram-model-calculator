@@ -30,7 +30,7 @@ DEFAULT_DIRS = [
 
 # Path substrings (case-insensitive) that mark a model as excluded from
 # scanning entirely, e.g. "heretic"-style abliterated/uncensored finetunes.
-SKIP_PATH_SUBSTRINGS = ["heretic", "uncensored", "abliterated", "huihui", "dolphin"]
+SKIP_PATH_SUBSTRINGS = ["heretic", "heresy", "uncensored", "abliterated", "huihui", "dolphin"]
 
 
 def get_shard_info(path):
