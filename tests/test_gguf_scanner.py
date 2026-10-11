@@ -104,46 +104,32 @@ class TestBackfillKvBytes:
 
 
 class TestNeedsScan:
-    def test_true_when_key_absent(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
-        assert needs_scan("missing-key", str(f), {}) is True
+    def test_true_when_key_absent(self):
+        assert needs_scan("missing-key", 10, {}) is True
 
-    def test_true_when_size_changed(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
+    def test_true_when_size_changed(self):
         cache = {"key": {"file_size_bytes": 5}}
-        assert needs_scan("key", str(f), cache) is True
+        assert needs_scan("key", 10, cache) is True
 
-    def test_false_when_up_to_date(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
+    def test_false_when_up_to_date(self):
         cache = {"key": {"file_size_bytes": 10}}
-        assert needs_scan("key", str(f), cache) is False
+        assert needs_scan("key", 10, cache) is False
 
-    def test_true_when_missing_fields_flag_set(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
+    def test_true_when_missing_fields_flag_set(self):
         cache = {"key": {"file_size_bytes": 10, "has_missing_fields": True}}
-        assert needs_scan("key", str(f), cache) is True
+        assert needs_scan("key", 10, cache) is True
 
-    def test_true_for_llm_entry_scanned_before_swa_support(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
+    def test_true_for_llm_entry_scanned_before_swa_support(self):
         cache = {"key": {"file_size_bytes": 10, "type": "llm"}}
-        assert needs_scan("key", str(f), cache) is True
+        assert needs_scan("key", 10, cache) is True
 
-    def test_false_for_llm_entry_with_swa_window_already_scanned(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
+    def test_false_for_llm_entry_with_swa_window_already_scanned(self):
         cache = {"key": {"file_size_bytes": 10, "type": "llm", "swa_window": None}}
-        assert needs_scan("key", str(f), cache) is False
+        assert needs_scan("key", 10, cache) is False
 
-    def test_false_for_non_llm_entry_without_swa_window(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x" * 10)
+    def test_false_for_non_llm_entry_without_swa_window(self):
         cache = {"key": {"file_size_bytes": 10, "type": "adapter"}}
-        assert needs_scan("key", str(f), cache) is False
+        assert needs_scan("key", 10, cache) is False
 
 
 class TestUpdateCache:
@@ -209,3 +195,174 @@ class TestUpdateCache:
         cache = update_cache([str(tmp_path / "models")])
         assert cache == {}
         assert "kein LLM" in capsys.readouterr().out
+
+    def test_up_to_date_cache_is_not_rewritten(self, tmp_path, monkeypatch):
+        model_dir = tmp_path / "models" / "MyModel-GGUF"
+        model_dir.mkdir(parents=True)
+        (model_dir / "model.gguf").write_bytes(b"data")
+        monkeypatch.chdir(tmp_path)
+        monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
+        monkeypatch.setattr(gguf_scanner, "get_model_params", fake_params)
+
+        update_cache([str(tmp_path / "models")])
+        update_cache([str(tmp_path / "models")])
+
+        with open("models_cache.json") as fh:
+            assert json.load(fh)["_version"] == 1
+
+
+def fake_params(path, file_size_bytes=None):
+    return {"type": "llm", "name": "x", "file_size_bytes": file_size_bytes, "swa_window": None}
+
+
+@pytest.fixture
+def scan_env(tmp_path, monkeypatch):
+    """chdir into tmp_path and record get_model_params calls."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
+    calls = []
+
+    def recording_params(path, file_size_bytes=None):
+        calls.append((path, file_size_bytes))
+        return fake_params(path, file_size_bytes)
+
+    monkeypatch.setattr(gguf_scanner, "get_model_params", recording_params)
+    return calls
+
+
+class TestShards:
+    def test_complete_shard_set_scanned_once_with_total_size(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "Big-GGUF"
+        d.mkdir(parents=True)
+        (d / "big-00001-of-00002.gguf").write_bytes(b"x" * 100)
+        (d / "big-00002-of-00002.gguf").write_bytes(b"x" * 50)
+
+        cache = update_cache([str(tmp_path / "models")])
+        update_cache([str(tmp_path / "models")])
+
+        assert len(scan_env) == 1
+        entry = cache["Big-GGUF/big-00001-of-00002.gguf"]
+        assert entry["file_size_bytes"] == 150
+        assert entry["num_shards"] == 2
+
+    def test_incomplete_shard_set_is_reported_not_scanned(self, tmp_path, scan_env, capsys):
+        d = tmp_path / "models" / "Big-GGUF"
+        d.mkdir(parents=True)
+        (d / "big-00001-of-00003.gguf").write_bytes(b"x")
+        (d / "big-00003-of-00003.gguf").write_bytes(b"x")
+
+        cache = update_cache([str(tmp_path / "models")])
+
+        assert scan_env == []
+        assert cache == {}
+        assert "unvollständiger Shard-Satz" in capsys.readouterr().out
+
+
+class TestKeys:
+    def test_hf_repo_folder_is_kept_in_key(self):
+        key = "models--org--Repo-GGUF/snapshots/abc/file.gguf"
+        assert _migrate_key(key) == key
+
+    def test_colliding_short_keys_fall_back_to_full_path(self, tmp_path, scan_env):
+        for org in ("foo", "bar"):
+            d = tmp_path / "models" / org
+            d.mkdir(parents=True)
+            (d / "model.gguf").write_bytes(org.encode())
+
+        cache = update_cache([str(tmp_path / "models")])
+
+        assert set(cache) == {"foo/model.gguf", "bar/model.gguf"}
+
+    def test_same_file_under_two_base_dirs_is_scanned_once(self, tmp_path, scan_env, capsys):
+        for base in ("a", "b"):
+            d = tmp_path / base / "org" / "My-GGUF"
+            d.mkdir(parents=True)
+            (d / "m.gguf").write_bytes(b"data")
+
+        cache = update_cache([str(tmp_path / "a"), str(tmp_path / "b")])
+
+        assert list(cache) == ["My-GGUF/m.gguf"]
+        assert len(scan_env) == 1
+        assert "doppelte Datei" in capsys.readouterr().out
+
+
+class TestRobustness:
+    def test_broken_symlink_does_not_abort_scan(self, tmp_path, scan_env, capsys):
+        d = tmp_path / "models" / "My-GGUF"
+        d.mkdir(parents=True)
+        (d / "good.gguf").write_bytes(b"data")
+        (d / "broken.gguf").symlink_to(tmp_path / "missing-blob")
+
+        cache = update_cache([str(tmp_path / "models")])
+
+        assert "My-GGUF/good.gguf" in cache
+        assert "SCAN-FEHLER" in capsys.readouterr().out
+
+    def test_non_dict_cache_entry_is_rescanned(self):
+        assert needs_scan("key", 10, {"key": "garbage"}) is True
+
+    def test_uppercase_extension_is_found(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "My-GGUF"
+        d.mkdir(parents=True)
+        (d / "MODEL.GGUF").write_bytes(b"data")
+
+        assert "My-GGUF/MODEL.GGUF" in update_cache([str(tmp_path / "models")])
+
+    def test_skip_filter_ignores_base_dir_path(self, tmp_path, scan_env):
+        d = tmp_path / "dolphin" / "My-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+
+        assert "My-GGUF/m.gguf" in update_cache([str(tmp_path / "dolphin")])
+
+    def test_no_tmp_file_left_after_save(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "My-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+
+        update_cache([str(tmp_path / "models")])
+
+        assert not (tmp_path / "models_cache.json.tmp").exists()
+
+
+class TestMigrationPersistence:
+    def test_migrated_cache_is_saved_without_new_scans(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "My-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+        legacy = {"_version": 3, "Org/My-GGUF/m.gguf": fake_params(None, 4)}
+        (tmp_path / "models_cache.json").write_text(json.dumps(legacy))
+
+        update_cache([str(tmp_path / "models")])
+
+        assert scan_env == []
+        saved = json.loads((tmp_path / "models_cache.json").read_text())
+        assert saved["_version"] == 4
+        assert "My-GGUF/m.gguf" in saved
+
+
+class TestPrune:
+    def _setup(self, tmp_path):
+        d = tmp_path / "models" / "My-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+        cache = {"_version": 1, "My-GGUF/m.gguf": fake_params(None, 4), "Gone-GGUF/x.gguf": fake_params(None, 9)}
+        (tmp_path / "models_cache.json").write_text(json.dumps(cache))
+
+    def test_stale_entries_kept_without_prune(self, tmp_path, scan_env, capsys):
+        self._setup(tmp_path)
+        cache = update_cache([str(tmp_path / "models")])
+        assert "Gone-GGUF/x.gguf" in cache
+        assert "--prune" in capsys.readouterr().out
+
+    def test_stale_entries_removed_with_prune(self, tmp_path, scan_env):
+        self._setup(tmp_path)
+        cache = update_cache([str(tmp_path / "models")], prune=True)
+        assert set(cache) == {"My-GGUF/m.gguf"}
+        saved = json.loads((tmp_path / "models_cache.json").read_text())
+        assert "Gone-GGUF/x.gguf" not in saved
+
+    def test_prune_skipped_when_no_files_found(self, tmp_path, scan_env):
+        self._setup(tmp_path)
+        cache = update_cache([str(tmp_path / "empty-or-unmounted")], prune=True)
+        assert "Gone-GGUF/x.gguf" in cache

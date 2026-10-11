@@ -18,6 +18,10 @@ def main():
 
     scan_parser = subparsers.add_parser("scan", help="Modelle scannen und models_cache.json aktualisieren")
     scan_parser.add_argument("paths", nargs="*", help="Zu scannende Pfade (Default: bekannte Modell-Verzeichnisse)")
+    scan_parser.add_argument(
+        "--prune", action="store_true",
+        help="Cache-Einträge ohne gefundene Datei entfernen (nur wenn alle Modell-Verzeichnisse erreichbar sind)",
+    )
 
     check_parser = subparsers.add_parser("check", help="GGUF-Dateien auf Integritaet pruefen")
     check_parser.add_argument("paths", nargs="*", help="Zu pruefende Pfade (Default: bekannte Modell-Verzeichnisse)")
@@ -38,7 +42,7 @@ def main():
     args = parser.parse_args()
 
     if args.command == "scan":
-        update_cache(args.paths or DEFAULT_DIRS)
+        update_cache(args.paths or DEFAULT_DIRS, prune=args.prune)
         return 0
     if args.command == "check":
         sys.argv = [sys.argv[0], *args.paths]
