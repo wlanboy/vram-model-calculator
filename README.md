@@ -61,6 +61,12 @@ uv run -m vram_model_calculator.gguf_scanner /pfad/zu/weiteren/modellen
 uv run main.py scan ~/LMStudio/models/
 ```
 
+Cache-Einträge, deren Datei beim Scan nicht gefunden wurde, bleiben standardmäßig erhalten, denn ein nicht eingehängtes Laufwerk sieht genauso aus wie gelöschte Modelle. Mit `--prune` werden sie entfernt. Das sollte man nur verwenden, wenn alle Modell-Verzeichnisse erreichbar sind:
+
+```bash
+uv run main.py scan --prune
+```
+
 Der Scanner liest die Metadaten aus jeder GGUF-Datei (Architektur, Layer-Anzahl, Embedding-Dimension, Quantisierung usw.) und speichert alles in `models_cache.json`. Bereits gescannte Dateien werden beim nächsten Aufruf übersprungen. Nur neue, geänderte oder unvollständig ausgewertete Dateien werden aktualisiert.
 
 ```

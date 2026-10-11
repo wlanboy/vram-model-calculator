@@ -46,32 +46,15 @@ def get_shard_info(path):
     return None
 
 
-def _migrate_key(key):
-    """Strip org/user prefix from cache key if not already starting with a GGUF model folder.
-    HF-cache repo folders (models--org--repo) are kept, they carry the model name."""
-    parts = key.split('/')
+def _short_key(rel_path):
+    """Cache key for a path relative to its base dir: the org/user folder is
+    stripped unless the path already starts with a GGUF model folder or an
+    HF-cache repo folder (models--org--repo, which carries the model name).
+    Must only be applied once, to the full relative path."""
+    parts = rel_path.split('/')
     if len(parts) >= 2 and not parts[0].upper().endswith('-GGUF') and not parts[0].startswith('models--'):
         return '/'.join(parts[1:])
-    return key
-
-
-def _migrate_cache(cache):
-    """Normalize old-format keys with org prefix to model-relative keys, removing duplicates."""
-    migrated = {}
-    changed = 0
-    for key, entry in cache.items():
-        new_key = _migrate_key(key)
-        if new_key != key:
-            changed += 1
-            if isinstance(entry, dict):
-                entry = dict(entry)
-                entry['rel_path'] = new_key
-        if new_key not in migrated:
-            migrated[new_key] = entry
-    removed = len(cache) - len(migrated)
-    if changed:
-        print(f"♻️ {changed} Einträge migriert, {removed} Duplikate entfernt.")
-    return migrated
+    return rel_path
 
 
 def _refresh_names(cache):
@@ -212,13 +195,13 @@ def _build_candidates(pairs, errors):
 
 
 def _assign_keys(candidates):
-    """Maps cache key -> candidate. Shortened keys (see _migrate_key) can
+    """Maps cache key -> candidate. Shortened keys (see _short_key) can
     collide; identical copies (same path below different base dirs) are
     dropped, distinct files fall back to their full relative path.
     Returns (keyed, duplicate_paths)."""
     by_key = {}
     for c in candidates:
-        by_key.setdefault(_migrate_key(os.path.relpath(c.path, c.base_dir)), []).append(c)
+        by_key.setdefault(_short_key(os.path.relpath(c.path, c.base_dir)), []).append(c)
 
     keyed = {}
     duplicates = []
@@ -251,7 +234,7 @@ def update_cache(base_dirs, prune=False):
     base_dirs = [os.path.abspath(d) for d in base_dirs]
 
     raw, file_version = _load_cache()
-    cache = _backfill_kv_bytes(_refresh_names(_migrate_cache(raw)))
+    cache = _backfill_kv_bytes(_refresh_names(dict(raw)))
 
     def save_if_changed():
         if cache == raw:

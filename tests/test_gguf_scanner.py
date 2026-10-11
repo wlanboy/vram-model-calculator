@@ -5,9 +5,8 @@ import pytest
 from vram_model_calculator import gguf_scanner
 from vram_model_calculator.gguf_scanner import (
     _backfill_kv_bytes,
-    _migrate_cache,
-    _migrate_key,
     _refresh_names,
+    _short_key,
     get_shard_info,
     needs_scan,
     update_cache,
@@ -28,36 +27,19 @@ class TestGetShardInfo:
         assert get_shard_info("model-00001-of-00004.gguf.part") is None
 
 
-class TestMigrateKey:
+class TestShortKey:
     def test_strips_org_prefix(self):
-        assert _migrate_key("SomeOrg/MyModel-GGUF/file.gguf") == "MyModel-GGUF/file.gguf"
+        assert _short_key("SomeOrg/MyModel-GGUF/file.gguf") == "MyModel-GGUF/file.gguf"
 
-    def test_leaves_already_relative_key_alone(self):
-        assert _migrate_key("MyModel-GGUF/file.gguf") == "MyModel-GGUF/file.gguf"
+    def test_leaves_gguf_model_folder_alone(self):
+        assert _short_key("MyModel-GGUF/file.gguf") == "MyModel-GGUF/file.gguf"
 
     def test_single_component_key_untouched(self):
-        assert _migrate_key("file.gguf") == "file.gguf"
+        assert _short_key("file.gguf") == "file.gguf"
 
-
-class TestMigrateCache:
-    def test_migrates_and_tags_rel_path(self):
-        cache = {"SomeOrg/MyModel-GGUF/file.gguf": {"name": "MyModel"}}
-        migrated = _migrate_cache(cache)
-        assert "MyModel-GGUF/file.gguf" in migrated
-        assert migrated["MyModel-GGUF/file.gguf"]["rel_path"] == "MyModel-GGUF/file.gguf"
-
-    def test_deduplicates_after_migration(self, capsys):
-        cache = {
-            "OrgA/MyModel-GGUF/file.gguf": {"name": "A"},
-            "OrgB/MyModel-GGUF/file.gguf": {"name": "B"},
-        }
-        migrated = _migrate_cache(cache)
-        assert len(migrated) == 1
-
-    def test_no_change_when_nothing_to_migrate(self):
-        cache = {"MyModel-GGUF/file.gguf": {"name": "MyModel"}}
-        migrated = _migrate_cache(cache)
-        assert migrated == cache
+    def test_hf_repo_folder_is_kept(self):
+        key = "models--org--Repo-GGUF/snapshots/abc/file.gguf"
+        assert _short_key(key) == key
 
 
 class TestRefreshNames:
@@ -259,10 +241,6 @@ class TestShards:
 
 
 class TestKeys:
-    def test_hf_repo_folder_is_kept_in_key(self):
-        key = "models--org--Repo-GGUF/snapshots/abc/file.gguf"
-        assert _migrate_key(key) == key
-
     def test_colliding_short_keys_fall_back_to_full_path(self, tmp_path, scan_env):
         for org in ("foo", "bar"):
             d = tmp_path / "models" / org
@@ -325,20 +303,31 @@ class TestRobustness:
         assert not (tmp_path / "models_cache.json.tmp").exists()
 
 
-class TestMigrationPersistence:
-    def test_migrated_cache_is_saved_without_new_scans(self, tmp_path, scan_env):
+class TestCachePersistence:
+    def test_refreshed_cache_is_saved_without_new_scans(self, tmp_path, scan_env):
         d = tmp_path / "models" / "My-GGUF"
         d.mkdir(parents=True)
         (d / "m.gguf").write_bytes(b"data")
-        legacy = {"_version": 3, "Org/My-GGUF/m.gguf": fake_params(None, 4)}
-        (tmp_path / "models_cache.json").write_text(json.dumps(legacy))
+        old = {"_version": 3, "My-GGUF/m.gguf": {**fake_params(None, 4), "name": "org_MyModel-GGUF"}}
+        (tmp_path / "models_cache.json").write_text(json.dumps(old))
 
         update_cache([str(tmp_path / "models")])
 
         assert scan_env == []
         saved = json.loads((tmp_path / "models_cache.json").read_text())
         assert saved["_version"] == 4
-        assert "My-GGUF/m.gguf" in saved
+        assert saved["My-GGUF/m.gguf"]["name"] == "MyModel"
+
+    def test_nested_non_gguf_folder_is_not_rescanned(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "org" / "humanizer"
+        d.mkdir(parents=True)
+        (d / "h.gguf").write_bytes(b"data")
+
+        update_cache([str(tmp_path / "models")])
+        cache = update_cache([str(tmp_path / "models")])
+
+        assert len(scan_env) == 1
+        assert list(cache) == ["humanizer/h.gguf"]
 
 
 class TestPrune:
