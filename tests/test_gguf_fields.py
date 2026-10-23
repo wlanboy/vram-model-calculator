@@ -160,17 +160,26 @@ class TestGetIntList:
 
 
 class TestGetSlidingWindow:
-    def test_no_window_returns_none_zero(self):
+    def test_no_window_returns_none(self):
         reader = FakeReader({})
-        assert get_sliding_window(reader, "gemma3", 32) == (None, 0)
+        assert get_sliding_window(reader, "gemma3", 32) == (None, None)
 
-    def test_zero_layers_returns_none_zero(self):
+    def test_zero_layers_returns_none(self):
         reader = FakeReader({"gemma3.attention.sliding_window": int_field(1024)})
-        assert get_sliding_window(reader, "gemma3", 0) == (None, 0)
+        assert get_sliding_window(reader, "gemma3", 0) == (None, None)
 
-    def test_window_without_pattern_marks_every_layer_local(self):
+    def test_window_without_pattern_or_default_means_no_swa(self):
+        # llama.cpp ignores a window unless the architecture defines a layer
+        # pattern, so every layer keeps a full KV cache.
         reader = FakeReader({"mistral.attention.sliding_window": int_field(4096)})
-        assert get_sliding_window(reader, "mistral", 32) == (4096, 32)
+        assert get_sliding_window(reader, "mistral", 32) == (None, None)
+
+    def test_window_without_pattern_uses_default_period(self):
+        # Gemma3 GGUFs carry no sliding_window_pattern; llama.cpp defaults to 6.
+        reader = FakeReader({"gemma3.attention.sliding_window": int_field(1024)})
+        window, pattern = get_sliding_window(reader, "gemma3", 12, default_period=6)
+        assert window == 1024
+        assert pattern == (True,) * 5 + (False,) + (True,) * 5 + (False,)
 
     def test_periodic_pattern_every_6th_layer_is_global(self):
         # Gemma3-style: pattern=6 -> 1 global layer per 6, rest local.
@@ -178,16 +187,27 @@ class TestGetSlidingWindow:
             "gemma3.attention.sliding_window": int_field(1024),
             "gemma3.attention.sliding_window_pattern": int_field(6),
         })
-        window, swa_layers = get_sliding_window(reader, "gemma3", 12)
+        window, pattern = get_sliding_window(reader, "gemma3", 12)
         assert window == 1024
-        assert swa_layers == 10  # 2 global (layers 6, 12), 10 local
+        # 2 global (layers 6, 12), 10 local
+        assert pattern == (True,) * 5 + (False,) + (True,) * 5 + (False,)
+
+    def test_dense_first_period_puts_global_layer_first(self):
+        reader = FakeReader({"laguna.attention.sliding_window": int_field(512)})
+        _, pattern = get_sliding_window(reader, "laguna", 6, default_period=4, dense_first=True)
+        assert pattern == (False, True, True, True, False, True)
+
+    def test_period_one_means_no_local_layers(self):
+        reader = FakeReader({"phi3.attention.sliding_window": int_field(2047)})
+        _, pattern = get_sliding_window(reader, "phi3", 4, default_period=1)
+        assert pattern == (False,) * 4
 
     def test_nonpositive_pattern_marks_every_layer_local(self):
         reader = FakeReader({
             "arch.attention.sliding_window": int_field(2048),
             "arch.attention.sliding_window_pattern": int_field(0),
         })
-        assert get_sliding_window(reader, "arch", 8) == (2048, 8)
+        assert get_sliding_window(reader, "arch", 8) == (2048, (True,) * 8)
 
     def test_explicit_per_layer_array(self):
         # true (1) = local/SWA, false (0) = full/global attention.
@@ -195,4 +215,4 @@ class TestGetSlidingWindow:
             "arch.attention.sliding_window": int_field(512),
             "arch.attention.sliding_window_pattern": array_field([1, 1, 0, 1, 1, 0]),
         })
-        assert get_sliding_window(reader, "arch", 6) == (512, 4)
+        assert get_sliding_window(reader, "arch", 6) == (512, (True, True, False, True, True, False))

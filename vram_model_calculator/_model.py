@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from .detection import METADATA_DUMP_FILE, detect_mcp, detect_thinking, dump_all_fields
 from .gguf_fields import (
     FILE_TYPE_MAP,
+    get_int_list,
     get_nonneg_int,
     get_safe_int,
     get_sliding_window,
@@ -18,9 +19,11 @@ MODEL_TYPE_LLM = "llm"
 MODEL_TYPE_ADAPTER = "adapter"
 MODEL_TYPE_MMPROJ = "mmproj"
 
-# Pure SSM and hybrid SSM/attention architectures where n_kv_heads is absent
-# from the GGUF metadata (n_kv_heads not applicable, or not exposed as a
-# single global value for the hybrid attention layers)
+# Pure SSM and hybrid SSM/attention architectures. Their KV cache only covers
+# the attention layers, identified by zeros in a per-layer head_count_kv
+# array or by attention.recurrent_layers/full_attention_interval (see
+# _kv_heads_per_layer); where neither exists (pure SSMs), n_kv_heads is None
+# and there is no KV cache at all.
 SSM_ARCHS = {
     "mamba", "mamba2", "rwkv", "rwkv6", "rwkv7", "rwkv6qwen2", "arwkv7",
     "jamba", "falcon-h1", "granitehybrid", "plamo2", "plamo3",
@@ -49,6 +52,35 @@ DIFFUSION_ARCHS = {
 # formula wildly overstates their KV-cache VRAM.
 MLA_ARCHS = {"deepseek2", "deepseek2-ocr", "minicpm3", "glm-dsa", "mistral4"}
 
+# Built-in sliding-window layer pattern, (period, dense_first), for
+# architectures whose GGUFs often carry attention.sliding_window but no
+# sliding_window_pattern (Gemma3 and gpt-oss files never have one). Mirrors
+# the load_swa_pattern/set_swa_pattern defaults in llama.cpp src/models/*.cpp;
+# see gguf_fields.swa_pattern_from_period for the period semantics. Any other
+# architecture without a pattern gets no SWA, as in llama.cpp (period 1 =
+# explicitly no local layers, e.g. phi3, whose window llama.cpp ignores).
+SWA_DEFAULT_PATTERN = {
+    "gemma2": (2, False), "gemma3": (6, False), "gemma3n": (5, False),
+    "gpt-oss": (2, False), "cohere2": (4, False), "cohere2moe": (4, True),
+    "exaone4": (4, False), "exaone-moe": (4, False), "olmo2": (4, False),
+    "plamo3": (8, False), "mellum": (4, False), "muse-glimmer": (4, False),
+    "afmoe": (4, False), "smallthinker": (4, True), "laguna": (4, True),
+    "phi3": (1, False),
+}
+
+# Hybrid architectures that mark their attention layers by an interval
+# (every n-th layer is full attention, the rest recurrent) rather than by
+# zeros in a per-layer head_count_kv array; the default applies when the GGUF
+# carries neither attention.recurrent_layers nor full_attention_interval.
+FULL_ATTENTION_INTERVAL_DEFAULT = {
+    "qwen3next": 4, "qwen35": 4, "qwen35moe": 4, "qwen4exp": None, "minimax-01": 8,
+}
+
+# Architectures where only the first n layers keep a KV cache of their own
+# and the rest reuse it, without an attention.shared_kv_layers key to say so
+# (llama.cpp hard-codes n_layer_kv_from_start for them).
+KV_LAYERS_FROM_START_DEFAULT = {"gemma3n": 20}
+
 # Tensor-name prefixes unique to stable-diffusion.cpp checkpoint GGUFs.
 # Some (e.g. dreamshaper-xl-v2-turbo-Q8_0.gguf) carry no metadata at all —
 # not even general.architecture — so DIFFUSION_ARCHS can't catch them.
@@ -67,9 +99,8 @@ def _is_metadata_less_diffusion_checkpoint(reader):
     )
 
 # KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and one
-# Value tensor.
+# Value tensor (head_dim_k and head_dim_v wide per KV head).
 KV_BYTES_PER_ELEMENT = 2
-KV_TENSORS_PER_LAYER = 2
 
 
 class NotAnLLMError(ValueError):
@@ -93,41 +124,77 @@ class ModelShape:
     n_layers: int
     n_embd: int
     n_heads: int
-    n_kv_heads: int | None  # None => SSM/hybrid: no classic per-head KV cache
+    n_kv_heads: int | None  # None => pure SSM: no classic per-head KV cache
     mla_kv_dim: int | None = None
-    # Sliding-window attention (Gemma2/3/4, Cohere2, gpt-oss, ...): swa_layers
-    # of the model's n_layers cache only swa_window tokens each, regardless of
-    # context length, instead of scaling with the full context like the rest.
-    swa_layers: int = 0
+    # Sliding-window attention (Gemma2/3/4, Cohere2, gpt-oss, ...): the layers
+    # flagged True in swa_pattern cache only swa_window tokens each,
+    # regardless of context length, instead of scaling with the full context
+    # like the rest. Ignored unless swa_window is set.
     swa_window: int | None = None
+    swa_pattern: tuple[bool, ...] | None = None
+    # One KV-head count per layer, overriding n_kv_heads where the model
+    # varies it (Gemma 4: 8 on local, 2 on global layers). 0 marks a layer
+    # without a KV cache of its own: the recurrent layers of a hybrid model,
+    # or a layer reusing an earlier layer's cache (Gemma 3n/4 shared KV).
+    kv_heads_per_layer: tuple[int, ...] | None = None
+    # attention.key_length/value_length(_swa). llama.cpp falls back to
+    # n_embd / n_heads, which is wrong for most current models (Qwen3,
+    # Gemma 3/4, gpt-oss), and the SWA dims default to the full-layer ones.
+    head_dim_k: int | None = None
+    head_dim_v: int | None = None
+    head_dim_k_swa: int | None = None
+    head_dim_v_swa: int | None = None
 
     @property
-    def is_ssm(self):
-        return self.n_kv_heads is None
+    def head_dims(self):
+        """Resolved (k, v, k_swa, v_swa) head dimensions."""
+        fallback = self.n_embd // (self.n_heads or 1)
+        k = self.head_dim_k or fallback
+        v = self.head_dim_v or fallback
+        return k, v, self.head_dim_k_swa or k, self.head_dim_v_swa or v
 
-    def _kv_dim_bytes_per_layer(self):
-        if self.is_ssm or not self.n_kv_heads:
-            return 0
-        head_dim = self.n_embd // (self.n_heads or 1)
-        kv_dim = self.n_kv_heads * head_dim
-        return KV_TENSORS_PER_LAYER * kv_dim * KV_BYTES_PER_ELEMENT
+    def _is_swa(self, il):
+        return bool(self.swa_window and self.swa_pattern and il < len(self.swa_pattern) and self.swa_pattern[il])
+
+    def _kv_heads(self, il):
+        if self.kv_heads_per_layer is not None:
+            return self.kv_heads_per_layer[il] if il < len(self.kv_heads_per_layer) else 0
+        return self.n_kv_heads or 0
+
+    @property
+    def swa_layers(self):
+        return sum(1 for il in range(self.n_layers) if self._is_swa(il))
+
+    @property
+    def kv_layers(self):
+        """Number of layers that keep a KV cache of their own."""
+        return sum(1 for il in range(self.n_layers) if self._kv_heads(il))
+
+    def _kv_bytes(self, swa):
+        """Per-context-token KV bytes summed over the local (swa=True) or the
+        full/global (swa=False) attention layers."""
+        k, v, k_swa, v_swa = self.head_dims
+        total = 0
+        for il in range(self.n_layers):
+            if self._is_swa(il) != swa:
+                continue
+            # K and V can differ in width (value_length != key_length), so
+            # the two cached tensors are sized separately.
+            dims = k_swa + v_swa if swa else k + v
+            total += self._kv_heads(il) * dims * KV_BYTES_PER_ELEMENT
+        return total
 
     def kv_bytes_per_ctx_token(self):
         """Bytes of KV-cache per context token contributed by the model's
-        full/global-attention layers (all layers, unless swa_layers carves
+        full/global-attention layers (all layers, unless swa_pattern carves
         some out into kv_bytes_per_ctx_token_swa instead)."""
         if self.mla_kv_dim:
             # MLA architectures (DeepSeek2, GLM-DSA, Mistral4, MiniCPM3) cache
             # a single shared compressed vector per token/layer instead of a
             # value per KV-head. They don't combine with sliding-window
-            # attention in practice, so swa_layers is ignored here.
+            # attention in practice, so swa_pattern is ignored here.
             return self.n_layers * self.mla_kv_dim * KV_BYTES_PER_ELEMENT
-        # swa_layers only comes out of the global count once swa_window is
-        # set too, so a caller that leaves swa_window unset (or 0) still gets
-        # the correct total: every layer counted as full/global attention.
-        swa_layers = self.swa_layers if self.swa_window else 0
-        global_layers = self.n_layers - swa_layers
-        return global_layers * self._kv_dim_bytes_per_layer()
+        return self._kv_bytes(swa=False)
 
     def kv_bytes_per_ctx_token_swa(self):
         """Bytes of KV-cache per context token contributed by the model's
@@ -135,7 +202,62 @@ class ModelShape:
         min(ctx, swa_window) rather than the raw context length."""
         if self.mla_kv_dim or not self.swa_window:
             return 0
-        return self.swa_layers * self._kv_dim_bytes_per_layer()
+        return self._kv_bytes(swa=True)
+
+
+def _recurrent_layers(reader, arch, n_layers):
+    """One flag per layer, True for the recurrent (SSM/linear-attention)
+    layers of a hybrid that marks them by attention.recurrent_layers or a
+    full_attention_interval (Qwen3-Next/3.5, MiniMax-01); None otherwise."""
+    flags = get_int_list(reader, f"{arch}.attention.recurrent_layers")
+    if flags is not None:
+        if len(flags) == 1:
+            return [bool(flags[0])] * n_layers
+        flags = [bool(v) for v in flags[:n_layers]]
+        return flags + [False] * (n_layers - len(flags))
+    arch_lower = arch.lower()
+    if arch_lower not in FULL_ATTENTION_INTERVAL_DEFAULT:
+        return None
+    interval = (
+        get_safe_int(reader, f"{arch}.full_attention_interval")
+        or FULL_ATTENTION_INTERVAL_DEFAULT[arch_lower]
+    )
+    if not interval:
+        return None
+    return [(i + 1) % interval != 0 for i in range(n_layers)]
+
+
+def _kv_heads_per_layer(reader, arch, n_layers, n_kv_heads, is_ssm):
+    """Per-layer KV-head counts (see ModelShape.kv_heads_per_layer), with 0
+    for every layer that keeps no KV cache of its own. None when all layers
+    share n_kv_heads and cache their own KV (the plain case), and for SSM
+    architectures whose attention layers can't be identified."""
+    heads = get_int_list(reader, f"{arch}.attention.head_count_kv")
+    varies = heads is not None and len(heads) > 1
+    if heads is not None and varies:
+        # Gemma 4 varies the count between local and global layers; hybrids
+        # (Jamba, LFM2, Granite-Hybrid, Nemotron-H, ...) put 0 on their
+        # recurrent layers.
+        per_layer = (heads[:n_layers] + [0] * n_layers)[:n_layers]
+    elif n_kv_heads:
+        per_layer = [n_kv_heads] * n_layers
+    else:
+        return None
+
+    recurrent = _recurrent_layers(reader, arch, n_layers) if is_ssm else None
+    if recurrent is not None:
+        per_layer = [0 if r else h for r, h in zip(recurrent, per_layer)]
+        varies = True
+    elif is_ssm and not varies:
+        return None
+
+    shared = get_safe_int(reader, f"{arch}.attention.shared_kv_layers")
+    kv_from_start = n_layers - shared if shared else KV_LAYERS_FROM_START_DEFAULT.get(arch.lower())
+    if kv_from_start is not None and 0 <= kv_from_start < n_layers:
+        per_layer[kv_from_start:] = [0] * (n_layers - kv_from_start)
+        varies = True
+
+    return tuple(per_layer) if varies else None
 
 
 def get_mmproj_params(reader, file_path, file_size_bytes):
@@ -249,16 +371,24 @@ def get_model_params(file_path, file_size_bytes=None):
         f"{arch}.ffn_hidden_size",
     )
 
-    if arch_lower in SSM_ARCHS:
-        n_kv_heads = None
-    else:
-        raw_kv = get_nonneg_int(reader,
-            f"{arch}.attention.head_count_kv",
-            f"{arch}.num_key_value_heads",
-            f"{arch}.attention.kv_head_count",
-        )
+    raw_kv = get_nonneg_int(reader,
+        f"{arch}.attention.head_count_kv",
+        f"{arch}.num_key_value_heads",
+        f"{arch}.attention.kv_head_count",
+    )
+    is_ssm = arch_lower in SSM_ARCHS
+    if not is_ssm and raw_kv == 0:
         # 0 means "same as n_heads" in llama.cpp convention
-        n_kv_heads = n_heads if (raw_kv is not None and raw_kv == 0) else raw_kv
+        raw_kv = n_heads
+    kv_heads_per_layer = _kv_heads_per_layer(reader, arch, n_layers or 0, raw_kv, is_ssm)
+    if kv_heads_per_layer is not None:
+        # Representative value for display; the per-layer counts drive the
+        # KV-cache size.
+        n_kv_heads = max(kv_heads_per_layer, default=0) or None
+    else:
+        # A hybrid whose attention layers can't be told apart counts as pure
+        # SSM (no KV cache) rather than as all-attention.
+        n_kv_heads = None if is_ssm else raw_kv
 
     mla_kv_dim = None
     if arch_lower in MLA_ARCHS:
@@ -267,7 +397,8 @@ def get_model_params(file_path, file_size_bytes=None):
         if kv_lora_rank and rope_dim:
             mla_kv_dim = kv_lora_rank + rope_dim
 
-    swa_window, swa_layers = get_sliding_window(reader, arch, n_layers or 0)
+    default_period, dense_first = SWA_DEFAULT_PATTERN.get(arch_lower, (None, False))
+    swa_window, swa_pattern = get_sliding_window(reader, arch, n_layers or 0, default_period, dense_first)
 
     raw_name = clean_name(get_str(reader, "general.name"))
     name = resolve_name(raw_name, file_path)
@@ -278,9 +409,15 @@ def get_model_params(file_path, file_size_bytes=None):
         n_heads=n_heads or 0,
         n_kv_heads=n_kv_heads,
         mla_kv_dim=mla_kv_dim,
-        swa_layers=swa_layers,
         swa_window=swa_window,
+        swa_pattern=swa_pattern,
+        kv_heads_per_layer=kv_heads_per_layer,
+        head_dim_k=get_safe_int(reader, f"{arch}.attention.key_length"),
+        head_dim_v=get_safe_int(reader, f"{arch}.attention.value_length"),
+        head_dim_k_swa=get_safe_int(reader, f"{arch}.attention.key_length_swa"),
+        head_dim_v_swa=get_safe_int(reader, f"{arch}.attention.value_length_swa"),
     )
+    head_dim_k, head_dim_v, head_dim_k_swa, head_dim_v_swa = shape.head_dims
 
     params = {
         "type": MODEL_TYPE_LLM,
@@ -296,9 +433,14 @@ def get_model_params(file_path, file_size_bytes=None):
         "n_heads": n_heads,
         "n_kv_heads": n_kv_heads,
         "mla_kv_dim": mla_kv_dim,
+        "head_dim_k": head_dim_k,
+        "head_dim_v": head_dim_v,
+        "head_dim_k_swa": head_dim_k_swa if swa_window else None,
+        "head_dim_v_swa": head_dim_v_swa if swa_window else None,
+        "kv_layers": shape.kv_layers,
         "kv_bytes_per_ctx_token": shape.kv_bytes_per_ctx_token(),
         "kv_bytes_per_ctx_token_swa": shape.kv_bytes_per_ctx_token_swa(),
-        "swa_layers": swa_layers,
+        "swa_layers": shape.swa_layers,
         "swa_window": swa_window,
         "n_ff": n_ff,
         "n_experts": get_safe_int(reader, f"{arch}.expert_count"),

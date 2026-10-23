@@ -68,7 +68,7 @@ def calculate_vram_matrix():
     for name, data in models.items():
         layers = coerce_legacy_cache_int(data.get("n_layers"))
         embd = coerce_legacy_cache_int(data.get("n_embd"))
-        # SSM-Modelle (LFM2, Nemotron-H) haben n_kv_heads=null → kein klassischer KV-Cache
+        # Reine SSM-Modelle (Mamba, RWKV) haben n_kv_heads=null → kein KV-Cache
         is_ssm = data.get("n_kv_heads") is None
         # Von _model.py vorberechnet (siehe ModelShape.kv_bytes_per_ctx_token/
         # _swa): einzige Quelle der KV-Cache-Formel. kv_bytes_per_ctx_token_swa

@@ -106,9 +106,10 @@ def needs_scan(rel_key, file_size_bytes, cache):
         return True
     if entry.get("has_missing_fields", False):
         return True
-    # Entries scanned before sliding-window-attention support existed lack
-    # this key; rescanning (once) picks it up without needing a cache wipe.
-    return entry.get("type") == MODEL_TYPE_LLM and "swa_window" not in entry
+    # Entries scanned before per-layer KV support (key/value_length head
+    # dims, per-layer KV heads, hybrid attention layers) lack this key;
+    # rescanning (once) picks it up without needing a cache wipe.
+    return entry.get("type") == MODEL_TYPE_LLM and "head_dim_k" not in entry
 
 
 def _load_cache():

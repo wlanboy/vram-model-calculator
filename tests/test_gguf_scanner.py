@@ -101,15 +101,15 @@ class TestNeedsScan:
         cache = {"key": {"file_size_bytes": 10, "has_missing_fields": True}}
         assert needs_scan("key", 10, cache) is True
 
-    def test_true_for_llm_entry_scanned_before_swa_support(self):
-        cache = {"key": {"file_size_bytes": 10, "type": "llm"}}
+    def test_true_for_llm_entry_scanned_before_head_dim_support(self):
+        cache = {"key": {"file_size_bytes": 10, "type": "llm", "swa_window": None}}
         assert needs_scan("key", 10, cache) is True
 
-    def test_false_for_llm_entry_with_swa_window_already_scanned(self):
-        cache = {"key": {"file_size_bytes": 10, "type": "llm", "swa_window": None}}
+    def test_false_for_llm_entry_with_head_dim_already_scanned(self):
+        cache = {"key": {"file_size_bytes": 10, "type": "llm", "head_dim_k": 128}}
         assert needs_scan("key", 10, cache) is False
 
-    def test_false_for_non_llm_entry_without_swa_window(self):
+    def test_false_for_non_llm_entry_without_head_dim(self):
         cache = {"key": {"file_size_bytes": 10, "type": "adapter"}}
         assert needs_scan("key", 10, cache) is False
 
@@ -194,7 +194,7 @@ class TestUpdateCache:
 
 
 def fake_params(path, file_size_bytes=None):
-    return {"type": "llm", "name": "x", "file_size_bytes": file_size_bytes, "swa_window": None}
+    return {"type": "llm", "name": "x", "file_size_bytes": file_size_bytes, "head_dim_k": 128}
 
 
 @pytest.fixture

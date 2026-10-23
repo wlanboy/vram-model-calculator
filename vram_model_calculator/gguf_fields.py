@@ -140,37 +140,46 @@ def get_int_list(reader, key):
         return None
 
 
-def get_sliding_window(reader, arch, n_layers):
+def swa_pattern_from_period(period, n_layers, dense_first=False):
+    """Expands a periodic sliding-window pattern into one flag per layer
+    (True = local/SWA), mirroring llama.cpp's llama_hparams::set_swa_pattern:
+    one full/global-attention layer per period, at the end of each period
+    (or at its start with dense_first). period <= 0 marks every layer local."""
+    if period <= 0:
+        return (True,) * n_layers
+    if dense_first:
+        return tuple(i % period != 0 for i in range(n_layers))
+    return tuple(i % period < period - 1 for i in range(n_layers))
+
+
+def get_sliding_window(reader, arch, n_layers, default_period=None, dense_first=False):
     """Reads {arch}.attention.sliding_window(_pattern) and returns
-    (window_size, swa_layer_count): how many tokens the model's
-    local/sliding-window-attention layers cache, and how many of its
-    n_layers use that local attention (the rest use full/global attention
-    with an uncapped, ctx-sized KV cache). Returns (None, 0) if the model
-    doesn't use sliding-window attention at all.
+    (window_size, swa_pattern): how many tokens the model's
+    local/sliding-window-attention layers cache, and one flag per layer,
+    True for those local layers (the rest use full/global attention with an
+    uncapped, ctx-sized KV cache). Returns (None, None) if the model doesn't
+    use sliding-window attention at all.
+
+    default_period/dense_first is the architecture's built-in pattern for
+    files that carry a window but no sliding_window_pattern (Gemma3: 6,
+    gpt-oss: 2, ...). Without either, llama.cpp ignores the window and every
+    layer keeps a full KV cache, so (None, None) is returned then as well.
     """
     window = get_safe_int(reader, f"{arch}.attention.sliding_window")
     if not window or not n_layers:
-        return None, 0
+        return None, None
 
     pattern = get_int_list(reader, f"{arch}.attention.sliding_window_pattern")
-    if pattern is None:
-        # A window with no pattern override: every layer is local
-        # (continuous sliding-window attention, e.g. early Mistral-7B-style
-        # models).
-        return window, n_layers
-
-    if len(pattern) > 1:
+    if pattern is not None and len(pattern) > 1:
         # Explicit per-layer array (gguf_writer.add_sliding_window_pattern):
         # a nonzero value means this layer is local/SWA, 0 means full/global.
-        return window, sum(1 for v in pattern[:n_layers] if v)
+        flags = tuple(bool(v) for v in pattern[:n_layers])
+        return window, flags + (False,) * (n_layers - len(flags))
 
-    period = pattern[0]
-    if period <= 0:
-        return window, n_layers
-
-    # Periodic pattern (llama.cpp convention, e.g. Gemma3/Cohere2): every
-    # period-th layer (1-indexed) is full/global attention, the rest local.
-    return window, sum(1 for i in range(n_layers) if (i + 1) % period != 0)
+    period = pattern[0] if pattern is not None else default_period
+    if period is None:
+        return None, None
+    return window, swa_pattern_from_period(period, n_layers, dense_first)
 
 
 def get_vocab_size(reader, arch):
