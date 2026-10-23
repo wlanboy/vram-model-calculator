@@ -143,7 +143,9 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 | `arch` | Modellarchitektur (`llama`, `qwen3`, `mistral`, …) |
 | `n_layers` | Anzahl der Transformer-Blöcke |
 | `n_embd` | Embedding-Dimension (Hidden Size) |
-| `n_heads` / `n_kv_heads` | Attention-Heads / KV-Heads (`null` bei SSM/Hybrid-Architekturen) |
+| `n_heads` / `n_kv_heads` | Attention-Heads / KV-Heads (bei pro Layer variierenden Werten das Maximum; `null` bei reinen SSMs) |
+| `head_dim_k` / `head_dim_v` (`_swa`) | Head-Dimension für Keys/Values aus `attention.key_length`/`value_length` (Fallback `n_embd / n_heads`); `_swa`-Varianten für die Sliding-Window-Layer (Gemma 4) |
+| `kv_layers` | Anzahl der Layer mit eigenem KV-Cache (ohne Recurrent-Layer von Hybriden und Layer mit geteiltem KV-Cache) |
 | `kv_bytes_per_ctx_token` | Vorberechnete KV-Cache-Größe pro Kontext-Token in Bytes für die vollen/globalen Attention-Layer (siehe `ModelShape` in `_model.py`) — einzige Quelle der KV-Cache-Formel, sowohl `vram_calculator.py` als auch `filter.js` multiplizieren dies nur noch mit der Kontextlänge |
 | `kv_bytes_per_ctx_token_swa` / `swa_window` / `swa_layers` | Bei Sliding-Window-Attention (Gemma3/4, Cohere2, gpt-oss, …): Bytes/Token für die lokalen Layer, gedeckelt auf `min(ctx, swa_window)` statt der vollen Kontextlänge |
 | `n_experts` / `n_experts_used` | MoE-Parameter (falls vorhanden) |
@@ -159,7 +161,9 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 **Besonderheiten:**
 - Mehrteilige Modelle (`-00001-of-00005.gguf`) werden als eine Einheit behandelt: nur der erste Shard wird geparst, die Gesamtgröße über alle Shards aufsummiert
 - Dateien, die mit `mmproj-` beginnen, werden als Vision-Projektor erkannt und separat gespeichert (`"type": "mmproj"`)
-- SSM- und Hybrid-Architekturen (siehe `SSM_ARCHS` in `_model.py`: Mamba, RWKV, Jamba, Falcon-H1, Granite-Hybrid, PLaMo2/3, Qwen3-Next, LFM2, Nemotron-H u. a.) haben `n_kv_heads = null` — kein klassischer KV-Cache
+- KV-Cache wird wie in llama.cpp pro Layer berechnet: KV-Heads pro Layer (`attention.head_count_kv` als Array, z. B. Gemma 4), eigene Head-Dimensionen für SWA-Layer (`key_length_swa`), Layer ohne eigenen Cache (`attention.shared_kv_layers`, Gemma 3n/4)
+- Sliding-Window-Pattern: fehlt `sliding_window_pattern` in der Datei (Gemma 3, gpt-oss), gilt der Architektur-Default aus llama.cpp (`SWA_DEFAULT_PATTERN` in `_model.py`); unbekannte Architekturen ohne Pattern bekommen wie in llama.cpp gar kein SWA
+- SSM- und Hybrid-Architekturen (siehe `SSM_ARCHS` in `_model.py`): Bei Hybriden (Qwen3.5/Qwen3-Next, LFM2, Nemotron-H, Granite-Hybrid, Jamba u. a.) zählen nur die Attention-Layer zum KV-Cache, erkannt über `0`-Einträge im `head_count_kv`-Array, `attention.recurrent_layers` oder `full_attention_interval`. Reine SSMs (Mamba, RWKV) haben `n_kv_heads = null` — kein KV-Cache. Der konstante Recurrent-State wird nicht mitgerechnet
 - Fehlende Metadaten (z. B. `vocab_size`) werden über Fallback-Methoden ermittelt; Modelle mit weiterhin fehlenden Feldern werden in `model-metadata.txt` protokolliert
 
 ---
@@ -257,10 +261,10 @@ Gesamt         = Gewichte + KV-Cache
 Der zweite Summand entfällt (`swa_window` ist `null`), solange das Modell keine Sliding-Window-Attention nutzt. `kv_bytes_per_ctx_token`/`kv_bytes_per_ctx_token_swa` werden beim Scan von `_model.py` (`ModelShape.kv_bytes_per_ctx_token()`/`kv_bytes_per_ctx_token_swa()`) berechnet und im Cache gespeichert:
 
 ```
-Klassische Attention (globale Layer): 2 × n_globale_layer × n_kv_heads × head_dim × 2   (head_dim = n_embd / n_heads)
-Sliding-Window-Layer (falls vorhanden): 2 × swa_layers × n_kv_heads × head_dim × 2, gedeckelt auf swa_window Tokens
-MLA (DeepSeek2 u.a.):  n_layers × mla_kv_dim × 2
-SSM-/Hybrid-Modelle (n_kv_heads = null): 0
+Globale Layer:        Σ über alle globalen Layer mit eigenem KV-Cache: n_kv_heads(layer) × (head_dim_k + head_dim_v) × 2
+Sliding-Window-Layer: Σ über alle SWA-Layer: n_kv_heads(layer) × (head_dim_k_swa + head_dim_v_swa) × 2, gedeckelt auf swa_window Tokens
+MLA (DeepSeek2 u.a.): n_layers × mla_kv_dim × 2
+Recurrent-/geteilte Layer, reine SSMs: 0
 ```
 
 **Farbcodierung:**
