@@ -64,7 +64,7 @@ function activeGpuLimits() {
             const moe = (data.n_experts && data.n_experts_used)
                 ? data.n_experts_used + "/" + data.n_experts
                 : null;
-            const kvHeads = data.n_kv_heads;   // null = SSM/Hybrid (kein KV-Cache)
+            const kvHeads = data.n_kv_heads;   // null = reines SSM (kein KV-Cache)
             const isSSM = kvHeads === null || kvHeads === undefined || kvHeads === 0;
             result.push({
                 key,
