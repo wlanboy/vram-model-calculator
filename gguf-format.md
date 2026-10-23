@@ -64,11 +64,13 @@ Alle architekturspezifischen Felder verwenden das Schema `{arch}.feldname`, wobe
 | Feld | Typ | Beschreibung |
 |------|-----|--------------|
 | `{arch}.attention.head_count` | uint32 | Anzahl der Query-Heads |
-| `{arch}.attention.head_count_kv` | uint32 | Anzahl der KV-Heads (GQA/MQA); `0` bedeutet identisch mit `head_count` |
+| `{arch}.attention.head_count_kv` | uint32 oder Array | Anzahl der KV-Heads (GQA/MQA); `0` bedeutet identisch mit `head_count`. Als Array ein Wert pro Layer (Gemma 4, Hybride: `0` = Layer ohne Attention) |
 | `{arch}.attention.key_length` | uint32 | Head-Dimension für Keys (falls nicht standard) |
 | `{arch}.attention.value_length` | uint32 | Head-Dimension für Values (falls nicht standard) |
 
-**Nicht vom Scanner ausgewertet, aber für exakte KV-Cache-VRAM-Schätzung relevant:** `{arch}.attention.sliding_window`/`.sliding_window_pattern` (bei SWA-Hybriden wie Gemma3 ist der effektive KV-Cache pro Layer kleiner als `context_length` vermuten lässt), `.key_length_mla`/`.value_length_mla`/`.kv_lora_rank`/`.kv_lora_rank_swa` (Multi-Head-Latent-Attention, z.B. DeepSeek2/Kimi/Bailing), `.key_length_swa`/`.value_length_swa`, `.shared_kv_layers` (Layer mit geteiltem KV-Cache). Modelle mit diesen Feldern werden von `_model.py` aktuell mit einem einzigen globalen `n_kv_heads`/`key_length` gerechnet, was den tatsächlichen KV-Cache-Bedarf über- oder unterschätzen kann.
+**Vom Scanner zusätzlich für den KV-Cache ausgewertet:** `{arch}.attention.sliding_window`/`.sliding_window_pattern` (fehlt das Pattern, gilt der llama.cpp-Default der Architektur, z. B. 6 bei Gemma 3, 2 bei gpt-oss), `.key_length_swa`/`.value_length_swa` (gguf ≥ 0.19, eigene Head-Dimension der SWA-Layer, Gemma 4), `.head_count_kv` als Array pro Layer (Gemma 4; `0` = Recurrent-Layer bei Hybriden), `.shared_kv_layers` (die letzten n Layer nutzen den KV-Cache früherer Layer mit), `.recurrent_layers` bzw. `{arch}.full_attention_interval` (Hybride wie Qwen3.5). Bei MLA-Architekturen wird `kv_lora_rank + rope.dimension_count` verwendet.
+
+**Nicht ausgewertet:** `.key_length_mla`/`.value_length_mla`/`.kv_lora_rank_swa`, `.key_length_mla_swa`/`.compress_ratios` (DeepSeek4-artige komprimierte Caches) sowie der konstante Recurrent-State von SSM-/Hybrid-Layern (`ssm.*`).
 
 ### RoPE-Parameter
 
@@ -101,9 +103,9 @@ Alle architekturspezifischen Felder verwenden das Schema `{arch}.feldname`, wobe
 
 Alle klassischen Transformer-Architekturen wie `llama`, `mistral`, `qwen2`, `gemma`, `gemma2`, `gemma3`, `phi`, `phi3`, `falcon`, `starcoder2`, `deepseek2`, `command-r` u.a. verwenden Attention-Layer und benötigen `attention.head_count_kv` für die KV-Cache-VRAM-Berechnung.
 
-### SSM- und Hybrid-Architekturen (kein `n_kv_heads`)
+### SSM- und Hybrid-Architekturen
 
-Diese Architekturen liefern kein global auswertbares `attention.head_count_kv` — entweder weil sie komplett auf State-Space-Blöcken basieren (reine SSMs), oder weil sie SSM- und Attention-Blöcke mischen und der Wert für die Attention-Layer nicht als einzelnes globales Feld vorliegt (Hybrid-Modelle). Beide Gruppen werden vom Scanner identisch behandelt: `n_kv_heads` wird auf `None` gesetzt statt aus der GGUF-Datei gelesen.
+Reine SSMs (Mamba, RWKV) haben keinen KV-Cache: `n_kv_heads` ist `None`. Hybride mischen Recurrent- und Attention-Layer; nur die Attention-Layer belegen KV-Cache. Der Scanner erkennt sie wie llama.cpp über `0`-Einträge im `attention.head_count_kv`-Array (Jamba, LFM2, Granite-Hybrid, Nemotron-H, PLaMo2, Kimi-Linear), über `attention.recurrent_layers` oder über `{arch}.full_attention_interval` (Qwen3-Next/3.5: Default 4, MiniMax-01: Default 8). Lässt sich das nicht bestimmen, wird der Hybrid wie ein reines SSM ohne KV-Cache behandelt.
 
 | Architektur | Typ | Beschreibung |
 |-------------|-----|--------------|
