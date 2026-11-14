@@ -87,6 +87,15 @@ function activeGpuLimits() {
 
     // ── Helpers ──────────────────────────────────────────────
 
+    // Alle Werte aus models_cache.json stammen letztlich aus GGUF-Metadaten
+    // oder Dateinamen Dritter und landen per innerHTML in der Seite. Darum
+    // jeden solchen Wert vor dem Einsetzen in Markup escapen.
+    const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+
+    function esc(value) {
+        return String(value).replace(/[&<>"']/g, c => HTML_ESCAPES[c]);
+    }
+
     function fmtCtx(tokens) {
         if (!tokens) return "—";
         if (tokens >= 1000000) return (Math.round(tokens / 100000) / 10) + "M";
@@ -177,12 +186,12 @@ function activeGpuLimits() {
             const kv     = calcKv(m, state.ctx);
             const kvEff  = kv * state.sessions;
             const totalEff = m.size_gb + kvEff;
-            const moe    = m.moe ? '<span class="badge badge-moe">MoE ' + m.moe + '</span>' : "";
+            const moe    = m.moe ? '<span class="badge badge-moe">MoE ' + esc(m.moe) + '</span>' : "";
             const feats  =
                 (m.mcp      ? '<span class="feat-icon" title="Unterstützt Tool Calls (MCP)">🔧</span>' : "") +
                 (m.thinking ? '<span class="feat-icon" title="Unterstützt Thinking/Reasoning">🧠</span>' : "");
             const ctxOver = m.n_ctx_orig && state.ctx > m.n_ctx_orig
-                ? ' title="Über Trainings-Kontextfenster (' + m.n_ctx_orig.toLocaleString() + ' Token)"'
+                ? ' title="Über Trainings-Kontextfenster (' + esc(m.n_ctx_orig.toLocaleString()) + ' Token)"'
                 : "";
             const gpuCells = activeGpu.map(function (g) {
                 const cls  = fitClass(totalEff, g.gb);
@@ -208,9 +217,9 @@ function activeGpuLimits() {
 
             return [
                 "<tr>",
-                '<td class="col-name" title="' + m.key + '"' + ctxOver + ">" + m.name + feats + "</td>",
-                "<td><span class='badge badge-arch'>" + m.arch + "</span>" + moe + "</td>",
-                "<td>" + (m.quant || "—") + "</td>",
+                '<td class="col-name" title="' + esc(m.key) + '"' + ctxOver + ">" + esc(m.name) + feats + "</td>",
+                "<td><span class='badge badge-arch'>" + esc(m.arch) + "</span>" + moe + "</td>",
+                "<td>" + (m.quant ? esc(m.quant) : "—") + "</td>",
                 '<td class="col-mono col-muted">' + m.size_gb.toFixed(2) + " GB</td>",
                 '<td class="col-mono">' + kvDisplay + "</td>",
                 '<td class="col-mono col-muted">' + fmtCtx(m.n_ctx_orig) + "</td>",
@@ -318,7 +327,7 @@ function activeGpuLimits() {
             })
             .catch(function (err) {
                 document.getElementById("model-tbody").innerHTML =
-                    '<tr><td colspan="' + (7 + GPU_LIMITS.length) + '" class="no-results">Fehler beim Laden: ' + err.message + '</td></tr>';
+                    '<tr><td colspan="' + (7 + GPU_LIMITS.length) + '" class="no-results">Fehler beim Laden: ' + esc(err.message) + '</td></tr>';
             });
     });
 }());

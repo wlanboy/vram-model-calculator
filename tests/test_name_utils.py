@@ -65,6 +65,15 @@ class TestCleanName:
     def test_strips_surrounding_whitespace(self):
         assert clean_name("  MyModel  ") == "MyModel"
 
+    def test_strips_angle_brackets(self):
+        assert clean_name('My<img src=x onerror=alert(1)>Model') == 'Myimg src=x onerror=alert(1)Model'
+
+    def test_strips_control_characters(self):
+        assert clean_name("My\x00Model\n\x1b[31m") == "MyModel[31m"
+
+    def test_only_unsafe_chars_becomes_empty(self):
+        assert clean_name("<>\n") == ""
+
 
 class TestIsUnreliableName:
     @pytest.mark.parametrize("name", [None, "", "a", "ab"])
@@ -102,6 +111,9 @@ class TestNameFromPath:
 
     def test_empty_candidate_returns_none(self):
         assert name_from_path("/-GGUF/file.gguf") is None
+
+    def test_strips_unsafe_chars_from_dir(self):
+        assert name_from_path("/models/<b>Evil<b>-GGUF/file.gguf") == "bEvilb"
 
 
 class TestResolveName:

@@ -6,9 +6,19 @@ import os
 import re
 
 _HEX_RE = re.compile(r'^[0-9a-fA-F]+$')
+# Control characters and angle brackets have no place in a model name. The
+# name comes from third-party GGUF metadata or file paths and ends up in the
+# HTML of the public page, so drop them at the source as a second line of
+# defence behind the escaping in filter.js.
+_UNSAFE_CHARS_RE = re.compile(r'[\x00-\x1f\x7f<>]')
+
+
+def strip_unsafe_chars(name):
+    return _UNSAFE_CHARS_RE.sub('', name) if name else name
 
 
 def clean_name(name):
+    name = strip_unsafe_chars(name)
     if not name:
         return name
     # Strip HuggingFace org/user prefix: "allenai_olmOCR", "Ibm Granite_Granite 4.0", "Zai org_GLM"
@@ -37,7 +47,7 @@ def name_from_path(file_path):
     candidate = parts[-2] if len(parts) >= 2 else os.path.splitext(parts[-1])[0]
     candidate = re.sub(r'[-_]GGUF$', '', candidate, flags=re.IGNORECASE)
     candidate = re.sub(r'[-_](Q\d+|IQ\d+|F16|F32|BF16).*$', '', candidate, flags=re.IGNORECASE)
-    return candidate or None
+    return strip_unsafe_chars(candidate) or None
 
 
 def resolve_name(raw_name, file_path):
