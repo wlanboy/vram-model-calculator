@@ -8,7 +8,9 @@ from vram_model_calculator._model import (
     MODEL_TYPE_MMPROJ,
     ModelShape,
     NotAnLLMError,
+    RecurrentShape,
     get_model_params,
+    is_pure_ssm,
 )
 
 
@@ -445,6 +447,155 @@ class TestModelShapeKvBytesPerCtxToken:
         shape = ModelShape(n_layers=4, n_embd=1024, n_heads=8, n_kv_heads=2, kv_heads_per_layer=(0, 0, 0, 2))
         assert shape.kv_layers == 1
         assert shape.kv_bytes_per_ctx_token() == 2 * (128 + 128) * 2
+
+
+class TestIsPureSsm:
+    @pytest.mark.parametrize("n_kv_heads", [None, 0])
+    def test_no_kv_heads_is_pure_ssm(self, n_kv_heads):
+        assert is_pure_ssm(n_kv_heads) is True
+
+    def test_kv_heads_is_not_pure_ssm(self):
+        assert is_pure_ssm(8) is False
+
+
+class TestRecurrentShape:
+    """Mirrors llama_hparams::n_embd_r()/n_embd_s() in llama.cpp; the state
+    is f32 (4 bytes per element) per recurrent layer and session."""
+
+    def test_no_recurrent_layers_has_no_state(self):
+        shape = RecurrentShape(n_recurrent_layers=0, n_embd=4096, n_heads=32, ssm_d_conv=4, ssm_d_inner=8192)
+        assert shape.state_bytes_per_session() == 0
+
+    def test_mamba1_conv_and_ssm_state(self):
+        shape = RecurrentShape(n_recurrent_layers=4, n_embd=768, n_heads=0, ssm_d_conv=4, ssm_d_inner=1536, ssm_d_state=16)
+        assert shape.n_embd_r() == 3 * 1536
+        assert shape.n_embd_s() == 16 * 1536
+        assert shape.state_bytes_per_session() == 4 * (3 * 1536 + 16 * 1536) * 4
+
+    def test_mamba2_groups_widen_conv_state(self):
+        shape = RecurrentShape(
+            n_recurrent_layers=1, n_embd=2048, n_heads=0,
+            ssm_d_conv=4, ssm_d_inner=2048, ssm_d_state=128, ssm_n_group=16,
+        )
+        assert shape.n_embd_r() == 3 * (2048 + 2 * 16 * 128)
+        assert shape.n_embd_s() == 128 * 2048
+
+    def test_rwkv_token_shift_and_wkv_state(self):
+        shape = RecurrentShape(n_recurrent_layers=1, n_embd=2048, n_heads=0, wkv_head_size=64)
+        assert shape.n_embd_r() == 2 * 2048
+        assert shape.n_embd_s() == 2048 * 64
+
+    def test_lfm2_shortconv_has_no_ssm_state(self):
+        shape = RecurrentShape(n_recurrent_layers=1, n_embd=2048, n_heads=32, shortconv_l_cache=3)
+        assert shape.n_embd_r() == 2048 * 2
+        assert shape.n_embd_s() == 0
+
+    def test_kda_conv_for_qkv_and_square_state_per_head(self):
+        shape = RecurrentShape(n_recurrent_layers=1, n_embd=2304, n_heads=32, ssm_d_conv=4, kda_head_dim=128)
+        assert shape.n_embd_r() == 3 * 3 * 32 * 128
+        assert shape.n_embd_s() == 128 * 128 * 32
+
+    def test_minimax_linear_attention_state(self):
+        shape = RecurrentShape(n_recurrent_layers=1, n_embd=6144, n_heads=64, la_head_dim=128)
+        assert shape.n_embd_r() == 0
+        assert shape.n_embd_s() == 128 * 128 * 64
+
+
+class TestGetModelParamsRecurrentState:
+    def test_transformer_has_no_recurrent_state(self, patch_reader):
+        patch_reader["reader"] = llama_reader()
+        params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
+        assert params["recurrent_layers"] == 0
+        assert params["recurrent_state_bytes"] == 0
+
+    def test_qwen35_interval_hybrid(self, patch_reader):
+        # Qwen3.5-2B header values; llama.cpp reports 19.27 MiB RS buffer per sequence.
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("qwen35"),
+            "qwen35.block_count": int_field(24),
+            "qwen35.embedding_length": int_field(2048),
+            "qwen35.attention.head_count": int_field(8),
+            "qwen35.attention.head_count_kv": int_field(2),
+            "qwen35.attention.key_length": int_field(256),
+            "qwen35.attention.value_length": int_field(256),
+            "qwen35.full_attention_interval": int_field(4),
+            "qwen35.ssm.conv_kernel": int_field(4),
+            "qwen35.ssm.state_size": int_field(128),
+            "qwen35.ssm.group_count": int_field(16),
+            "qwen35.ssm.time_step_rank": int_field(16),
+            "qwen35.ssm.inner_size": int_field(2048),
+            "qwen35.vocab_size": int_field(248320),
+        })
+        params = get_model_params("/models/Qwen35/model.gguf", file_size_bytes=1)
+        assert params["recurrent_layers"] == 18
+        assert params["recurrent_state_bytes"] == 18 * (3 * (2048 + 2 * 16 * 128) + 128 * 2048) * 4 == 20201472
+
+    def test_lfm2_zero_kv_heads_are_recurrent_layers(self, patch_reader):
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("lfm2"),
+            "lfm2.block_count": int_field(6),
+            "lfm2.embedding_length": int_field(2048),
+            "lfm2.attention.head_count": int_field(32),
+            "lfm2.attention.head_count_kv": array_field([0, 0, 8, 0, 0, 8]),
+            "lfm2.shortconv.l_cache": int_field(3),
+            "lfm2.vocab_size": int_field(65536),
+        })
+        params = get_model_params("/models/LFM2/model.gguf", file_size_bytes=1)
+        assert params["recurrent_layers"] == 4
+        assert params["recurrent_state_bytes"] == 4 * 2048 * 2 * 4
+
+    def test_nemotron_h_mlp_layers_are_not_recurrent(self, patch_reader):
+        # Layer types: M - M * M -  (Mamba, MLP, attention); MLP layers have
+        # head_count_kv 0 too, but a non-zero feed_forward_length.
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("nemotron_h"),
+            "nemotron_h.block_count": int_field(6),
+            "nemotron_h.embedding_length": int_field(3136),
+            "nemotron_h.attention.head_count": int_field(40),
+            "nemotron_h.attention.head_count_kv": array_field([0, 0, 0, 8, 0, 0]),
+            "nemotron_h.feed_forward_length": array_field([0, 12544, 0, 0, 0, 12544]),
+            "nemotron_h.ssm.conv_kernel": int_field(4),
+            "nemotron_h.ssm.inner_size": int_field(4096),
+            "nemotron_h.ssm.state_size": int_field(128),
+            "nemotron_h.ssm.group_count": int_field(8),
+            "nemotron_h.vocab_size": int_field(131072),
+        })
+        params = get_model_params("/models/Nemotron/model.gguf", file_size_bytes=1)
+        assert params["recurrent_layers"] == 3
+        assert params["recurrent_state_bytes"] == 3 * (3 * (4096 + 2 * 8 * 128) + 128 * 4096) * 4
+
+    def test_pure_mamba_every_layer_recurrent(self, patch_reader):
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("mamba"),
+            "mamba.block_count": int_field(4),
+            "mamba.embedding_length": int_field(768),
+            "mamba.ssm.conv_kernel": int_field(4),
+            "mamba.ssm.inner_size": int_field(1536),
+            "mamba.ssm.state_size": int_field(16),
+            "mamba.vocab_size": int_field(50280),
+        })
+        params = get_model_params("/models/Mamba/model.gguf", file_size_bytes=1)
+        assert params["n_kv_heads"] is None
+        assert params["recurrent_layers"] == 4
+        assert params["recurrent_state_bytes"] == 4 * (3 * 1536 + 16 * 1536) * 4
+
+    def test_hybrid_without_layer_info_counts_all_layers(self, patch_reader):
+        # Scalar head_count_kv: the attention layers can't be told apart, so
+        # the model counts as pure SSM (no KV cache) with state in every layer.
+        patch_reader["reader"] = llama_reader(**{
+            "general.architecture": str_field("jamba"),
+            "jamba.block_count": int_field(8),
+            "jamba.embedding_length": int_field(4096),
+            "jamba.attention.head_count": int_field(32),
+            "jamba.attention.head_count_kv": int_field(8),
+            "jamba.ssm.conv_kernel": int_field(4),
+            "jamba.ssm.inner_size": int_field(8192),
+            "jamba.ssm.state_size": int_field(16),
+            "jamba.vocab_size": int_field(65536),
+        })
+        params = get_model_params("/models/Jamba/model.gguf", file_size_bytes=1)
+        assert params["n_kv_heads"] is None
+        assert params["recurrent_layers"] == 8
 
 
 class TestGetModelParamsAdapter:

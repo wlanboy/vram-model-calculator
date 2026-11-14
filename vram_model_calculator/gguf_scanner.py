@@ -9,6 +9,7 @@ from tqdm import tqdm
 from ._model import (
     METADATA_DUMP_FILE,
     MODEL_TYPE_LLM,
+    SSM_ARCHS,
     ModelShape,
     NotAnLLMError,
     clean_name,
@@ -109,7 +110,14 @@ def needs_scan(rel_key, file_size_bytes, cache):
     # Entries scanned before per-layer KV support (key/value_length head
     # dims, per-layer KV heads, hybrid attention layers) lack this key;
     # rescanning (once) picks it up without needing a cache wipe.
-    return entry.get("type") == MODEL_TYPE_LLM and "head_dim_k" not in entry
+    if entry.get("type") != MODEL_TYPE_LLM:
+        return False
+    if "head_dim_k" not in entry:
+        return True
+    # Same for SSM/hybrid entries scanned before the recurrent state was
+    # computed: its dimensions (ssm.*, shortconv.*, wkv.*) aren't in the
+    # cache, so it can't be backfilled without the GGUF file.
+    return str(entry.get("arch", "")).lower() in SSM_ARCHS and "recurrent_state_bytes" not in entry
 
 
 def _load_cache():

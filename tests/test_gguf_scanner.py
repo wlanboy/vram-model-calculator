@@ -113,6 +113,21 @@ class TestNeedsScan:
         cache = {"key": {"file_size_bytes": 10, "type": "adapter"}}
         assert needs_scan("key", 10, cache) is False
 
+    def test_true_for_ssm_entry_scanned_before_recurrent_state(self):
+        cache = {"key": {"file_size_bytes": 10, "type": "llm", "arch": "qwen35", "head_dim_k": 256}}
+        assert needs_scan("key", 10, cache) is True
+
+    def test_false_for_ssm_entry_with_recurrent_state(self):
+        cache = {"key": {
+            "file_size_bytes": 10, "type": "llm", "arch": "lfm2",
+            "head_dim_k": 64, "recurrent_state_bytes": 163840,
+        }}
+        assert needs_scan("key", 10, cache) is False
+
+    def test_false_for_transformer_entry_without_recurrent_state(self):
+        cache = {"key": {"file_size_bytes": 10, "type": "llm", "arch": "llama", "head_dim_k": 128}}
+        assert needs_scan("key", 10, cache) is False
+
 
 class TestUpdateCache:
     def test_scans_new_files_and_writes_cache(self, tmp_path, monkeypatch, capsys):

@@ -93,7 +93,12 @@ uv run -m vram_model_calculator.vram_calculator
 
 # Direkt aus dem Repo, gebündelter Einstiegspunkt (Option C)
 uv run main.py calculate
+
+# Mit quantisiertem KV-Cache (wie llama.cpp --cache-type-k/-v q8_0)
+uv run main.py calculate --cache-type q8_0
 ```
+
+`--cache-type` kennt `f16` (Default), `q8_0` und `q4_0`.
 
 Gibt für jedes Modell eine Tabelle aus, die zeigt, wie viel VRAM für jeden Anwendungsfall benötigt wird und ob es in die konfigurierten GPUs passt:
 
@@ -148,6 +153,7 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 | `kv_layers` | Anzahl der Layer mit eigenem KV-Cache (ohne Recurrent-Layer von Hybriden und Layer mit geteiltem KV-Cache) |
 | `kv_bytes_per_ctx_token` | Vorberechnete KV-Cache-Größe pro Kontext-Token in Bytes für die vollen/globalen Attention-Layer (siehe `ModelShape` in `_model.py`) — einzige Quelle der KV-Cache-Formel, sowohl `vram_calculator.py` als auch `filter.js` multiplizieren dies nur noch mit der Kontextlänge |
 | `kv_bytes_per_ctx_token_swa` / `swa_window` / `swa_layers` | Bei Sliding-Window-Attention (Gemma3/4, Cohere2, gpt-oss, …): Bytes/Token für die lokalen Layer, gedeckelt auf `min(ctx, swa_window)` statt der vollen Kontextlänge |
+| `recurrent_layers` / `recurrent_state_bytes` | Bei SSM- und Hybrid-Modellen: Anzahl der Recurrent-Layer und Größe des Recurrent-States pro Session in Bytes (siehe `RecurrentShape` in `_model.py`), sonst `0` |
 | `n_experts` / `n_experts_used` | MoE-Parameter (falls vorhanden) |
 | `quant` | Quantisierungstyp (`Q4_K_M`, `Q8_0`, `F16`, …), automatisch aus `gguf.constants.LlamaFileType` abgeleitet |
 | `n_ctx_orig` | Trainings-Kontextfenster des Modells |
@@ -163,7 +169,8 @@ uv run -m vram_model_calculator.gguf_scanner /wdblack/models
 - Dateien, die mit `mmproj-` beginnen, werden als Vision-Projektor erkannt und separat gespeichert (`"type": "mmproj"`)
 - KV-Cache wird wie in llama.cpp pro Layer berechnet: KV-Heads pro Layer (`attention.head_count_kv` als Array, z. B. Gemma 4), eigene Head-Dimensionen für SWA-Layer (`key_length_swa`), Layer ohne eigenen Cache (`attention.shared_kv_layers`, Gemma 3n/4)
 - Sliding-Window-Pattern: fehlt `sliding_window_pattern` in der Datei (Gemma 3, gpt-oss), gilt der Architektur-Default aus llama.cpp (`SWA_DEFAULT_PATTERN` in `_model.py`); unbekannte Architekturen ohne Pattern bekommen wie in llama.cpp gar kein SWA
-- SSM- und Hybrid-Architekturen (siehe `SSM_ARCHS` in `_model.py`): Bei Hybriden (Qwen3.5/Qwen3-Next, LFM2, Nemotron-H, Granite-Hybrid, Jamba u. a.) zählen nur die Attention-Layer zum KV-Cache, erkannt über `0`-Einträge im `head_count_kv`-Array, `attention.recurrent_layers` oder `full_attention_interval`. Reine SSMs (Mamba, RWKV) haben `n_kv_heads = null` — kein KV-Cache. Der konstante Recurrent-State wird nicht mitgerechnet
+- SSM- und Hybrid-Architekturen (siehe `SSM_ARCHS` in `_model.py`): Bei Hybriden (Qwen3.5/Qwen3-Next, LFM2, Nemotron-H, Granite-Hybrid, Jamba u. a.) zählen nur die Attention-Layer zum KV-Cache, erkannt über `0`-Einträge im `head_count_kv`-Array, `attention.recurrent_layers` oder `full_attention_interval`. Reine SSMs (Mamba, RWKV) haben `n_kv_heads = null` und damit keinen KV-Cache. CLI und Webseite werten `n_kv_heads` `null` oder `0` gleich als reines SSM (`is_pure_ssm` in `_model.py`)
+- Recurrent-State: SSM-Layer belegen pro Session einen festen Zustand, der nicht mit dem Kontext wächst. Der Scanner berechnet ihn wie llama.cpp (`n_embd_r` + `n_embd_s` in `llama-hparams.cpp`, f32) aus `ssm.*`, `wkv.head_size`, `shortconv.l_cache` und `kda.head_dim`. Einträge von SSM-Architekturen ohne `recurrent_state_bytes` liest der Scanner beim nächsten Lauf einmal neu ein
 - Fehlende Metadaten (z. B. `vocab_size`) werden über Fallback-Methoden ermittelt; Modelle mit weiterhin fehlenden Feldern werden in `model-metadata.txt` protokolliert
 
 ---
@@ -254,9 +261,23 @@ USECASES = {
 ```
 Gewichte-VRAM  = file_size_gb
 KV-Cache-VRAM  = (kv_bytes_per_ctx_token × ctx_tokens
-                  + kv_bytes_per_ctx_token_swa × min(ctx_tokens, swa_window)) / 1024³
-Gesamt         = Gewichte + KV-Cache
+                  + kv_bytes_per_ctx_token_swa × min(ctx_tokens, swa_window))
+                 × kv_faktor / 1024³
+State-VRAM     = recurrent_state_bytes / 1024³
+Gesamt         = Gewichte + (KV-Cache + State) × Sessions
 ```
+
+Die Spalte „KV-Cache“ in CLI und Webseite enthält den Recurrent-State mit, die CLI nennt ihn zusätzlich in der Kopfzeile des Modells. Der State liegt in llama.cpp immer in f32 vor, `kv_faktor` gilt für ihn nicht. Die CLI rechnet mit einer Session.
+
+Die Bytes pro Token in `models_cache.json` gelten für einen KV-Cache in f16. `kv_faktor` rechnet sie auf den gewählten KV-Cache-Typ um (`KV_CACHE_TYPES` in `vram_calculator.py` und `filter.js`):
+
+| KV-Cache-Typ | Bytes pro 32 Elemente | `kv_faktor` |
+|---|---|---|
+| `f16` | 64 | 1 |
+| `q8_0` | 34 | 34/64 ≈ 0,53 |
+| `q4_0` | 18 | 18/64 ≈ 0,28 |
+
+Die Auswahl entspricht in llama.cpp den Optionen `--cache-type-k` und `--cache-type-v` mit demselben Typ. Einen quantisierten V-Cache nutzt llama.cpp nur mit Flash Attention.
 
 Der zweite Summand entfällt (`swa_window` ist `null`), solange das Modell keine Sliding-Window-Attention nutzt. `kv_bytes_per_ctx_token`/`kv_bytes_per_ctx_token_swa` werden beim Scan von `_model.py` (`ModelShape.kv_bytes_per_ctx_token()`/`kv_bytes_per_ctx_token_swa()`) berechnet und im Cache gespeichert:
 
@@ -290,7 +311,8 @@ Eine reine Browser-Anwendung ohne Build-Schritt. Sie besteht aus drei Dateien:
 **Funktionen:**
 
 - **Kontext-Stepper** — frei wählbare Kontextlänge (1024er-Schritte, Standard 8192), statt fester Presets
-- **Sessions** — Multiplikator für den KV-Cache, um parallele Anfragen/Sessions zu simulieren
+- **Sessions** — Multiplikator für KV-Cache und Recurrent-State, um parallele Anfragen/Sessions zu simulieren. Die GPU-Zellen zeigen, wie viele Sessions neben den Gewichten Platz hätten. Bei reinen SSMs zählt dafür der Recurrent-State. Fehlt er im Cache, weil der Eintrag noch nicht neu gescannt wurde, steht in der Zelle keine Zahl
+- **KV-Cache** — Typ des KV-Cache (`f16`, `q8_0`, `q4_0`), skaliert KV-Cache, Gesamtbedarf und die Zahl paralleler Sessions
 - **Feature-Filter** — 🔧 MCP (Tool-Calling) und 🧠 Thinking/Reasoning, heuristisch aus den Modelldaten erkannt
 - **Suche** — Freitext-Suche über Modellname und Architektur
 - **Sichtbare VRAM-Spalten** — zehn GPU-Größen von 4 GB bis 80 GB als ein-/ausblendbare Pills, standardmäßig sind 6 GB und 12 GB als „rot ausblenden“ aktiv

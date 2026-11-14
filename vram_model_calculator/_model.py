@@ -32,6 +32,18 @@ SSM_ARCHS = {
     "bailingmoe3", "minimax-01",
 }
 
+# SSM architectures where every layer keeps a recurrent state: the pure SSMs,
+# plus Falcon-H1, which runs attention and SSM side by side in each layer
+# (llama.cpp fills is_recr_impl with true for all of them).
+ALL_LAYERS_RECURRENT_ARCHS = {
+    "mamba", "mamba2", "rwkv", "rwkv6", "rwkv7", "rwkv6qwen2", "arwkv7", "falcon-h1",
+}
+
+# Hybrids whose layers with neither KV heads nor a feed-forward width are the
+# recurrent ones; layers with KV heads 0 but a feed-forward width are plain
+# MLP/MoE layers (llama.cpp src/models/nemotron-h.cpp).
+RECURRENT_NEEDS_ZERO_FF_ARCHS = {"nemotron_h", "nemotron_h_moe"}
+
 # Image/video diffusion architectures (stable-diffusion.cpp GGUF quantizations,
 # e.g. from HF caches shared with LMStudio/HF hub). These carry no LLM-style
 # block_count/n_layers metadata and are out of scope for this VRAM calculator.
@@ -99,8 +111,21 @@ def _is_metadata_less_diffusion_checkpoint(reader):
     )
 
 # KV-cache dtype is fp16 (2 bytes/element); each layer stores one Key and one
-# Value tensor (head_dim_k and head_dim_v wide per KV head).
+# Value tensor (head_dim_k and head_dim_v wide per KV head). The cache always
+# stores f16 bytes; quantized KV caches (q8_0, q4_0) are scaled by the
+# consumers (KV_CACHE_TYPES in vram_calculator.py and filter.js).
 KV_BYTES_PER_ELEMENT = 2
+
+# llama.cpp keeps the recurrent state (conv and SSM/WKV state) in f32, one
+# copy per parallel sequence, independent of the context length.
+RECURRENT_BYTES_PER_ELEMENT = 4
+
+
+def is_pure_ssm(n_kv_heads):
+    """True for a model without any attention layer of its own (Mamba, RWKV,
+    or a hybrid whose attention layers can't be told apart). Shared
+    definition for vram_calculator.py; filter.js mirrors it as isSSM."""
+    return n_kv_heads in (None, 0)
 
 
 class NotAnLLMError(ValueError):
@@ -203,6 +228,91 @@ class ModelShape:
         if self.mla_kv_dim or not self.swa_window:
             return 0
         return self._kv_bytes(swa=True)
+
+
+@dataclass(frozen=True)
+class RecurrentShape:
+    """The GGUF dimensions that size the recurrent state of SSM and hybrid
+    models. Unlike the KV cache, that state doesn't grow with the context:
+    each parallel session holds one fixed-size copy per recurrent layer.
+
+    `state_bytes_per_session()` mirrors llama_hparams::n_embd_r() (conv
+    state) and n_embd_s() (SSM/WKV state) in llama.cpp src/llama-hparams.cpp;
+    its result is stored as `recurrent_state_bytes` in each cache entry.
+    """
+
+    n_recurrent_layers: int
+    n_embd: int
+    n_heads: int
+    ssm_d_conv: int = 0
+    ssm_d_inner: int = 0
+    ssm_d_state: int = 0
+    ssm_n_group: int = 0
+    wkv_head_size: int = 0      # RWKV
+    token_shift_count: int = 2  # RWKV, llama.cpp default
+    shortconv_l_cache: int = 0  # LFM2
+    kda_head_dim: int = 0       # Kimi-Linear/K3, Ling 3 (Kimi Delta Attention)
+    la_head_dim: int = 0        # MiniMax-01 linear attention
+
+    def n_embd_r(self):
+        """Conv state elements per layer and session."""
+        if self.wkv_head_size:
+            return self.token_shift_count * self.n_embd
+        if self.shortconv_l_cache:
+            return self.n_embd * (self.shortconv_l_cache - 1)
+        if self.kda_head_dim:
+            d_conv = self.ssm_d_conv - 1 if self.ssm_d_conv > 0 else 3
+            return 3 * d_conv * self.n_heads * self.kda_head_dim
+        d_conv = self.ssm_d_conv - 1 if self.ssm_d_conv > 0 else 0
+        return d_conv * (self.ssm_d_inner + 2 * self.ssm_n_group * self.ssm_d_state)
+
+    def n_embd_s(self):
+        """SSM/WKV state elements per layer and session."""
+        if self.wkv_head_size:
+            return self.n_embd * self.wkv_head_size
+        if self.kda_head_dim:
+            return self.kda_head_dim * self.kda_head_dim * self.n_heads
+        if self.la_head_dim:
+            return self.la_head_dim * self.la_head_dim * self.n_heads
+        return self.ssm_d_state * self.ssm_d_inner
+
+    def state_bytes_per_session(self):
+        if not self.n_recurrent_layers:
+            return 0
+        return self.n_recurrent_layers * (self.n_embd_r() + self.n_embd_s()) * RECURRENT_BYTES_PER_ELEMENT
+
+
+def _per_layer(values, n_layers):
+    """Spreads a GGUF scalar over all layers, or pads/truncates a per-layer
+    array to n_layers (missing layers count as 0)."""
+    if len(values) == 1:
+        return values * n_layers
+    return (values[:n_layers] + [0] * n_layers)[:n_layers]
+
+
+def _recurrent_layer_count(reader, arch, n_layers):
+    """Number of layers that keep a recurrent state, following the
+    is_recr_impl setup in llama.cpp src/models/*.cpp. 0 for non-SSM
+    architectures. A hybrid whose recurrent layers can't be identified counts
+    every layer as recurrent, matching its treatment as pure SSM (no KV
+    cache) in _kv_heads_per_layer."""
+    arch_lower = arch.lower()
+    if arch_lower not in SSM_ARCHS:
+        return 0
+    if arch_lower in ALL_LAYERS_RECURRENT_ARCHS:
+        return n_layers
+
+    flags = _recurrent_layers(reader, arch, n_layers)
+    if flags is None:
+        heads = get_int_list(reader, f"{arch}.attention.head_count_kv")
+        if heads is None or len(heads) <= 1:
+            return n_layers
+        flags = [h == 0 for h in _per_layer(heads, n_layers)]
+        if arch_lower in RECURRENT_NEEDS_ZERO_FF_ARCHS:
+            ff = get_int_list(reader, f"{arch}.feed_forward_length")
+            if ff is not None:
+                flags = [f and not w for f, w in zip(flags, _per_layer(ff, n_layers))]
+    return sum(flags)
 
 
 def _recurrent_layers(reader, arch, n_layers):
@@ -419,6 +529,22 @@ def get_model_params(file_path, file_size_bytes=None):
     )
     head_dim_k, head_dim_v, head_dim_k_swa, head_dim_v_swa = shape.head_dims
 
+    recurrent = RecurrentShape(
+        n_recurrent_layers=_recurrent_layer_count(reader, arch, n_layers or 0),
+        n_embd=n_embd or 0,
+        n_heads=n_heads or 0,
+        ssm_d_conv=get_safe_int(reader, f"{arch}.ssm.conv_kernel") or 0,
+        ssm_d_inner=get_safe_int(reader, f"{arch}.ssm.inner_size") or 0,
+        ssm_d_state=get_safe_int(reader, f"{arch}.ssm.state_size") or 0,
+        ssm_n_group=get_safe_int(reader, f"{arch}.ssm.group_count") or 0,
+        wkv_head_size=get_safe_int(reader, f"{arch}.wkv.head_size") or 0,
+        token_shift_count=get_safe_int(reader, f"{arch}.token_shift_count") or 2,
+        shortconv_l_cache=get_safe_int(reader, f"{arch}.shortconv.l_cache") or 0,
+        kda_head_dim=get_safe_int(reader, f"{arch}.kda.head_dim") or 0,
+        # llama.cpp sizes MiniMax-01's linear-attention state by key_length.
+        la_head_dim=head_dim_k if arch_lower == "minimax-01" else 0,
+    )
+
     params = {
         "type": MODEL_TYPE_LLM,
         "arch": arch,
@@ -442,6 +568,8 @@ def get_model_params(file_path, file_size_bytes=None):
         "kv_bytes_per_ctx_token_swa": shape.kv_bytes_per_ctx_token_swa(),
         "swa_layers": shape.swa_layers,
         "swa_window": swa_window,
+        "recurrent_layers": recurrent.n_recurrent_layers,
+        "recurrent_state_bytes": recurrent.state_bytes_per_session(),
         "n_ff": n_ff,
         "n_experts": get_safe_int(reader, f"{arch}.expert_count"),
         "n_experts_used": get_safe_int(reader, f"{arch}.expert_used_count"),

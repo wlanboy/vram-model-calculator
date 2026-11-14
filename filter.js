@@ -24,6 +24,17 @@
     // vram_calculator.py (checked by tests/test_vram_calculator.py).
     const TIGHT_FIT_RATIO = 0.85;
 
+    // KV-Cache-Typen wie bei llama.cpp --cache-type-k/--cache-type-v. Der
+    // Cache speichert f16-Bytes; q8_0 = 34, q4_0 = 18 Bytes pro 32 Elemente
+    // statt 64. Muss mit KV_CACHE_TYPES in vram_calculator.py übereinstimmen
+    // (geprüft von tests/test_vram_calculator.py).
+    const KV_CACHE_TYPES = {
+        f16:  1,
+        q8_0: 34 / 64,
+        q4_0: 18 / 64,
+    };
+    const KV_CACHE_TYPE_DEFAULT = "f16";
+
 function activeGpuLimits() {
         return GPU_LIMITS.filter(g => state.hideRed[String(g.gb)]);
     }
@@ -33,6 +44,7 @@ function activeGpuLimits() {
     let state = {
         ctx:      CTX_DEFAULT,
         sessions: 1,
+        kvType:   KV_CACHE_TYPE_DEFAULT,
         mcp:       false,
         thinking:  false,
         filterRed: false,
@@ -49,12 +61,21 @@ function activeGpuLimits() {
     // der KV-Cache-Formel. kvBytesPerCtxTokenSwa gilt nur bis swaWindow Tokens
     // (Sliding-Window-Attention-Layer wie bei Gemma3/4, Cohere2, gpt-oss
     // cachen nie mehr als das Fenster, unabhängig vom gewählten Kontext).
+    // Die Bytes gelten für f16, state.kvType skaliert auf q8_0/q4_0 um.
     function calcKv(model, ctx) {
         let bytes = model.kvBytesPerCtxToken * ctx;
         if (model.swaWindow) {
             bytes += model.kvBytesPerCtxTokenSwa * Math.min(ctx, model.swaWindow);
         }
-        return bytes / (1024 ** 3);
+        return bytes * KV_CACHE_TYPES[state.kvType] / (1024 ** 3);
+    }
+
+    // Speicher, den jede Session belegt: KV-Cache plus der feste
+    // Recurrent-State von SSM- und Hybrid-Modellen (recurrent_state_bytes,
+    // siehe RecurrentShape in _model.py). Der State ist in llama.cpp immer
+    // f32 und wächst nicht mit dem Kontext, darum ohne KV-Cache-Typ.
+    function calcPerSession(model, ctx) {
+        return calcKv(model, ctx) + model.recurrentStateBytes / (1024 ** 3);
     }
 
     function buildModels(raw) {
@@ -64,7 +85,8 @@ function activeGpuLimits() {
             const moe = (data.n_experts && data.n_experts_used)
                 ? data.n_experts_used + "/" + data.n_experts
                 : null;
-            const kvHeads = data.n_kv_heads;   // null = reines SSM (kein KV-Cache)
+            // null oder 0 = reines SSM ohne KV-Cache, wie is_pure_ssm in _model.py
+            const kvHeads = data.n_kv_heads;
             const isSSM = kvHeads === null || kvHeads === undefined || kvHeads === 0;
             result.push({
                 key,
@@ -80,6 +102,7 @@ function activeGpuLimits() {
                 kvBytesPerCtxToken: data.kv_bytes_per_ctx_token || 0,
                 kvBytesPerCtxTokenSwa: data.kv_bytes_per_ctx_token_swa || 0,
                 swaWindow: data.swa_window || null,
+                recurrentStateBytes: data.recurrent_state_bytes || 0,
             });
         }
         return result;
@@ -115,8 +138,7 @@ function activeGpuLimits() {
     }
 
     function effectiveTotal(model) {
-        const kv = calcKv(model, state.ctx);
-        return model.size_gb + kv * state.sessions;
+        return model.size_gb + calcPerSession(model, state.ctx) * state.sessions;
     }
 
     function isHiddenByRed(model) {
@@ -132,7 +154,7 @@ function activeGpuLimits() {
         arch:  m => m.arch,
         quant: m => m.quant || "",
         size:  m => m.size_gb,
-        kv:    m => calcKv(m, state.ctx) * state.sessions,
+        kv:    m => calcPerSession(m, state.ctx) * state.sessions,
         ctx:   m => m.n_ctx_orig || 0,
         total: m => effectiveTotal(m),
     };
@@ -183,7 +205,7 @@ function activeGpuLimits() {
         }
 
         tbody.innerHTML = rows.map(function (m) {
-            const kv     = calcKv(m, state.ctx);
+            const kv     = calcPerSession(m, state.ctx);
             const kvEff  = kv * state.sessions;
             const totalEff = m.size_gb + kvEff;
             const moe    = m.moe ? '<span class="badge badge-moe">MoE ' + esc(m.moe) + '</span>' : "";
@@ -197,23 +219,25 @@ function activeGpuLimits() {
                 const cls  = fitClass(totalEff, g.gb);
                 const icon = fitIcon(totalEff, g.gb);
                 let parallelHtml = "";
-                if (cls !== "fit-none") {
-                    if (m.isSSM) {
-                        parallelHtml = '<span class="parallel-count">∞×</span>';
-                    } else if (kv > 0) {
-                        const remaining = g.gb - m.size_gb;
-                        const parallel = remaining > 0 ? Math.floor(remaining / kv) : 0;
-                        if (parallel > 0) {
-                            parallelHtml = '<span class="parallel-count">' + parallel + "×</span>";
-                        }
+                // Auch reine SSMs belegen pro Session Speicher (Recurrent-State).
+                // Fehlt der Wert (Cache-Eintrag vor dem Rescan), bleibt die
+                // Zelle leer statt einer unbegrenzten Zahl.
+                if (cls !== "fit-none" && kv > 0) {
+                    const remaining = g.gb - m.size_gb;
+                    const parallel = remaining > 0 ? Math.floor(remaining / kv) : 0;
+                    if (parallel > 0) {
+                        parallelHtml = '<span class="parallel-count">' + parallel + "×</span>";
                     }
                 }
                 return '<td class="fit-cell ' + cls + '">' + icon + (parallelHtml ? "<br>" + parallelHtml : "") + "</td>";
             }).join("");
 
-            const kvDisplay = m.isSSM
-                ? '<span class="badge badge-arch">SSM</span>'
-                : kvEff.toFixed(2) + " GB" + (state.sessions > 1 ? ' <span class="col-muted">×' + state.sessions + '</span>' : "");
+            const kvDisplay =
+                (m.isSSM ? '<span class="badge badge-arch">SSM</span> ' : "") +
+                kvEff.toFixed(2) + " GB" + (state.sessions > 1 ? ' <span class="col-muted">×' + state.sessions + '</span>' : "");
+            const kvTitle = m.recurrentStateBytes
+                ? ' title="Enthält ' + (m.recurrentStateBytes / (1024 ** 2)).toFixed(1) + ' MB Recurrent-State pro Session"'
+                : "";
 
             return [
                 "<tr>",
@@ -221,7 +245,7 @@ function activeGpuLimits() {
                 "<td><span class='badge badge-arch'>" + esc(m.arch) + "</span>" + moe + "</td>",
                 "<td>" + (m.quant ? esc(m.quant) : "—") + "</td>",
                 '<td class="col-mono col-muted">' + m.size_gb.toFixed(2) + " GB</td>",
-                '<td class="col-mono">' + kvDisplay + "</td>",
+                '<td class="col-mono"' + kvTitle + ">" + kvDisplay + "</td>",
                 '<td class="col-mono col-muted">' + fmtCtx(m.n_ctx_orig) + "</td>",
                 '<td class="col-mono">' + totalEff.toFixed(2) + " GB</td>",
                 gpuCells,
@@ -238,6 +262,11 @@ function activeGpuLimits() {
         document.getElementById("sessions-select").innerHTML =
             Array.from({ length: 20 }, (_, i) => i + 1)
                 .map(n => '<option value="' + n + '"' + (n === 1 ? ' selected' : '') + '>' + n + (n === 1 ? ' Session' : ' Sessions') + '</option>')
+                .join("");
+
+        document.getElementById("kv-type-select").innerHTML =
+            Object.keys(KV_CACHE_TYPES)
+                .map(t => '<option value="' + t + '"' + (t === state.kvType ? ' selected' : '') + '>' + t + '</option>')
                 .join("");
 
         const hideVramEl = document.getElementById("hide-vram-pills");
@@ -309,6 +338,10 @@ function activeGpuLimits() {
                 });
                 document.getElementById("sessions-select").addEventListener("change", function (e) {
                     state.sessions = Number(e.target.value); renderTable();
+                });
+                document.getElementById("kv-type-select").addEventListener("change", function (e) {
+                    if (e.target.value in KV_CACHE_TYPES) state.kvType = e.target.value;
+                    renderTable();
                 });
                 document.getElementById("filter-mcp").addEventListener("change", function (e) {
                     state.mcp = e.target.checked; renderTable();

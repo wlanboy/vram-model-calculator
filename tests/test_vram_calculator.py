@@ -179,6 +179,41 @@ class TestCalculateVramMatrix:
         expected_kv = (2048 * ctx + 10240 * 1024) / (1024**3)
         assert f"{expected_kv:>8.2f}" in out
 
+    def test_quantized_kv_cache_scales_precomputed_f16_bytes(self, tmp_path, monkeypatch, capsys):
+        cache = {
+            "_version": 1,
+            "AnyModel": {
+                "type": "llm",
+                "arch": "llama",
+                "n_layers": 32,
+                "n_embd": 4096,
+                "n_kv_heads": 8,
+                "kv_bytes_per_ctx_token": 131072,
+                "kv_bytes_per_ctx_token_swa": 65536,
+                "swa_window": 4096,
+                "file_size_gb": 1.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix("q8_0")
+        out = strip_ansi(capsys.readouterr().out)
+
+        assert "KV-Cache-Typ: q8_0" in out
+        ctx = vram_calculator.USECASES["Doc (64k)"]
+        f16_kv = (131072 * ctx + 65536 * 4096) / (1024**3)
+        assert f"{f16_kv * 34 / 64:>8.2f}" in out
+        assert f"{f16_kv:>8.2f}" not in out
+
+    def test_main_passes_cache_type_option(self, monkeypatch):
+        calls = []
+        monkeypatch.setattr(vram_calculator, "calculate_vram_matrix", calls.append)
+        vram_calculator.main(["--cache-type", "q4_0"])
+        vram_calculator.main([])
+        assert calls == ["q4_0", "f16"]
+
     def test_ssm_model_shows_ssm_label_and_no_kv_growth(self, tmp_path, monkeypatch, capsys):
         cache = {
             "_version": 1,
@@ -202,9 +237,98 @@ class TestCalculateVramMatrix:
         # SSM models have no KV growth, so every usecase row should report the base size.
         assert out.count("2.0G") >= len(vram_calculator.USECASES)
 
+    def test_zero_kv_heads_counts_as_ssm_like_filter_js(self, tmp_path, monkeypatch, capsys):
+        cache = {
+            "_version": 1,
+            "ZeroKv": {
+                "type": "llm",
+                "arch": "mamba",
+                "n_layers": 24,
+                "n_embd": 2048,
+                "n_kv_heads": 0,
+                "kv_bytes_per_ctx_token": 0,
+                "file_size_gb": 2.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix()
+        out = strip_ansi(capsys.readouterr().out)
+        assert out.count("SSM 0.00GB") == len(vram_calculator.USECASES)
+
+    def test_recurrent_state_adds_to_total_unscaled_by_cache_type(self, tmp_path, monkeypatch, capsys):
+        # 256 MiB recurrent state (always f32 in llama.cpp) plus a hybrid's
+        # attention-layer KV cache, which q4_0 does shrink.
+        state_bytes = 256 * 1024**2
+        cache = {
+            "_version": 1,
+            "Hybrid": {
+                "type": "llm",
+                "arch": "qwen35",
+                "n_layers": 24,
+                "n_embd": 1024,
+                "n_kv_heads": 2,
+                "kv_bytes_per_ctx_token": 12288,
+                "recurrent_state_bytes": state_bytes,
+                "file_size_gb": 1.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix("q4_0")
+        out = strip_ansi(capsys.readouterr().out)
+
+        assert "Recurrent-State: 256.0 MB" in out
+        ctx = vram_calculator.USECASES["Code (32k)"]
+        per_session = 12288 * ctx * 18 / 64 / (1024**3) + 0.25
+        assert f"{per_session:>8.2f}GB" in out
+        assert f"{1.0 + per_session:>5.1f}G" in out
+
+    def test_pure_ssm_shows_recurrent_state(self, tmp_path, monkeypatch, capsys):
+        cache = {
+            "_version": 1,
+            "Mamba": {
+                "type": "llm",
+                "arch": "mamba",
+                "n_layers": 64,
+                "n_embd": 2560,
+                "n_kv_heads": None,
+                "kv_bytes_per_ctx_token": 0,
+                "recurrent_state_bytes": 512 * 1024**2,
+                "file_size_gb": 2.0,
+            },
+        }
+        cache_file = tmp_path / "cache.json"
+        cache_file.write_text(json.dumps(cache))
+        monkeypatch.setattr(vram_calculator, "CACHE_FILE", str(cache_file))
+
+        calculate_vram_matrix()
+        out = strip_ansi(capsys.readouterr().out)
+        assert out.count("SSM 0.50GB") == len(vram_calculator.USECASES)
+        assert out.count("2.5G") >= len(vram_calculator.USECASES)
+
 
 class TestConstantsInSyncWithFilterJs:
     def test_tight_fit_ratio_matches(self):
         match = re.search(r"const\s+TIGHT_FIT_RATIO\s*=\s*([0-9.]+)\s*;", FILTER_JS.read_text(encoding="utf-8"))
         assert match, "TIGHT_FIT_RATIO not found in filter.js"
         assert float(match.group(1)) == vram_calculator.TIGHT_FIT_RATIO
+
+    def test_kv_cache_types_match(self):
+        source = FILTER_JS.read_text(encoding="utf-8")
+        block = re.search(r"const\s+KV_CACHE_TYPES\s*=\s*\{(.*?)\};", source, re.DOTALL)
+        assert block, "KV_CACHE_TYPES not found in filter.js"
+        js_types = {
+            name: float(num) / float(den or 1)
+            for name, num, den in re.findall(r"(\w+)\s*:\s*([0-9.]+)(?:\s*/\s*([0-9.]+))?", block.group(1))
+        }
+        assert js_types == vram_calculator.KV_CACHE_TYPES
+
+    def test_kv_cache_type_default_matches(self):
+        match = re.search(r'const\s+KV_CACHE_TYPE_DEFAULT\s*=\s*"(\w+)"\s*;', FILTER_JS.read_text(encoding="utf-8"))
+        assert match, "KV_CACHE_TYPE_DEFAULT not found in filter.js"
+        assert match.group(1) == vram_calculator.KV_CACHE_TYPE_DEFAULT

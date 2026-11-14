@@ -6,7 +6,10 @@ from vram_model_calculator.gguf_checker import main as checker_main
 from vram_model_calculator.gguf_scanner import DEFAULT_DIRS, update_cache
 from vram_model_calculator.hf_cache_picker import DEFAULT_DEST
 from vram_model_calculator.hf_cache_picker import main as hf_cache_picker_main
-from vram_model_calculator.vram_calculator import calculate_vram_matrix
+from vram_model_calculator.vram_calculator import (
+    add_cache_type_argument,
+    calculate_vram_matrix,
+)
 
 
 def main():
@@ -26,7 +29,8 @@ def main():
     check_parser = subparsers.add_parser("check", help="GGUF-Dateien auf Integritaet pruefen")
     check_parser.add_argument("paths", nargs="*", help="Zu pruefende Pfade (Default: bekannte Modell-Verzeichnisse)")
 
-    subparsers.add_parser("calculate", help="VRAM-Matrix aus models_cache.json berechnen und ausgeben")
+    calc_parser = subparsers.add_parser("calculate", help="VRAM-Matrix aus models_cache.json berechnen und ausgeben")
+    add_cache_type_argument(calc_parser)
 
     hf_parser = subparsers.add_parser(
         "hf-copy",
@@ -48,7 +52,7 @@ def main():
         sys.argv = [sys.argv[0], *args.paths]
         return checker_main()
     if args.command == "calculate":
-        calculate_vram_matrix()
+        calculate_vram_matrix(args.cache_type)
         return 0
     if args.command == "hf-copy":
         sys.argv = [
