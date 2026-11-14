@@ -20,8 +20,8 @@
 
     const MODEL_TYPE_LLM = "llm";
 
-    // A GPU is "tight" once usage crosses this fraction of its VRAM. Keep in
-    // sync with the identical constant in vram_calculator.py.
+    // A GPU is "tight" once usage crosses this fraction of its VRAM. Must match
+    // vram_calculator.py (checked by tests/test_vram_calculator.py).
     const TIGHT_FIT_RATIO = 0.85;
 
 function activeGpuLimits() {

@@ -12,8 +12,8 @@ GPU_LIMITS = {
     "24GB (Ultra)": 24.0
 }
 
-# A GPU is "tight" once usage crosses this fraction of its VRAM. Keep in sync
-# with the identical constant in filter.js.
+# A GPU is "tight" once usage crosses this fraction of its VRAM. Must match
+# the constant in filter.js (checked by tests/test_vram_calculator.py).
 TIGHT_FIT_RATIO = 0.85
 
 USECASES = {

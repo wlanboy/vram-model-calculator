@@ -1,5 +1,6 @@
 import json
 import re
+from pathlib import Path
 
 from vram_model_calculator import vram_calculator
 from vram_model_calculator.vram_calculator import (
@@ -9,6 +10,7 @@ from vram_model_calculator.vram_calculator import (
 )
 
 ANSI_RE = re.compile(r"\033\[[0-9;]*m")
+FILTER_JS = Path(__file__).resolve().parent.parent / "filter.js"
 
 
 def strip_ansi(text):
@@ -199,3 +201,10 @@ class TestCalculateVramMatrix:
         assert "SSM" in out
         # SSM models have no KV growth, so every usecase row should report the base size.
         assert out.count("2.0G") >= len(vram_calculator.USECASES)
+
+
+class TestConstantsInSyncWithFilterJs:
+    def test_tight_fit_ratio_matches(self):
+        match = re.search(r"const\s+TIGHT_FIT_RATIO\s*=\s*([0-9.]+)\s*;", FILTER_JS.read_text(encoding="utf-8"))
+        assert match, "TIGHT_FIT_RATIO not found in filter.js"
+        assert float(match.group(1)) == vram_calculator.TIGHT_FIT_RATIO
