@@ -16,9 +16,10 @@
 
 <div class="family-header">
   <h1>Gemma 4</h1>
-  <p class="subtitle">Google DeepMind · Trainings-Cutoff Januar 2025 · 140+ Sprachen · 262k Vokabular</p>
+  <p class="subtitle">Google DeepMind · Release 31.03.2026 (12B: 03.06.2026) · Apache 2.0 · Trainings-Cutoff Januar 2025 · 140+ Sprachen · 262k Vokabular</p>
   <div class="family-tags">
     <span class="badge badge-arch">gemma4</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Apache 2.0</span>
     <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Multimodal</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking Mode</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
@@ -36,10 +37,13 @@
     </div>
     <div class="spec-row"><span class="spec-label">Effektive Parameter</span><span class="spec-value">2,3 B</span></div>
     <div class="spec-row"><span class="spec-label">Gesamt (+ Embeddings)</span><span class="spec-value">5,1 B</span></div>
-    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">35</span></div>
+    <div class="spec-row"><span class="spec-label">Layer (lokal · global)</span><span class="spec-value">35 (28 · 7)</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Heads lokal / global</span><span class="spec-value">1 / 1</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Sharing</span><span class="spec-value">20 von 35 Layern</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
     <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">512 Token</span></div>
-    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Cache (F16)</span><span class="spec-value">6 KB/Token + 6 MB fix</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.144</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
     <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~150 M</span></div>
     <div class="spec-row"><span class="spec-label">Audio-Encoder</span><span class="spec-value">~300 M</span></div>
@@ -53,10 +57,13 @@
     </div>
     <div class="spec-row"><span class="spec-label">Effektive Parameter</span><span class="spec-value">4,5 B</span></div>
     <div class="spec-row"><span class="spec-label">Gesamt (+ Embeddings)</span><span class="spec-value">8 B</span></div>
-    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">42</span></div>
+    <div class="spec-row"><span class="spec-label">Layer (lokal · global)</span><span class="spec-value">42 (35 · 7)</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Heads lokal / global</span><span class="spec-value">2 / 2</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Sharing</span><span class="spec-value">18 von 42 Layern</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
     <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">512 Token</span></div>
-    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Cache (F16)</span><span class="spec-value">16 KB/Token + 20 MB fix</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.144</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
     <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~150 M</span></div>
     <div class="spec-row"><span class="spec-label">Audio-Encoder</span><span class="spec-value">~300 M</span></div>
@@ -66,14 +73,19 @@
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">Dense</span>
-      <span class="spec-card-title">Gemma 4 12B</span>
+      <span class="spec-card-title">Gemma 4 12B Unified</span>
     </div>
-    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">~12 B (Unified)</span></div>
-    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">48</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">11,95 B</span></div>
+    <div class="spec-row"><span class="spec-label">Release</span><span class="spec-value">03.06.2026</span></div>
+    <div class="spec-row"><span class="spec-label">Layer (lokal · global)</span><span class="spec-value">48 (40 · 8)</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Heads lokal / global</span><span class="spec-value">8 / 1</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
-    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">1.024 Token</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Cache (F16)</span><span class="spec-value">16 KB/Token + 320 MB fix</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.144</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio</span></div>
-    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Kein PLE (voll dicht)</span></div>
+    <div class="spec-row"><span class="spec-label">Encoder</span><span class="spec-value">keine (mmproj ~0,18 GB)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Encoder-frei, kein PLE</span></div>
   </div>
 
   <div class="spec-card">
@@ -84,10 +96,12 @@
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">3,8 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">25,2 B</span></div>
     <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
-    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">30</span></div>
+    <div class="spec-row"><span class="spec-label">Layer (lokal · global)</span><span class="spec-value">30 (25 · 5)</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Heads lokal / global</span><span class="spec-value">8 / 2</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
     <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">1.024 Token</span></div>
-    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Cache (F16)</span><span class="spec-value">20 KB/Token + 200 MB fix</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.144</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
     <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~550 M</span></div>
   </div>
@@ -98,23 +112,40 @@
       <span class="spec-card-title">Gemma 4 31B</span>
     </div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">30,7 B</span></div>
-    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">60</span></div>
+    <div class="spec-row"><span class="spec-label">Layer (lokal · global)</span><span class="spec-value">60 (50 · 10)</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Heads lokal / global</span><span class="spec-value">16 / 4</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k Token</span></div>
     <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">1.024 Token</span></div>
-    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.000</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Cache (F16)</span><span class="spec-value">80 KB/Token + 800 MB fix</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">262.144</span></div>
     <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild</span></div>
     <div class="spec-row"><span class="spec-label">Vision-Encoder</span><span class="spec-value">~550 M</span></div>
   </div>
 
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">Embedding</span>
+      <span class="spec-card-title">EmbeddingGemma 2</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">740 M</span></div>
+    <div class="spec-row"><span class="spec-label">Aufteilung</span><span class="spec-value">270 M Text · 170 M Vision · 300 M Audio</span></div>
+    <div class="spec-row"><span class="spec-label">Release</span><span class="spec-value">06.10.2026</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">24 (lokal:global 5:1)</span></div>
+    <div class="spec-row"><span class="spec-label">Eingabe-Kontext</span><span class="spec-value">8.192 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Sliding Window</span><span class="spec-value">1.024 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Embedding-Dimension</span><span class="spec-value">768 (MRL 512/256/128)</span></div>
+    <div class="spec-row"><span class="spec-label">Modalitäten</span><span class="spec-value">Text · Bild · Audio · Video</span></div>
+    <div class="spec-row"><span class="spec-label">GGUF (BF16)</span><span class="spec-value">0,56 GB + mmproj 0,98 GB</span></div>
+  </div>
 </div>
 
-<h2 class="section-title">VRAM-Kompatibilität (Q4-Quantisierung)</h2>
+<h2 class="section-title">VRAM-Kompatibilität (Q4_K_M, 8k Kontext)</h2>
 <div class="table-wrap">
 <table>
 <thead><tr>
   <th>Modell</th>
   <th>Typ</th>
-  <th style="white-space:nowrap">VRAM Q4</th>
+  <th style="white-space:nowrap">VRAM Q4 + 8k</th>
   <th class="gpu-head">6 GB VRAM<small>z. B. NVIDIA A2000</small></th>
   <th class="gpu-head">12 GB VRAM<small>z. B. RTX 3060 Ti</small></th>
   <th class="gpu-head">16 GB VRAM<small>z. B. RTX 4060 Ti</small></th>
@@ -126,56 +157,67 @@
   <tr>
     <td class="col-name">Gemma 4 E2B <span class="col-muted">(5,1 B)</span></td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~3–4 GB</td>
-    <td class="fit-detail fit-good"><strong>Perfekt</strong><span>Läuft voll im VRAM, ~2 GB Puffer für Basis-Kontext</span></td>
-    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Viel Platz für langen Kontext und Bilder</span></td>
-    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Massig Reserven für parallele Anfragen</span></td>
-    <td class="fit-detail fit-good"><strong>Ultra-Leicht</strong><span>Massig Platz für parallel laufende Agenten</span></td>
-    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~12–15 Tok/Sek · Modell passt komplett in RAM, ~12 GB frei</span></td>
+    <td class="col-mono">~4,3 GB</td>
+    <td class="fit-detail fit-good"><strong>Gut</strong><span>Nur Text ~4,3 GB; mit mmproj (~0,9 GB) ~5,2 GB, dann knapp</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Voller 128k-Kontext kostet nur ~0,8 GB KV-Cache</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Reserve für parallele Anfragen</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Platz für mehrere parallel laufende Agenten</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~12–15 Tok/Sek (Schätzung) · Modell passt komplett in RAM, ~11 GB frei</span></td>
   </tr>
 
   <tr>
     <td class="col-name">Gemma 4 E4B <span class="col-muted">(8 B)</span></td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~5–6 GB</td>
-    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt gerade so; kaum Platz für Bild-/Audio-Kontext</span></td>
-    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Ausreichend Puffer für Kontext und Bilder</span></td>
-    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Riesiger Kontext-Puffer frei</span></td>
-    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Riesiger Kontext-Puffer frei</span></td>
-    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~8–10 Tok/Sek · Belegt fast halben RAM; träge bei Bildern</span></td>
+    <td class="col-mono">~6,1 GB</td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Q4_K_M passt nicht; mit UD-Q4_K_XL (4,2 GB) oder QAT-Q4_0 (5,2 GB) ohne mmproj</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>128k-Kontext in F16 ~8,1 GB, mmproj passt dazu</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Großer Puffer für Kontext und Bilder</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Großer Puffer für Kontext und Bilder</span></td>
+    <td class="fit-detail fit-tight"><strong>Akzeptabel</strong><span>~8–10 Tok/Sek (Schätzung) · belegt gut ein Drittel des RAM; träge bei Bildern</span></td>
   </tr>
 
   <tr>
     <td class="col-name">Gemma 4 12B <span class="col-muted">(Unified)</span></td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~6,5–7 GB</td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM läuft über; Absturz oder extremer Einbruch</span></td>
-    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für Multimodalität</span></td>
-    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Beste Balance aus Intelligenz, Audio &amp; Kontext</span></td>
-    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Beste Balance aus Intelligenz, Audio &amp; Kontext</span></td>
-    <td class="fit-detail fit-tight"><strong>Sehr träge / Limit</strong><span>~4–6 Tok/Sek · Belegt inkl. System fast den gesamten RAM</span></td>
+    <td class="col-mono">~8,3 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Schon die Q4-Gewichte (7,4 GB) sind größer als der VRAM</span></td>
+    <td class="fit-detail fit-good"><strong>Gut</strong><span>Bis ~64k Kontext inkl. mmproj (~9,5 GB); 128k knapp (~10,5 GB), mit q4_0-KV entspannt</span></td>
+    <td class="fit-detail fit-good"><strong>Sweet-Spot</strong><span>Voller 256k-Kontext in F16 ~12,6 GB inkl. Audio/Bild</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Platz für Q8_0 (~13 GB) oder parallele Slots</span></td>
+    <td class="fit-detail fit-tight"><strong>Träge</strong><span>~4–6 Tok/Sek (Schätzung) · ~8–9 GB belegt, Rest bleibt für das System</span></td>
   </tr>
 
   <tr>
     <td class="col-name">Gemma 4 26B A4B <span class="col-muted">(MoE)</span></td>
     <td><span class="badge badge-moe">MoE 8/128</span></td>
-    <td class="col-mono">~14–16 GB</td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
-    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; kaum Puffer für Chat-Verlauf</span></td>
-    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>Hohe Logik-Intelligenz, genug Platz für Chat-Verlauf</span></td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM komplett → System fängt an zu swappen</span></td>
+    <td class="col-mono">~17 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein (nur mit Expert-Offload in den RAM)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein (nur mit Expert-Offload in den RAM)</span></td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Q4_K_M passt nicht; UD-Q3_K_M (12,7 GB) oder IQ4_XS (13,6 GB) mit kurzem Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr gut</strong><span>~18 GB inkl. mmproj bei 8k; 128k in F16 ~20,6 GB</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich (Q4)</strong><span>Q4 sprengt 16 GB RAM; UD-IQ2_M (10 GB) passt, läuft dank ~4 B aktiv brauchbar</span></td>
   </tr>
 
   <tr>
     <td class="col-name">Gemma 4 31B <span class="col-muted">(Dense)</span></td>
     <td><span class="badge badge-arch">Dense</span></td>
-    <td class="col-mono">~18–21 GB</td>
+    <td class="col-mono">~19,5 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM viel zu klein</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein</span></td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM reicht bei Weitem nicht aus</span></td>
-    <td class="fit-detail fit-tight"><strong>Knapp (Limit)</strong><span>Modell passt, aber bei langen Texten/Bildern droht Überlauf</span></td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM/RAM reicht bei Weitem nicht aus</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Schon die Q4-Gewichte (18,3 GB) passen nicht</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp</strong><span>8k–32k mit F16-KV (19,5–21,4 GB); 128k nur mit q4_0-KV (~21 GB); mmproj +1,2 GB</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>RAM reicht bei Weitem nicht aus</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">EmbeddingGemma 2 <span class="col-muted">(740 M)</span></td>
+    <td><span class="badge badge-arch">Embedding</span></td>
+    <td class="col-mono">~0,6 GB</td>
+    <td class="fit-detail fit-good"><strong>Problemlos</strong><span>Text-Modell BF16 0,56 GB; mit mmproj für Bild/Audio ~1,5 GB</span></td>
+    <td class="fit-detail fit-good"><strong>Problemlos</strong><span>Läuft gut neben einem Chat-Modell (RAG)</span></td>
+    <td class="fit-detail fit-good"><strong>Problemlos</strong><span>Läuft gut neben einem Chat-Modell (RAG)</span></td>
+    <td class="fit-detail fit-good"><strong>Problemlos</strong><span>Läuft gut neben einem Chat-Modell (RAG)</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Für Embeddings auf der CPU ausreichend schnell</span></td>
   </tr>
 
 </tbody>
@@ -202,7 +244,7 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-part" title="als Einzel-Frames, max. 60 s bei 1 fps">~</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">128k</td>
@@ -213,7 +255,7 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-part" title="als Einzel-Frames, max. 60 s bei 1 fps">~</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">128k</td>
@@ -224,7 +266,7 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-part" title="als Einzel-Frames, max. 60 s bei 1 fps">~</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">256k</td>
@@ -235,7 +277,7 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-no">✗</td>
-    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-part" title="als Einzel-Frames, max. 60 s bei 1 fps">~</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">256k</td>
@@ -246,11 +288,22 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-no">✗</td>
-    <td class="cap-cell cap-part" title="via Einzel-Frames">~</td>
+    <td class="cap-cell cap-part" title="als Einzel-Frames, max. 60 s bei 1 fps">~</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">256k</td>
     <td class="col-mono col-muted">35+</td>
+  </tr>
+  <tr>
+    <td class="col-name">EmbeddingGemma 2</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="als Frames, 140 Token pro Frame">~</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="col-mono">8k</td>
+    <td class="col-mono col-muted">100+</td>
   </tr>
 </tbody>
 </table>
@@ -272,14 +325,14 @@
     <td>GGUF · Unsloth Dynamic</td>
     <td class="col-mono">UD-Q2_K_XL</td>
     <td class="col-mono">10,5 GB</td>
-    <td class="col-muted">Kleinstes nutzbares GGUF</td>
+    <td class="col-muted">Noch kleiner: UD-IQ2_M 10,0 GB, UD-IQ2_XXS 9,9 GB</td>
   </tr>
   <tr>
     <td class="col-name">26B-A4B</td>
     <td>GGUF · Unsloth Dynamic</td>
     <td class="col-mono">UD-Q3_K_M</td>
-    <td class="col-mono">12,5 GB</td>
-    <td></td>
+    <td class="col-mono">12,7 GB</td>
+    <td class="col-muted">Für 16-GB-GPUs mit kurzem Kontext</td>
   </tr>
   <tr>
     <td class="col-name">26B-A4B</td>
@@ -310,82 +363,185 @@
     <td class="col-muted">Volles Gewicht</td>
   </tr>
   <tr>
-    <td class="col-name">E2B</td>
-    <td>QAT W4A16 (offiziell)</td>
-    <td class="col-mono">-qat-w4a16-ct</td>
-    <td class="col-mono">7,3 GB</td>
-    <td class="col-muted">−26 % ggü. BF16</td>
-  </tr>
-  <tr>
-    <td class="col-name">E4B</td>
-    <td>QAT W4A16 (offiziell)</td>
-    <td class="col-mono">-qat-w4a16-ct</td>
-    <td class="col-mono">9,8 GB</td>
-    <td class="col-muted">−36 % ggü. BF16</td>
+    <td class="col-name">31B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">18,3 GB</td>
+    <td class="col-muted">Q4_0 17,3 GB · IQ4_XS 16,4 GB</td>
   </tr>
   <tr>
     <td class="col-name">12B</td>
     <td>GGUF</td>
     <td class="col-mono">Q4_K_M</td>
-    <td class="col-mono">6,9 GB</td>
+    <td class="col-mono">7,4 GB</td>
     <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">E4B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">5,3 GB</td>
+    <td class="col-muted">UD-Q4_K_XL (QAT-Basis) 4,2 GB</td>
+  </tr>
+  <tr>
+    <td class="col-name">E2B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">3,4 GB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="col-name">E2B</td>
+    <td>QAT Q4_0 GGUF (offiziell)</td>
+    <td class="col-mono">-qat-q4_0-gguf</td>
+    <td class="col-mono">3,35 GB</td>
+    <td class="col-muted">+ mmproj 0,99 GB</td>
+  </tr>
+  <tr>
+    <td class="col-name">E4B</td>
+    <td>QAT Q4_0 GGUF (offiziell)</td>
+    <td class="col-mono">-qat-q4_0-gguf</td>
+    <td class="col-mono">5,16 GB</td>
+    <td class="col-muted">+ mmproj 0,99 GB</td>
+  </tr>
+  <tr>
+    <td class="col-name">12B</td>
+    <td>QAT Q4_0 GGUF (offiziell)</td>
+    <td class="col-mono">-qat-q4_0-gguf</td>
+    <td class="col-mono">6,98 GB</td>
+    <td class="col-muted">+ mmproj 0,18 GB</td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B</td>
+    <td>QAT Q4_0 GGUF (offiziell)</td>
+    <td class="col-mono">-qat-q4_0-gguf</td>
+    <td class="col-mono">14,44 GB</td>
+    <td class="col-muted">+ mmproj 1,20 GB · kleiner als UD-Q4_K_M</td>
+  </tr>
+  <tr>
+    <td class="col-name">31B</td>
+    <td>QAT Q4_0 GGUF (offiziell)</td>
+    <td class="col-mono">-qat-q4_0-gguf</td>
+    <td class="col-mono">17,65 GB</td>
+    <td class="col-muted">+ mmproj 1,20 GB</td>
+  </tr>
+  <tr>
+    <td class="col-name">E2B</td>
+    <td>QAT W4A16 (offiziell)</td>
+    <td class="col-mono">-qat-w4a16-ct</td>
+    <td class="col-mono">8,3 GB</td>
+    <td class="col-muted">−19 % ggü. BF16 (Embeddings bleiben groß)</td>
+  </tr>
+  <tr>
+    <td class="col-name">E4B</td>
+    <td>QAT W4A16 (offiziell)</td>
+    <td class="col-mono">-qat-w4a16-ct</td>
+    <td class="col-mono">11,5 GB</td>
+    <td class="col-muted">−28 % ggü. BF16</td>
   </tr>
   <tr>
     <td class="col-name">12B</td>
     <td>QAT W4A16 (offiziell)</td>
     <td class="col-mono">-qat-w4a16-ct</td>
-    <td class="col-mono">8,3 GB</td>
-    <td class="col-muted">−64 % ggü. BF16</td>
+    <td class="col-mono">10,3 GB</td>
+    <td class="col-muted">−57 % ggü. BF16</td>
   </tr>
   <tr>
     <td class="col-name">31B</td>
     <td>QAT W4A16 (offiziell)</td>
     <td class="col-mono">-qat-w4a16-ct</td>
-    <td class="col-mono">19,8 GB</td>
-    <td class="col-muted">−66 % ggü. BF16</td>
+    <td class="col-mono">23,3 GB</td>
+    <td class="col-muted">−63 % ggü. BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">E2B</td>
+    <td>Mobile QAT (offiziell)</td>
+    <td class="col-mono">-qat-mobile-ct</td>
+    <td class="col-mono">2,7 GB</td>
+    <td class="col-muted">3,8× kleiner als BF16</td>
   </tr>
   <tr>
     <td class="col-name">E4B</td>
-    <td>Mobile QAT (int2/4/8)</td>
-    <td class="col-mono">-mobile</td>
+    <td>Mobile QAT (offiziell)</td>
+    <td class="col-mono">-qat-mobile-ct</td>
     <td class="col-mono">3,7 GB</td>
-    <td class="col-muted">4,1× kleiner als BF16 · +1,5× Durchsatz</td>
+    <td class="col-muted">4,3× kleiner als BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">26B-A4B / 31B</td>
+    <td>MTP-Drafter GGUF</td>
+    <td class="col-mono">mtp-…-Q8_0</td>
+    <td class="col-mono">0,46 / 0,51 GB</td>
+    <td class="col-muted">Für Speculative Decoding, BF16 0,86 / 0,95 GB</td>
+  </tr>
+  <tr>
+    <td class="col-name">E2B / E4B</td>
+    <td>MTP-Drafter (offiziell)</td>
+    <td class="col-mono">-it-assistant</td>
+    <td class="col-mono">0,16 GB</td>
+    <td class="col-muted">78 M Parameter, BF16</td>
+  </tr>
+  <tr>
+    <td class="col-name">EmbeddingGemma 2</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">0,31 GB</td>
+    <td class="col-muted">+ mmproj Q8_0 0,55 GB für Bild/Audio</td>
   </tr>
 </tbody>
 </table>
 </div>
 
-<h2 class="section-title">Kontextabhängiger VRAM-Bedarf (Gemma 4 31B, Q4)</h2>
+<h2 class="section-title">Kontextabhängiger VRAM-Bedarf (Gemma 4 31B, Q4_K_M)</h2>
 <div class="table-wrap">
 <table>
 <thead><tr>
   <th>Kontextlänge</th>
-  <th>KV-Cache/Token (BF16)</th>
-  <th>KV-Cache/Token (Q4)</th>
-  <th style="white-space:nowrap">Gesamt VRAM ca.</th>
+  <th>KV-Cache F16</th>
+  <th>KV-Cache q4_0</th>
+  <th style="white-space:nowrap">Gesamt (F16-KV)</th>
+  <th style="white-space:nowrap">Gesamt (q4_0-KV)</th>
 </tr></thead>
 <tbody>
   <tr>
-    <td class="col-mono">4 K Token</td>
-    <td class="col-mono">~0,85 MB</td>
-    <td class="col-mono">~0,038 MB</td>
-    <td class="col-mono">~20 GB</td>
+    <td class="col-mono">4k</td>
+    <td class="col-mono">1,1 GB</td>
+    <td class="col-mono">0,3 GB</td>
+    <td class="col-mono">~19,2 GB</td>
+    <td class="col-mono">~18,4 GB</td>
   </tr>
   <tr>
-    <td class="col-mono">64 K Token</td>
-    <td class="col-mono">~0,85 MB</td>
-    <td class="col-mono">~0,038 MB</td>
-    <td class="col-mono">~25 GB</td>
+    <td class="col-mono">32k</td>
+    <td class="col-mono">3,3 GB</td>
+    <td class="col-mono">0,9 GB</td>
+    <td class="col-mono">~21,4 GB</td>
+    <td class="col-mono">~19,0 GB</td>
   </tr>
   <tr>
-    <td class="col-mono">256 K Token</td>
-    <td class="col-mono">~0,85 MB</td>
-    <td class="col-mono">~0,038 MB</td>
-    <td class="col-mono">~40 GB</td>
+    <td class="col-mono">64k</td>
+    <td class="col-mono">5,8 GB</td>
+    <td class="col-mono">1,6 GB</td>
+    <td class="col-mono">~23,9 GB</td>
+    <td class="col-mono">~19,8 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">128k</td>
+    <td class="col-mono">10,8 GB</td>
+    <td class="col-mono">3,0 GB</td>
+    <td class="col-mono">~29,0 GB</td>
+    <td class="col-mono">~21,2 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">256k</td>
+    <td class="col-mono">20,8 GB</td>
+    <td class="col-mono">5,8 GB</td>
+    <td class="col-mono">~39,1 GB</td>
+    <td class="col-mono">~24,2 GB</td>
   </tr>
 </tbody>
 </table>
 </div>
+<p class="col-muted" style="font-size:0.76rem">Die Werte sind wie im VRAM-Rechner gerechnet. Sie enthalten 18,3 GB Gewichte, den KV-Cache der 10 globalen Layer (80 KB/Token in F16), den festen Cache der 50 Sliding-Window-Layer (~800 MB), den Compute-Puffer und 0,5 GB Overhead für einen Slot. Das mmproj für Bilder (+1,2 GB) ist nicht enthalten.</p>
 
 <h2 class="section-title">Deployment</h2>
 <div class="spec-grid">
@@ -395,8 +551,11 @@
       <span class="badge badge-arch">Ollama</span>
       <span class="spec-card-title">Einfachste Option</span>
     </div>
+    <div class="spec-row"><span class="spec-label">E4B (Standard)</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run gemma4</span></div>
+    <div class="spec-row"><span class="spec-label">12B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run gemma4:12b</span></div>
     <div class="spec-row"><span class="spec-label">26B-A4B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run gemma4:26b</span></div>
     <div class="spec-row"><span class="spec-label">31B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run gemma4:31b</span></div>
+    <div class="spec-row"><span class="spec-label">QAT-Varianten</span><span class="spec-value col-mono" style="font-size:0.8rem">gemma4:12b-it-qat usw.</span></div>
   </div>
 
   <div class="spec-card">
@@ -404,7 +563,7 @@
       <span class="badge badge-arch">LM Studio</span>
       <span class="spec-card-title">Day-0-Support</span>
     </div>
-    <div class="spec-row"><span class="spec-label">Alle 4 Varianten</span><span class="spec-value">GUI-gestützt, GGUF direkt wählbar</span></div>
+    <div class="spec-row"><span class="spec-label">Alle 5 Größen</span><span class="spec-value">GUI-gestützt, GGUF direkt wählbar</span></div>
   </div>
 
   <div class="spec-card">
@@ -413,7 +572,18 @@
       <span class="spec-card-title">KV-Optimierung</span>
     </div>
     <div class="spec-row"><span class="spec-label">KV-Quantisierung</span><span class="spec-value col-mono" style="font-size:0.8rem">--cache-type-k q4_0 --cache-type-v q4_0</span></div>
-    <div class="spec-row"><span class="spec-label">31B Tipp</span><span class="spec-value col-mono" style="font-size:0.8rem">-np 1  ← spart ~11 GB VRAM</span></div>
+    <div class="spec-row"><span class="spec-label">31B Tipp</span><span class="spec-value col-mono" style="font-size:0.8rem">-np 1  ← SWA-Cache ~1,2 statt ~3,5 GB</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">llama.cpp</span>
+      <span class="spec-card-title">MTP-Drafter</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Draft-Modell</span><span class="spec-value col-mono" style="font-size:0.8rem">--model-draft mtp-gemma-4-…-it.gguf</span></div>
+    <div class="spec-row"><span class="spec-label">Modus</span><span class="spec-value col-mono" style="font-size:0.8rem">--spec-type draft-mtp --spec-draft-n-max 2</span></div>
+    <div class="spec-row"><span class="spec-label">Gewinn</span><span class="spec-value">~1,4–2,2× (Unsloth-Angabe)</span></div>
+    <div class="spec-row"><span class="spec-label">Zusatz-VRAM</span><span class="spec-value">0,06–0,5 GB</span></div>
   </div>
 
   <div class="spec-card">
@@ -469,17 +639,23 @@
 
 <div class="note-box">
   <strong>Hinweise:</strong><br>
-  · VRAM-Werte gelten für Q4_K_M-Quantisierung <em>ohne</em> KV-Cache. Bei vollem Kontextfenster steigt der Bedarf deutlich (bis zu +50 %).<br>
+  · VRAM-Werte gelten für Q4_K_M mit 8k Kontext (F16-KV), Compute-Puffer und 0,5 GB Overhead, ohne mmproj. Sie sind wie im Rechner in GiB gerechnet; Dateigrößen in der Quantisierungstabelle sind GB (10⁹ Byte) wie auf Hugging Face.<br>
+  · Sliding-Window-Layer cachen höchstens 512 (E2B/E4B) bzw. 1.024 Token. Mit dem Kontext wächst nur der KV-Cache der globalen Layer, deshalb bleibt der KV-Bedarf trotz 256k Kontext moderat.<br>
   · E2B und E4B nutzen <em>Per-Layer Embeddings (PLE)</em>. Ein Großteil der Parameter steckt in Embeddings; die effektive Rechenlast ist wesentlich kleiner als die Gesamtparameter suggerieren.<br>
   · 26B A4B: MoE mit 1 geteiltem Experten + 8 gerouteten Experten pro Layer (de facto 9 FFN-Blöcke aktiv). GGUF-Metadaten zählen nur die 8 gerouteten; VRAM kann minimal unterschätzt werden.<br>
-  · Video wird über einzelne Einzel-Frames unterstützt, kein nativer Video-Stream.<br>
-  · Gemma 4 12B fehlt in der offiziellen Modellkarte (Stand Juni 2025); die Werte hier stammen aus verifizierten GGUF-Metadaten (48 Layer, 256k Kontext), nicht aus Google-Angaben.<br>
+  · Video läuft über Einzel-Frames (max. 60 s bei 1 fps), kein nativer Video-Stream. Audio ist auf 30 s pro Clip begrenzt und nur bei E2B, E4B und 12B verfügbar.<br>
+  · Gemma 4 12B Unified ist seit 03.06.2026 offiziell und steht in der Modellkarte. Es hat keine eigenen Vision- und Audio-Encoder: Bild-Patches und Audio gehen über lineare Schichten direkt in den Decoder. Das mmproj-GGUF ist deshalb nur ~0,18 GB groß.<br>
+  · In den globalen Layern von 12B, 26B A4B und 31B sind Key und Value identisch (<code>attention_k_eq_v</code>) und haben nur 1, 2 bzw. 4 KV-Heads. llama.cpp legt trotzdem K und V getrennt im Cache ab; die KV-Werte oben sind so gerechnet.<br>
+  · E2B und E4B teilen den KV-Cache über die letzten 20 bzw. 18 Layer (KV-Sharing). Nur 15 bzw. 24 Layer halten einen eigenen Cache.<br>
   · Alle Modelle teilen dasselbe Vokabular (262k Token) und die Hybrid-Attention-Architektur (lokales Sliding-Window + globale Attention).<br>
-  · KV-Cache der 31B ist 2–3× größer als bei vergleichbaren Modellen: ~0,85 MB/Token (BF16), ~0,038 MB/Token mit Q4-KV-Quantisierung.<br>
-  · QAT W4A16-Checkpoints sind offizielle Google-Quantisierungen, der Qualitätsverlust ist geringer als bei nachträglicher GGUF-Quantisierung.<br>
+  · KV-Cache der 31B: ~80 KB/Token für die globalen Layer (F16, q4_0 ~22 KB) plus fest ~800 MB für die Sliding-Window-Layer. Würden alle 60 Layer den vollen Kontext cachen (z. B. mit <code>--swa-full</code>), wären es ~0,86 MB/Token.<br>
+  · llama-server mit mehreren Slots (<code>-np 4</code>) legt den Sliding-Window-Cache pro Slot an. Bei der 31B wächst er dadurch von ~1,2 auf ~3,5 GB (inkl. Ubatch-Reserve).<br>
+  · QAT-Checkpoints sind offizielle Google-Quantisierungen (Q4_0-GGUF für llama.cpp, W4A16 für vLLM, Mobile-Varianten für E2B/E4B), der Qualitätsverlust ist geringer als bei nachträglicher Quantisierung. Seit 16.04.2026 gibt es zusätzlich MTP-Drafter (<code>-assistant</code>), inzwischen für alle fünf Größen.<br>
+  · EmbeddingGemma 2 (06.10.2026) basiert auf der Gemma-4-Architektur und bildet Text, Bild, Audio und Video in einen gemeinsamen 768-dimensionalen Vektorraum ab. Für reine Text-Embeddings reicht das 270-M-Textmodell ohne mmproj. llama.cpp unterstützt es (<code>gemma-embedding2</code>).<br>
   · Vision-Token-Budget: 280 Tokens/Bild als Standard, für OCR und Texterkennung empfehlen sich 560–1120 Tokens pro Bild.<br>
   · vLLM unterstützt neben NVIDIA CUDA auch AMD ROCm (MI300X/MI325X/MI350X/MI355X), Google Cloud TPUs und Intel Xeon 6 CPUs.<br>
-  · Lizenz: Apache 2.0, keine proprietären Nutzungsbeschränkungen.
+  · Lizenz: Apache 2.0 für alle Gemma-4-Modelle inkl. EmbeddingGemma 2. Frühere Gemma-Generationen standen unter den eigenen Gemma Terms of Use.<br>
+  · Stand 19.11.2026: kein Gemma 4.x oder Gemma 5 angekündigt. MedGemma, ShieldGemma, FunctionGemma, T5Gemma, TranslateGemma und VaultGemma basieren weiterhin auf Gemma 3; Gemma-4-Ableger davon gibt es noch nicht.
 </div>
 
 </div>
