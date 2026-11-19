@@ -16,16 +16,120 @@
 
 <div class="family-header">
   <h1>Ling / Ring (inclusionAI)</h1>
-  <p class="subtitle">Ant Group · MIT-Lizenz · 128k Kontextfenster (YaRN bis 512k) · Bailing-MoE-Architektur (Ling 2.0)</p>
+  <p class="subtitle">Ant Group · MIT-Lizenz · Ling 3.x: 128k–256k Kontext (Ling-3.1-flash: 1M) · Ling 2.0: 32k nativ, 128k per YaRN · Bailing-MoE, ab Ling 2.5 mit Hybrid-Linear-Attention</p>
   <div class="family-tags">
+    <span class="badge badge-arch">bailingmoe3</span>
     <span class="badge badge-arch">bailingmoe2</span>
     <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">MoE (Mixture-of-Experts)</span>
-    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking (Ring-Varianten)</span>
+    <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Hybrid-Linear (KDA + MLA)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking (Ling 3.x, Ring)</span>
     <span class="badge" style="background:rgba(63,185,80,0.14);color:var(--green)">Tool Calling</span>
   </div>
 </div>
 
-<h2 class="section-title">Architektur &amp; Parameter</h2>
+<h2 class="section-title">Ling 3.x: Hybrid-Linear-MoE (bailingmoe3, in llama.cpp unterstützt)</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">Ling-3.0-tiny</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">7,9 B (≈ 1,3 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">24: 18 KDA + 6 MLA (3:1), 1 Dense-Layer</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">128 geroutet, 8 aktiv + 1 Shared Expert</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size / Heads</span><span class="spec-value">1536 / 16</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k nativ, 256k per YaRN</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">157 184 Token</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">August 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">Ling-3.0-flash</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">124 B (≈ 5,1 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">42: 35 KDA + 7 Gated MLA (5:1), 2 Dense-Layer, 1 MTP-Layer</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">512 geroutet, 8 aktiv + 1 Shared Expert (1/64)</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size / Heads</span><span class="spec-value">2560 / 32</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">256k (Training 8k → 32k → 256k)</span></div>
+    <div class="spec-row"><span class="spec-label">Varianten</span><span class="spec-value">-VL (Vision), -Fin (Finanzen), Base-Modelle, FP8/INT4/FP4</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">August 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">Ling-3.1-flash</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Server</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">560 B (≈ 25 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">72: 63 KDA + 9 Gated MLA (7:1), 4 Dense-Layer, 1 MTP-Layer</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">512 geroutet, 8 aktiv + 1 Shared Expert</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Size / Heads</span><span class="spec-value">4096 / 64</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1M laut Modellkarte (config.json: 262 144)</span></div>
+    <div class="spec-row"><span class="spec-label">Versionen</span><span class="spec-value">Ling-3.1-flash (Okt. 2026), Ling-3.1-flash-1019 (Ende Okt. 2026)</span></div>
+    <div class="spec-row"><span class="spec-label">Gewichte</span><span class="spec-value">FP8 (E4M3) auf Hugging Face</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">Ling / Ring 2.5 und 2.6: Hybrid-Linear (MLA + Lightning, kein llama.cpp-Support)</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="spec-card-title">Ling-2.6-flash</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">104 B (≈ 7,4 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">32, MLA und Lightning Linear Attention im Verhältnis 1:7</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">256 geroutet, 8 aktiv + 1 Shared Expert</span></div>
+    <div class="spec-row"><span class="spec-label">Typ</span><span class="spec-value">Instruct-Modell ohne langes Thinking</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k nativ, 256k per YaRN</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">April 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="spec-card-title">Ling-2.5-1T / Ling-2.6-1T</span>
+      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">≈ 1 Billion (≈ 63 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">80, MLA und Lightning Linear Attention im Verhältnis 1:7</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">256 geroutet, 8 aktiv + 1 Shared Expert</span></div>
+    <div class="spec-row"><span class="spec-label">Typ</span><span class="spec-value">Instant-Modell („Fast Thinking“, kurze Antworten)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">2.5: 256k, per YaRN 1M · 2.6: 256k</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">2.5: Februar 2026 · 2.6: April 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">MoE</span>
+      <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking</span>
+      <span class="spec-card-title">Ring-2.5-1T / Ring-2.6-1T</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">≈ 1 Billion (≈ 63 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Ling-2.5-Architektur + RL für Reasoning und Agenten-Aufgaben</span></div>
+    <div class="spec-row"><span class="spec-label">Reasoning-Stufen</span><span class="spec-value">Ring-2.6-1T: „high“ und „xhigh“</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k nativ, 256k per YaRN</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">2.5: Februar 2026 · 2.6: Mai 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">Ling / Ring 2.0: klassische Attention (bailingmoe2)</h2>
 <div class="spec-grid">
 
   <div class="spec-card">
@@ -36,7 +140,7 @@
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">16 B (≈ 1,4 B aktiv)</span></div>
     <div class="spec-row"><span class="spec-label">Aktivierungsrate</span><span class="spec-value">1/32 (fine-grained Experts)</span></div>
     <div class="spec-row"><span class="spec-label">Training</span><span class="spec-value">&gt;20 Billionen Token, gefolgt von Mid-Training/SFT/RL</span></div>
-    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k native, via YaRN bis 512k</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">32k nativ, via YaRN bis 128k</span></div>
     <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Effizientes Allround-Modell, Leistung vergleichbar mit ~7-8B Dense</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
@@ -50,7 +154,7 @@
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">16 B (≈ 1,4 B aktiv)</span></div>
     <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Ling-mini-2.0 + RL-Post-Training für langes Chain-of-Thought</span></div>
     <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Mathematik, Code, Logik-Reasoning</span></div>
-    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k native, via YaRN bis 512k</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">32k nativ, via YaRN bis 128k</span></div>
     <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value">Ja</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
@@ -63,7 +167,7 @@
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">100 B (≈ 6,1 B aktiv)</span></div>
     <div class="spec-row"><span class="spec-label">Aktivierungsrate</span><span class="spec-value">1/16 (fine-grained Experts)</span></div>
     <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Ling 2.0, gleiche Familie wie Ling-mini-2.0, hochskaliert</span></div>
-    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k native, via YaRN bis 512k</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">32k nativ, via YaRN bis 128k</span></div>
     <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Stärkerer Allrounder, mehr Kapazität als Mini bei ~4× aktiven Parametern</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
@@ -77,7 +181,7 @@
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">100 B (≈ 6,1 B aktiv)</span></div>
     <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Ling-flash-2.0 + RL-Post-Training für langes Chain-of-Thought</span></div>
     <div class="spec-row"><span class="spec-label">Fokus</span><span class="spec-value">Mathematik, Code, Logik-Reasoning</span></div>
-    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k native, via YaRN bis 512k</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">32k nativ, via YaRN bis 128k</span></div>
     <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value">Ja</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
@@ -86,12 +190,11 @@
     <div class="spec-card-header">
       <span class="badge badge-arch">MoE</span>
       <span class="spec-card-title">Ling-1T</span>
-      <span class="badge" style="background:rgba(248,81,73,0.12);color:var(--red);font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;font-family:ui-monospace,monospace">Flagship</span>
     </div>
-    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">≈ 1 Billion (≈ 50 B aktiv)</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">≈ 1 Billion (≈ 51 B aktiv)</span></div>
     <div class="spec-row"><span class="spec-label">Architektur</span><span class="spec-value">Ling 2.0 weiter hochskaliert, Evo-CoT-Training</span></div>
-    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k native, via YaRN bis 512k</span></div>
-    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Flaggschiff, konkurriert mit anderen Trillion-Parameter-MoE-Modellen</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">32k nativ, via YaRN bis 128k</span></div>
+    <div class="spec-row"><span class="spec-label">Einsatzzweck</span><span class="spec-value">Flaggschiff der 2.0-Generation (Oktober 2025), Nachfolger sind Ling-2.5-1T und Ling-2.6-1T</span></div>
     <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
   </div>
 
@@ -113,20 +216,31 @@
 <tbody>
 
   <tr>
+    <td class="col-name">Ling-3.0-tiny</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~5,4 GB (32k)<br>~6 GB (128k)<br><span style="opacity:0.7;font-size:0.68rem">(Datei 4,8 GB)</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Mit 32k–64k Kontext; 128k füllt die 6 GB vollständig</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Auch Q8_0 (8,4 GB) mit 128k Kontext passt</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Q8_0 mit 256k Kontext (YaRN) passt</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Selbst BF16 (15,8 GB) passt</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>Nur 1,3 B aktive Parameter, daher flotte CPU-Inferenz</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">Ling-mini-2.0 / Ring-mini-2.0</td>
     <td><span class="badge badge-arch">MoE</span></td>
     <td class="col-mono">~10 GB</td>
-    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>VRAM zu klein für 128k Kontext</span></td>
-    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Passt, wenig Puffer bei langem Kontext</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Schon die Datei (9,9 GB) ist größer als der VRAM</span></td>
+    <td class="fit-detail fit-tight"><strong>Knapp möglich</strong><span>Passt mit kurzem Kontext; 128k braucht ~5,4 GB KV-Cache zusätzlich</span></td>
     <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>Nur ~1,4 B aktive Parameter → sehr schnelle Inferenz</span></td>
-    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Viel Puffer für 128k+ Kontext</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>Platz für die vollen 128k Kontext</span></td>
     <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>MoE-Routing hält CPU-Inferenz trotz 16 B Gesamtgröße flott</span></td>
   </tr>
 
   <tr>
     <td class="col-name">Ling-flash-2.0 / Ring-flash-2.0</td>
     <td><span class="badge badge-arch">MoE</span></td>
-    <td class="col-mono">~62 GB</td>
+    <td class="col-mono">~63 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
@@ -135,9 +249,42 @@
   </tr>
 
   <tr>
+    <td class="col-name">Ling-2.6-flash</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~66 GB<br><span style="opacity:0.7;font-size:0.68rem">(nur llama.cpp-Fork)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Offizielles llama.cpp lädt die Architektur nicht; GGUFs laufen nur im Fork ssweens/llama.cpp-ling-2.6</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM deutlich</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Ling-3.0-flash</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~79 GB (128k)<br>~80 GB (256k)<br><span style="opacity:0.7;font-size:0.68rem">(Datei 77,8 GB)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Auch IQ2_XXS (35 GB) ist zu groß</span></td>
+    <td class="fit-detail fit-tight"><strong>Nur mit Offloading</strong><span>Experten im System-RAM (--n-cpu-moe), Attention und KV-Cache auf der GPU; braucht ≥ 96 GB RAM. Mit 5,1 B aktiven Parametern bleibt das brauchbar schnell</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Sprengt 16 GB RAM deutlich</span></td>
+  </tr>
+
+  <tr>
+    <td class="col-name">Ling-3.1-flash / -1019</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~362 GB (256k)<br>~370 GB (1M)<br><span style="opacity:0.7;font-size:0.68rem">(Datei 358 GB)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Nur Multi-GPU-Server oder Workstation mit ≥ 384 GB RAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">Ling-1T</td>
     <td><span class="badge badge-arch">MoE</span></td>
-    <td class="col-mono">~620+ GB<br><span style="opacity:0.7;font-size:0.68rem">(Schätzung aus Parameterzahl)</span></td>
+    <td class="col-mono">~610 GB<br><span style="opacity:0.7;font-size:0.68rem">(Datei 608 GB)</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
@@ -145,6 +292,79 @@
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
   </tr>
 
+  <tr>
+    <td class="col-name">Ling- / Ring-2.5-1T, -2.6-1T</td>
+    <td><span class="badge badge-arch">MoE</span></td>
+    <td class="col-mono">~620 GB<br><span style="opacity:0.7;font-size:0.68rem">(Schätzung, kein GGUF)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>llama.cpp unterstützt die Architektur nicht; Betrieb nur mit SGLang/vLLM auf Datacenter-GPUs</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>—</span></td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">KV-Cache je Kontextlänge (f16, llama.cpp)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell</th>
+  <th style="white-space:nowrap">Attention-Layer mit KV-Cache</th>
+  <th style="white-space:nowrap">je Token</th>
+  <th style="white-space:nowrap;text-align:center">32k</th>
+  <th style="white-space:nowrap;text-align:center">128k</th>
+  <th style="white-space:nowrap;text-align:center">256k</th>
+  <th style="white-space:nowrap;text-align:center">1M</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td class="col-name">Ling-mini-2.0</td>
+    <td class="col-mono col-muted">20 GQA (4 KV-Heads)</td>
+    <td class="col-mono">40 KiB</td>
+    <td class="col-mono" style="text-align:center">~1,3 GB</td>
+    <td class="col-mono" style="text-align:center">~5,4 GB</td>
+    <td class="col-mono" style="text-align:center">—</td>
+    <td class="col-mono" style="text-align:center">—</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-flash-2.0</td>
+    <td class="col-mono col-muted">32 GQA (4 KV-Heads)</td>
+    <td class="col-mono">64 KiB</td>
+    <td class="col-mono" style="text-align:center">~2,1 GB</td>
+    <td class="col-mono" style="text-align:center">~8,6 GB</td>
+    <td class="col-mono" style="text-align:center">—</td>
+    <td class="col-mono" style="text-align:center">—</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-3.0-tiny</td>
+    <td class="col-mono col-muted">6 MLA von 24</td>
+    <td class="col-mono">6,75 KiB</td>
+    <td class="col-mono" style="text-align:center">~0,2 GB</td>
+    <td class="col-mono" style="text-align:center">~0,9 GB</td>
+    <td class="col-mono" style="text-align:center">~1,8 GB</td>
+    <td class="col-mono" style="text-align:center">—</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-3.0-flash</td>
+    <td class="col-mono col-muted">7 MLA von 42</td>
+    <td class="col-mono">7,9 KiB</td>
+    <td class="col-mono" style="text-align:center">~0,3 GB</td>
+    <td class="col-mono" style="text-align:center">~1,1 GB</td>
+    <td class="col-mono" style="text-align:center">~2,1 GB</td>
+    <td class="col-mono" style="text-align:center">—</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-3.1-flash</td>
+    <td class="col-mono col-muted">9 MLA von 72</td>
+    <td class="col-mono">10,1 KiB</td>
+    <td class="col-mono" style="text-align:center">~0,3 GB</td>
+    <td class="col-mono" style="text-align:center">~1,4 GB</td>
+    <td class="col-mono" style="text-align:center">~2,7 GB</td>
+    <td class="col-mono" style="text-align:center">~10,9 GB</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -163,12 +383,66 @@
 </tr></thead>
 <tbody>
   <tr>
+    <td class="col-name">Ling-3.0-tiny</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k (256k YaRN)</td>
+    <td class="col-mono col-muted">≈ 1,3 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-3.0-flash</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">256k</td>
+    <td class="col-mono col-muted">≈ 5,1 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-3.1-flash</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">1M</td>
+    <td class="col-mono col-muted">≈ 25 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-2.6-flash</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k (256k YaRN)</td>
+    <td class="col-mono col-muted">≈ 7,4 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ling-2.5-1T / Ling-2.6-1T</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">256k (2.5: 1M YaRN)</td>
+    <td class="col-mono col-muted">≈ 63 B</td>
+  </tr>
+  <tr>
+    <td class="col-name">Ring-2.5-1T / Ring-2.6-1T</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k (256k YaRN)</td>
+    <td class="col-mono col-muted">≈ 63 B</td>
+  </tr>
+  <tr>
     <td class="col-name">Ling-mini-2.0</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="col-mono">128k (512k YaRN)</td>
+    <td class="col-mono">32k (128k YaRN)</td>
     <td class="col-mono col-muted">≈ 1,4 B</td>
   </tr>
   <tr>
@@ -177,7 +451,7 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="col-mono">128k (512k YaRN)</td>
+    <td class="col-mono">32k (128k YaRN)</td>
     <td class="col-mono col-muted">≈ 1,4 B</td>
   </tr>
   <tr>
@@ -186,7 +460,7 @@
     <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="col-mono">128k (512k YaRN)</td>
+    <td class="col-mono">32k (128k YaRN)</td>
     <td class="col-mono col-muted">≈ 6,1 B</td>
   </tr>
   <tr>
@@ -195,7 +469,7 @@
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="col-mono">128k (512k YaRN)</td>
+    <td class="col-mono">32k (128k YaRN)</td>
     <td class="col-mono col-muted">≈ 6,1 B</td>
   </tr>
   <tr>
@@ -204,18 +478,19 @@
     <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
-    <td class="col-mono">128k (512k YaRN)</td>
-    <td class="col-mono col-muted">≈ 50 B</td>
+    <td class="col-mono">32k (128k YaRN)</td>
+    <td class="col-mono col-muted">≈ 51 B</td>
   </tr>
 </tbody>
 </table>
 </div>
 
 <div class="note-box">
-  <strong>Ling / Ring (inclusionAI, Ant Group):</strong> "inclusionAI" ist die Open-Source-Organisation von Ant Group (Alibaba-Finanztochter) auf Hugging Face. Die <strong>Ling-2.0</strong>-Serie sind reine "Instruct"/Base-Modelle für allgemeine Aufgaben, während die <strong>Ring</strong>-Serie dieselben Basismodelle über zusätzliches RL-Post-Training auf langes Chain-of-Thought-Reasoning spezialisiert (analog zu "Thinking"-Varianten anderer Familien wie ERNIE-Thinking oder Qwen3-Thinking). Beide Serien teilen sich Architektur und Parameterzahl je Größenstufe – Ring ist also kein eigenständiges Modell, sondern ein Reasoning-Finetune von Ling.<br><br>
-  <strong>Bailing-MoE-Architektur:</strong> Ling 2.0 setzt auf feingranulare Experten mit sehr niedriger Aktivierungsrate (1/32 bei Mini, 1/16 bei Flash). Dadurch bleiben trotz hoher Gesamtparameterzahl nur wenige Milliarden Parameter pro Token aktiv, was die Inferenz auch auf bescheidener Hardware spürbar beschleunigt gegenüber dicht besetzten Modellen ähnlicher Gesamtgröße. <strong>Ling-mini-2.0</strong> (16B/1,4B aktiv) positioniert sich damit als Alternative zu Modellen wie Qwen3-30B-A3B oder OLMoE für Nutzer mit 16–24 GB VRAM.<br><br>
-  <strong>Ling-1T:</strong> Das Flaggschiff der Familie mit rund einer Billion Gesamtparametern (≈50 B aktiv) wurde Ende 2025 veröffentlicht und richtet sich an Multi-GPU-/Datacenter-Umgebungen. Für Consumer-Hardware unter 32 GB VRAM ist ausschließlich <strong>Ling-mini-2.0</strong> bzw. <strong>Ring-mini-2.0</strong> praktikabel.<br><br>
-  <strong>Hinweis zu den Zahlen:</strong> Für Ling-flash-2.0 und Ling-1T liegen aktuell keine breit etablierten Standard-GGUF-Quantisierungen vor; die VRAM-Werte sind Schätzungen auf Basis der Gesamtparameterzahl (analog zur Berechnung bei Ling-mini-2.0). Angaben zu Parametern, Aktivierungsrate und Kontextfenster stammen aus den Hugging-Face-Modellkarten der inclusionAI-Organisation (inclusionAI/Ling-mini-2.0, inclusionAI/Ling-flash-2.0, inclusionAI/Ring-mini-2.0, inclusionAI/Ring-flash-2.0).
+  <strong>Ling / Ring (inclusionAI, Ant Group):</strong> "inclusionAI" ist die Open-Source-Organisation von Ant Group (Alibaba-Finanztochter) auf Hugging Face. Bis Version 2.6 trennt die Familie zwei Linien: <strong>Ling</strong> sind Instruct-Modelle ohne langes Chain-of-Thought, <strong>Ring</strong> sind dieselben Basismodelle mit zusätzlichem RL-Post-Training für Reasoning. Ab <strong>Ling 3.0</strong> gibt es keine eigenen Ring-Modelle mehr. Die Ling-3.x-Modelle sind Hybrid-Reasoning-Modelle, Thinking ist standardmäßig an und lässt sich pro Anfrage mit <code>enable_thinking: false</code> abschalten.<br><br>
+  <strong>Drei Architektur-Generationen:</strong> Ling 2.0 nutzt feingranulare Experten mit GQA-Attention in jedem Layer (llama.cpp-Architektur <code>bailingmoe2</code>). Ling 2.5 und 2.6 ersetzen per Weitertraining 7 von 8 Attention-Layern durch Lightning Linear Attention und den Rest durch MLA. Für diese Architektur (<code>BailingMoeV2_5</code>) gibt es in llama.cpp (Stand November 2026) keinen Support. Ling 3.0 ist von Beginn des Pretrainings an hybrid und kombiniert Kimi Delta Attention (KDA) mit Gated MLA. llama.cpp unterstützt diese Architektur seit August 2026 als <code>bailingmoe3</code> (PR #26608), dazu kamen ein eigener Chat-Parser (PR #28682) und Vision-Support für Ling-3.0-flash-VL (PR #29151).<br><br>
+  <strong>Weniger KV-Cache:</strong> Nur die MLA-Layer legen einen KV-Cache an. Bei MLA speichert llama.cpp je Token und Layer 576 Werte (kv_lora_rank 512 + 64 RoPE-Dimensionen), in f16 also 1 152 Byte. Die KDA-Layer halten einen festen rekurrenten Zustand, der nicht mit dem Kontext wächst (Ling-3.0-tiny ~20 MB, Ling-3.0-flash ~75 MB, Ling-3.1-flash ~265 MB). Ling-3.0-tiny braucht für 128k Kontext deshalb nur ~0,9 GB KV-Cache, Ling-mini-2.0 mit GQA dagegen ~5,4 GB.<br><br>
+  <strong>Empfehlung für Consumer-Hardware:</strong> <strong>Ling-3.0-tiny</strong> löst Ling-mini-2.0 als Einstieg ab. Die Q4_K_M-Datei ist mit 4,8 GB halb so groß, der Kontext reicht nativ bis 128k, und das Modell beherrscht Thinking und Tool Calling. Auf 12–16 GB VRAM lohnt sich Q8_0 (8,4 GB). <strong>Ling-3.0-flash</strong> ist die erste Ling-Stufe, die auf einer 24-GB-Karte mit Experten-Offloading in den System-RAM sinnvoll läuft, braucht dafür aber 96 GB RAM oder mehr. Ling-3.1-flash und alle 1T-Modelle sind Servermodelle.<br><br>
+  <strong>Hinweis zu den Zahlen:</strong> Die VRAM-Werte sind die Q4_K_M-Dateigrößen von bartowski (Ling 3.x, Ling-flash-2.0, Ling-1T), inclusionAI (Ling-mini-2.0) und ssweens (Ling-2.6-flash) plus KV-Cache und Compute-Buffer. Für Ling-3.0-tiny stammen Dateigröße und Compute-Buffer (~0,3 GB) aus einer lokal gescannten GGUF. Für Ling-/Ring-2.5/2.6-1T gibt es kein GGUF, der Wert ist aus der Parameterzahl hochgerechnet. Ling-3.1-flash nennt in der Modellkarte 1M Kontext, die config.json gibt aber nur 262 144 Positionen an. Ob 1M in llama.cpp ohne zusätzliche RoPE-Einstellungen funktioniert, ist nicht geprüft. Architekturdaten, Kontextlängen und Lizenzen stammen aus den Modellkarten und config.json-Dateien der inclusionAI-Organisation auf Hugging Face (Stand November 2026).
 </div>
 
 </div>
