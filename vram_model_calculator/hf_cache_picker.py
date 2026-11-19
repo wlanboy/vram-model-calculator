@@ -1,18 +1,21 @@
-"""Listet GGUF-Dateien im Huggingface-Cache auf und kopiert Auswahl nach /wdblack/models.
+"""Listet GGUF-Dateien im Huggingface-Cache auf und kopiert eine Auswahl ins
+Modellverzeichnis (copy_dest aus der Konfiguration, Default /wdblack/models).
 
 Der HF-Cache legt Snapshots unter
 ``~/.cache/huggingface/hub/models--<org>--<repo>/snapshots/<hash>/<datei>.gguf``
 ab. Dieses Tool nummeriert alle gefundenen GGUF-Dateien durch, damit man
-gezielt einzelne (oder alle) davon nach ``/wdblack/models/<org>/<repo>/``
+gezielt einzelne (oder alle) davon nach ``<ziel>/<org>/<repo>/``
 kopieren kann -- passend zur bestehenden Ordnerstruktur dort.
 """
+import argparse
 import os
 import re
 import shutil
-import sys
+
+from .config import DEFAULT_COPY_DEST, load_config
 
 HF_CACHE_DIR = os.path.expanduser("~/.cache/huggingface/hub/")
-DEFAULT_DEST = "/wdblack/models"
+DEFAULT_DEST = DEFAULT_COPY_DEST
 
 REPO_DIR_RE = re.compile(r'^models--(?P<org>[^-].*?)--(?P<repo>.+)$')
 
@@ -127,21 +130,17 @@ def copy_selected(files, indices, dest_root=DEFAULT_DEST, dry_run=False):
     return copied, skipped
 
 
-def main():
-    raw_args = sys.argv[1:]
-    dry_run = "--dry-run" in raw_args
-    raw_args = [a for a in raw_args if a != "--dry-run"]
+def add_arguments(parser):
+    parser.add_argument("--dry-run", action="store_true", help="Nur anzeigen, nicht kopieren")
+    parser.add_argument("--dest", default=None, help="Zielverzeichnis (Default: copy_dest aus der Konfiguration)")
+    parser.add_argument(
+        "selection", nargs="*",
+        help="Auswahl ('1,3,5-7' oder 'all'). Ohne Angabe wird interaktiv gefragt.",
+    )
 
-    dest_root = DEFAULT_DEST
-    args = []
-    i = 0
-    while i < len(raw_args):
-        if raw_args[i] == "--dest" and i + 1 < len(raw_args):
-            dest_root = raw_args[i + 1]
-            i += 2
-            continue
-        args.append(raw_args[i])
-        i += 1
+
+def run(args):
+    dest_root = args.dest or load_config().copy_dest
 
     files = find_gguf_files()
     if not files:
@@ -150,8 +149,8 @@ def main():
 
     _print_table(files)
 
-    if args:
-        selection = " ".join(args)
+    if args.selection:
+        selection = " ".join(args.selection)
     else:
         selection = input("Auswahl (z.B. '1,3,5-7' oder 'all', leer = abbrechen): ")
 
@@ -160,11 +159,17 @@ def main():
         print("Keine gültige Auswahl, nichts kopiert.")
         return 0
 
-    copied, skipped = copy_selected(files, indices, dest_root=dest_root, dry_run=dry_run)
-    suffix = " (dry-run)" if dry_run else ""
+    copied, skipped = copy_selected(files, indices, dest_root=dest_root, dry_run=args.dry_run)
+    suffix = " (dry-run)" if args.dry_run else ""
     print(f"\n✅ {copied} Datei(en) kopiert, {skipped} übersprungen{suffix}. Ziel: {dest_root}")
     return 0
 
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="GGUF-Dateien aus dem HF-Cache auflisten und kopieren.")
+    add_arguments(parser)
+    return run(parser.parse_args(argv))
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

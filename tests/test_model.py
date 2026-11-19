@@ -9,6 +9,7 @@ from vram_model_calculator._model import (
     ModelShape,
     NotAnLLMError,
     RecurrentShape,
+    compute_buffer_bytes,
     get_model_params,
     is_pure_ssm,
 )
@@ -676,3 +677,43 @@ class TestGetModelParamsMmproj:
         params = get_model_params("/models/MyModel/mmproj-f16.gguf", file_size_bytes=1)
         assert "modality" not in params
         assert params["image_size"] == 336
+
+
+class TestComputeBufferBytes:
+    def test_logits_dominate_for_large_vocab(self):
+        # Llama 3 8B: 512 * 4 * (128256 + 4096) bytes = 258.5 MiB. llama.cpp
+        # logs for this model with -fa often show the same figure
+        # ("compute buffer size = 258.50 MiB"); own measurements should be
+        # added here as further cases.
+        assert compute_buffer_bytes(128256, 4096, 14336) / 1024**2 == pytest.approx(258.5)
+
+    def test_ffn_dominates_for_small_vocab(self):
+        assert compute_buffer_bytes(1000, 1024, 8192) == 512 * 4 * (2 * 8192 + 2 * 1024)
+
+    def test_moe_uses_active_experts(self):
+        assert compute_buffer_bytes(0, 2048, None, n_ff_exp=768, n_experts_used=8) == 512 * 4 * (2 * 6144 + 2 * 2048)
+
+    def test_missing_dimensions(self):
+        assert compute_buffer_bytes(None, None) == 0
+        assert compute_buffer_bytes(None, 1024) == 512 * 4 * 2 * 1024
+
+
+
+
+class TestGetModelParamsComputeBuffer:
+    def test_dense_model(self, patch_reader):
+        patch_reader["reader"] = llama_reader()
+        params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
+        assert params["n_ff_exp"] is None
+        assert params["compute_buffer_bytes"] == compute_buffer_bytes(32000, 4096, 11008)
+
+    def test_moe_model_reads_expert_width(self, patch_reader):
+        patch_reader["reader"] = llama_reader(**{
+            "llama.feed_forward_length": int_field(0),
+            "llama.expert_feed_forward_length": int_field(1408),
+            "llama.expert_used_count": int_field(8),
+            "llama.expert_count": int_field(64),
+        })
+        params = get_model_params("/models/MyModel/model.gguf", file_size_bytes=1)
+        assert params["n_ff_exp"] == 1408
+        assert params["compute_buffer_bytes"] == compute_buffer_bytes(32000, 4096, 0, 1408, 8)

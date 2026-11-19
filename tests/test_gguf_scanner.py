@@ -137,9 +137,8 @@ class TestUpdateCache:
         gguf_file.write_bytes(b"fake gguf content")
 
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
 
-        def fake_get_model_params(path, file_size_bytes=None):
+        def fake_get_model_params(path, file_size_bytes=None, dump_file=None):
             return {"type": "llm", "name": "MyModel", "n_layers": 32}
 
         monkeypatch.setattr(gguf_scanner, "get_model_params", fake_get_model_params)
@@ -158,7 +157,6 @@ class TestUpdateCache:
         (model_dir / "model.gguf").write_bytes(b"data")
 
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
         monkeypatch.setattr(
             gguf_scanner, "get_model_params",
             lambda *a, **kw: pytest.fail("should not be called"),
@@ -169,7 +167,6 @@ class TestUpdateCache:
 
     def test_missing_base_dir_is_skipped_gracefully(self, tmp_path, monkeypatch, capsys):
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
         cache = update_cache([str(tmp_path / "does-not-exist")])
         assert cache == {}
         assert "Pfad nicht gefunden" in capsys.readouterr().out
@@ -182,9 +179,8 @@ class TestUpdateCache:
         (model_dir / "model.gguf").write_bytes(b"data")
 
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
 
-        def raise_not_llm(path, file_size_bytes=None):
+        def raise_not_llm(path, file_size_bytes=None, dump_file=None):
             raise NotAnLLMError("diffusion model")
 
         monkeypatch.setattr(gguf_scanner, "get_model_params", raise_not_llm)
@@ -198,7 +194,6 @@ class TestUpdateCache:
         model_dir.mkdir(parents=True)
         (model_dir / "model.gguf").write_bytes(b"data")
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
         monkeypatch.setattr(gguf_scanner, "get_model_params", fake_params)
 
         update_cache([str(tmp_path / "models")])
@@ -208,7 +203,7 @@ class TestUpdateCache:
             assert json.load(fh)["_version"] == 1
 
 
-def fake_params(path, file_size_bytes=None):
+def fake_params(path, file_size_bytes=None, dump_file=None):
     return {"type": "llm", "name": "x", "file_size_bytes": file_size_bytes, "head_dim_k": 128}
 
 
@@ -216,10 +211,9 @@ def fake_params(path, file_size_bytes=None):
 def scan_env(tmp_path, monkeypatch):
     """chdir into tmp_path and record get_model_params calls."""
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(gguf_scanner, "CACHE_FILE", "models_cache.json")
     calls = []
 
-    def recording_params(path, file_size_bytes=None):
+    def recording_params(path, file_size_bytes=None, dump_file=None):
         calls.append((path, file_size_bytes))
         return fake_params(path, file_size_bytes)
 
@@ -370,3 +364,72 @@ class TestPrune:
         self._setup(tmp_path)
         cache = update_cache([str(tmp_path / "empty-or-unmounted")], prune=True)
         assert "Gone-GGUF/x.gguf" in cache
+
+
+class TestRescanOptions:
+    def test_matches_rescan_substring_and_glob(self):
+        from vram_model_calculator.gguf_scanner import matches_rescan
+        assert matches_rescan("Qwen3-GGUF/qwen3-4b.gguf", ["QWEN3-4B"])
+        assert matches_rescan("Qwen3-GGUF/qwen3-4b.gguf", ["qwen3-*/*.gguf"])
+        assert not matches_rescan("Qwen3-GGUF/qwen3-4b.gguf", ["gemma"])
+
+    def test_needs_scan_forced(self):
+        cache = {"k": {"type": "llm", "file_size_bytes": 5, "head_dim_k": 128}}
+        assert not needs_scan("k", 5, cache)
+        assert needs_scan("k", 5, cache, rescan_all=True)
+        assert needs_scan("k", 5, cache, rescan_patterns=["k"])
+
+    def test_rescan_all_rescans_up_to_date_entries(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "M-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+        update_cache([str(tmp_path / "models")])
+        update_cache([str(tmp_path / "models")], rescan_all=True)
+        assert len(scan_env) == 2
+
+    def test_custom_cache_file_and_no_skip(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "dolphin-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+        cache_file = tmp_path / "elsewhere" / "cache.json"
+        cache_file.parent.mkdir()
+        cache = update_cache([str(tmp_path / "models")], cache_file=str(cache_file), skip_patterns=[])
+        assert "dolphin-GGUF/m.gguf" in cache
+        assert cache_file.exists()
+        assert not (tmp_path / "models_cache.json").exists()
+
+    def test_main_passes_options(self, tmp_path, scan_env):
+        d = tmp_path / "models" / "dolphin-GGUF"
+        d.mkdir(parents=True)
+        (d / "m.gguf").write_bytes(b"data")
+        cache_file = tmp_path / "c.json"
+        assert gguf_scanner.main([str(tmp_path / "models"), "--cache", str(cache_file)]) == 0
+        assert scan_env == []
+        gguf_scanner.main([str(tmp_path / "models"), "--cache", str(cache_file), "--no-skip"])
+        assert len(scan_env) == 1
+        gguf_scanner.main([str(tmp_path / "models"), "--cache", str(cache_file), "--no-skip", "--rescan", "dolphin"])
+        assert len(scan_env) == 2
+
+
+class TestCacheMigrations:
+    def test_legacy_string_ints_are_converted(self):
+        from vram_model_calculator.gguf_scanner import _migrate_legacy_ints
+        cache = {"m": {"type": "llm", "n_layers": "(", "n_embd": "4096", "n_ff": "abc", "name": "x"}}
+        entry = _migrate_legacy_ints(cache)["m"]
+        assert entry["n_layers"] == 40
+        assert entry["n_embd"] == 4096
+        assert entry["n_ff"] is None
+        assert entry["name"] == "x"
+
+    def test_compute_buffer_backfilled(self):
+        from vram_model_calculator._model import compute_buffer_bytes
+        from vram_model_calculator.gguf_scanner import _backfill_compute_buffer
+        cache = {
+            "m": {"type": "llm", "n_embd": 4096, "n_ff": 14336, "vocab_size": 128256},
+            "done": {"type": "llm", "n_embd": 1, "compute_buffer_bytes": 7},
+            "mm": {"type": "mmproj", "n_embd": 1},
+        }
+        out = _backfill_compute_buffer(cache)
+        assert out["m"]["compute_buffer_bytes"] == compute_buffer_bytes(128256, 4096, 14336)
+        assert out["done"]["compute_buffer_bytes"] == 7
+        assert "compute_buffer_bytes" not in out["mm"]

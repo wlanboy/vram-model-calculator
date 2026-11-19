@@ -120,6 +120,37 @@ KV_BYTES_PER_ELEMENT = 2
 # copy per parallel sequence, independent of the context length.
 RECURRENT_BYTES_PER_ELEMENT = 4
 
+# Compute buffer estimate (see compute_buffer_bytes). llama.cpp's default
+# micro-batch (-ub/--ubatch-size) is 512 tokens; activations are f32.
+COMPUTE_UBATCH = 512
+COMPUTE_BYTES_PER_ELEMENT = 4
+# With Flash Attention the KQ mask is the only part of the compute buffer
+# that grows with the context: one f16 entry per KV cell and ubatch token.
+# Consumers add ctx_total * COMPUTE_MASK_BYTES_PER_CTX_TOKEN to the stored
+# compute_buffer_bytes. Must match filter.js (checked by
+# tests/test_vram_calculator.py).
+COMPUTE_MASK_BYTES_PER_CTX_TOKEN = COMPUTE_UBATCH * 2
+
+
+def compute_buffer_bytes(vocab_size, n_embd, n_ff=None, n_ff_exp=None, n_experts_used=None,
+                         n_ubatch=COMPUTE_UBATCH):
+    """Estimates the context-independent part of llama.cpp's compute buffer
+    (log line "llama_context: <backend> compute buffer size").
+
+    ggml's graph allocator reuses memory, so the buffer is about the largest
+    set of activations alive at the same time for one ubatch: either the
+    output logits (n_vocab f32 per token, plus the normed input) or the FFN
+    block (gate and up projection, plus residual and input). MoE models use
+    n_ff_exp per active expert. Attention scores aren't counted because they
+    stay small with Flash Attention; the KQ mask is added per context token
+    by the consumers (COMPUTE_MASK_BYTES_PER_CTX_TOKEN).
+    """
+    if not n_embd:
+        return 0
+    ffn_width = n_ff or (n_ff_exp or 0) * (n_experts_used or 0)
+    per_token = max((vocab_size or 0) + n_embd, 2 * ffn_width + 2 * n_embd)
+    return n_ubatch * per_token * COMPUTE_BYTES_PER_ELEMENT
+
 
 def is_pure_ssm(n_kv_heads):
     """True for a model without any attention layer of its own (Mamba, RWKV,
@@ -370,7 +401,7 @@ def _kv_heads_per_layer(reader, arch, n_layers, n_kv_heads, is_ssm):
     return tuple(per_layer) if varies else None
 
 
-def get_mmproj_params(reader, file_path, file_size_bytes):
+def get_mmproj_params(reader, file_path, file_size_bytes, dump_file=None):
     raw_name = clean_name(get_str(reader, "general.name"))
     # Audio-only projectors (e.g. speech-to-text encoders) carry clip.audio.*
     # metadata instead of clip.vision.*; clip.has_audio_encoder marks those,
@@ -411,13 +442,13 @@ def get_mmproj_params(reader, file_path, file_size_bytes):
         critical = ["image_size", "n_embd", "n_layers"]
     missing = [f for f in critical if params.get(f) is None]
     if missing:
-        print(f"  ⚠️ Fehlende Felder {missing} in {os.path.basename(file_path)} → dump nach {METADATA_DUMP_FILE}")
-        dump_all_fields(reader, file_path)
+        print(f"  ⚠️ Fehlende Felder {missing} in {os.path.basename(file_path)} → dump nach {dump_file or METADATA_DUMP_FILE}")
+        dump_all_fields(reader, file_path, dump_file)
         params["has_missing_fields"] = True
     return params
 
 
-def get_model_params(file_path, file_size_bytes=None):
+def get_model_params(file_path, file_size_bytes=None, dump_file=None):
     reader = open_gguf_reader(file_path)
     if file_size_bytes is None:
         file_size_bytes = os.path.getsize(file_path)
@@ -434,7 +465,7 @@ def get_model_params(file_path, file_size_bytes=None):
         }
 
     if "mmproj" in os.path.basename(file_path).lower() or general_type == "projector":
-        return get_mmproj_params(reader, file_path, file_size_bytes)
+        return get_mmproj_params(reader, file_path, file_size_bytes, dump_file)
 
     arch = get_str(reader, "general.architecture")
     if not arch:
@@ -545,6 +576,10 @@ def get_model_params(file_path, file_size_bytes=None):
         la_head_dim=head_dim_k if arch_lower == "minimax-01" else 0,
     )
 
+    n_ff_exp = get_safe_int(reader, f"{arch}.expert_feed_forward_length")
+    n_experts_used = get_safe_int(reader, f"{arch}.expert_used_count")
+    vocab_size = get_vocab_size(reader, arch)
+
     params = {
         "type": MODEL_TYPE_LLM,
         "arch": arch,
@@ -571,9 +606,11 @@ def get_model_params(file_path, file_size_bytes=None):
         "recurrent_layers": recurrent.n_recurrent_layers,
         "recurrent_state_bytes": recurrent.state_bytes_per_session(),
         "n_ff": n_ff,
+        "n_ff_exp": n_ff_exp,
         "n_experts": get_safe_int(reader, f"{arch}.expert_count"),
-        "n_experts_used": get_safe_int(reader, f"{arch}.expert_used_count"),
-        "vocab_size": get_vocab_size(reader, arch),
+        "n_experts_used": n_experts_used,
+        "vocab_size": vocab_size,
+        "compute_buffer_bytes": compute_buffer_bytes(vocab_size, n_embd, n_ff, n_ff_exp, n_experts_used),
         "n_ctx_orig": n_ctx,
         "file_size_bytes": file_size_bytes,
         "file_size_gb": round(file_size_bytes / (1024**3), 3),
@@ -588,8 +625,8 @@ def get_model_params(file_path, file_size_bytes=None):
 
     missing = [f for f in critical if params.get(f) is None]
     if missing:
-        print(f"  ⚠️ Fehlende Felder {missing} in {os.path.basename(file_path)} → dump nach {METADATA_DUMP_FILE}")
-        dump_all_fields(reader, file_path)
+        print(f"  ⚠️ Fehlende Felder {missing} in {os.path.basename(file_path)} → dump nach {dump_file or METADATA_DUMP_FILE}")
+        dump_all_fields(reader, file_path, dump_file)
         params["has_missing_fields"] = True
 
     return params

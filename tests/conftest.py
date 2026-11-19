@@ -66,3 +66,10 @@ def array_field(values):
 @pytest.fixture
 def make_reader():
     return lambda fields: FakeReader(fields)
+
+
+@pytest.fixture(autouse=True)
+def isolated_config(tmp_path, monkeypatch):
+    """Keep the user's config file and VRAM_CALC_CACHE out of every test."""
+    monkeypatch.setenv("VRAM_CALC_CONFIG", str(tmp_path / "no-config.toml"))
+    monkeypatch.delenv("VRAM_CALC_CACHE", raising=False)

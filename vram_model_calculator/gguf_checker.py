@@ -1,11 +1,12 @@
+import argparse
 import os
 import struct
-import sys
 
 from gguf import GGUFReader
 from tqdm import tqdm
 
-from .gguf_scanner import DEFAULT_DIRS, SHARD_RE, get_shard_info
+from .config import load_config
+from .files import collect_gguf_files, get_shard_info, group_shards
 
 GGUF_MAGIC = b'GGUF'
 SUPPORTED_VERSIONS = (2, 3)
@@ -98,23 +99,6 @@ def check_shard_group(paths):
     return {"status": "ok", "total_shards": total, "found_shards": len(shards)}
 
 
-def _collect_gguf_files(targets):
-    files = []
-    for target in targets:
-        if os.path.isfile(target):
-            if target.endswith(".gguf"):
-                files.append(os.path.abspath(target))
-            continue
-        if not os.path.isdir(target):
-            print(f"❌ Pfad nicht gefunden: {target}")
-            continue
-        for root, _, names in os.walk(target):
-            for n in names:
-                if n.endswith(".gguf"):
-                    files.append(os.path.join(root, n))
-    return files
-
-
 class ScanReport:
     """Accumulates check_file()/check_shard_group() results, partitioned by status."""
 
@@ -137,23 +121,18 @@ class ScanReport:
         return bool(self.incomplete or self.corrupt)
 
 
-def main():
-    targets = sys.argv[1:] if len(sys.argv) > 1 else DEFAULT_DIRS
-    files = _collect_gguf_files(targets)
-    if not files:
+def add_arguments(parser):
+    parser.add_argument("paths", nargs="*", help="Zu prüfende Dateien oder Verzeichnisse (Default: scan_dirs aus der Konfiguration)")
+
+
+def run(args):
+    targets = args.paths or load_config().expanded_scan_dirs
+    pairs, _ = collect_gguf_files(targets)
+    if not pairs:
         print("❌ Keine GGUF-Dateien gefunden.")
         return 1
 
-    shard_groups = {}
-    singles = []
-    for f in files:
-        info = get_shard_info(f)
-        if info:
-            base = SHARD_RE.sub('.gguf', f)
-            shard_groups.setdefault(base, []).append(f)
-        else:
-            singles.append(f)
-
+    singles, shard_groups = group_shards([p for p, _ in pairs])
     report = ScanReport()
 
     for f in tqdm(singles, desc="Einzeldateien prüfen", unit="file", colour="green"):
@@ -179,5 +158,11 @@ def main():
     return 1 if report.has_problems else 0
 
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="GGUF-Dateien auf Integrität prüfen.")
+    add_arguments(parser)
+    return run(parser.parse_args(argv))
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

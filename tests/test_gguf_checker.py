@@ -1,13 +1,12 @@
-import os
 import struct
 
 from vram_model_calculator.gguf_checker import (
     GGUF_MAGIC,
     ScanReport,
     _check_header,
-    _collect_gguf_files,
     check_file,
     check_shard_group,
+    main,
 )
 
 
@@ -91,35 +90,6 @@ class TestCheckShardGroup:
         assert result["status"] == "corrupt"
 
 
-class TestCollectGgufFiles:
-    def test_collects_single_file(self, tmp_path):
-        f = tmp_path / "model.gguf"
-        f.write_bytes(b"x")
-        files = _collect_gguf_files([str(f)])
-        assert files == [os.path.abspath(str(f))]
-
-    def test_ignores_non_gguf_single_file(self, tmp_path):
-        f = tmp_path / "readme.txt"
-        f.write_bytes(b"x")
-        files = _collect_gguf_files([str(f)])
-        assert files == []
-
-    def test_walks_directory_recursively(self, tmp_path):
-        sub = tmp_path / "sub"
-        sub.mkdir()
-        (tmp_path / "a.gguf").write_bytes(b"x")
-        (sub / "b.gguf").write_bytes(b"x")
-        (sub / "ignore.txt").write_bytes(b"x")
-        files = _collect_gguf_files([str(tmp_path)])
-        assert len(files) == 2
-        assert all(f.endswith(".gguf") for f in files)
-
-    def test_missing_path_reported(self, tmp_path, capsys):
-        files = _collect_gguf_files([str(tmp_path / "nope")])
-        assert files == []
-        assert "Pfad nicht gefunden" in capsys.readouterr().out
-
-
 class TestScanReport:
     def test_partitions_by_status(self):
         report = ScanReport()
@@ -136,3 +106,14 @@ class TestScanReport:
         report = ScanReport()
         report.add({"status": "ok"}, "a.gguf")
         assert report.has_problems is False
+
+
+class TestRun:
+    def test_no_files_returns_1(self, tmp_path, capsys):
+        assert main([str(tmp_path)]) == 1
+        assert "Keine GGUF-Dateien" in capsys.readouterr().out
+
+    def test_uppercase_extension_is_checked(self, tmp_path, capsys):
+        write_header(tmp_path / "MODEL.GGUF", magic=b"XXXX")
+        assert main([str(tmp_path)]) == 1
+        assert "MODEL.GGUF" in capsys.readouterr().out

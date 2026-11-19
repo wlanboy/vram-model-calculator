@@ -47,10 +47,11 @@ def detect_thinking(reader, name, file_path):
     return bool(THINKING_NAME_RE.search(text))
 
 
-def dump_all_fields(reader, file_path):
-    """Appends all raw GGUF fields to METADATA_DUMP_FILE for debugging."""
+def dump_all_fields(reader, file_path, dump_file=None):
+    """Appends all raw GGUF fields to dump_file (default METADATA_DUMP_FILE)
+    for debugging."""
     skip_keys = {"tokenizer.ggml.merges", "tokenizer.ggml.tokens", "tokenizer.ggml.token_type"}
-    with open(METADATA_DUMP_FILE, 'a', encoding='utf-8') as f:
+    with open(dump_file or METADATA_DUMP_FILE, 'a', encoding='utf-8') as f:
         f.write(f"\n{'=' * 80}\n")
         f.write(f"File: {file_path}\n")
         f.write(f"{'=' * 80}\n")
