@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="nav-label" content="Deepseek V3">
+<meta name="nav-label" content="DeepSeek">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DeepSeek V3 &amp; R1 – Modell-Übersicht</title>
+<title>DeepSeek V3 &amp; V4 – Modell-Übersicht</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="modelfamilien.css">
@@ -15,29 +15,125 @@
 <a class="nav-back" href="../index.html">← VRAM Calculator</a>
 
 <div class="family-header">
-  <h1>DeepSeek V3 &amp; R1</h1>
-  <p class="subtitle">DeepSeek AI · Dense Distilled &amp; MoE 8/128 · 128k–160k Kontext · 129k Vokabular · MIT-Lizenz</p>
+  <h1>DeepSeek V3 &amp; V4 (inkl. R1)</h1>
+  <p class="subtitle">DeepSeek AI · MoE (V3: 8/256 · V4: 6/256–384) &amp; Dense Distilled · 128k–1M Kontext · 129k Vokabular · MIT-Lizenz</p>
   <div class="family-tags">
-    <span class="badge badge-moe">MoE 8/128</span>
+    <span class="badge badge-moe">MoE 8/256</span>
+    <span class="badge badge-moe">MoE 6/384</span>
     <span class="badge badge-arch">Distilled Dense</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Thinking / Reasoning</span>
     <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Function Calling</span>
-    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">MLA Attention</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">MLA / DSA / CSA+HCA</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">1M Kontext (V4)</span>
+    <span class="badge" style="background:rgba(88,166,255,0.12);color:var(--accent)">Vision (V4.1)</span>
     <span class="badge" style="background:rgba(255,160,50,0.14);color:#ffa032">Enterprise / API</span>
   </div>
 </div>
 
-<h2 class="section-title">Architektur &amp; Parameter — Vollmodelle</h2>
+<h2 class="section-title">Architektur &amp; Parameter — V4 / V4.1 (2026)</h2>
 <div class="spec-grid">
 
   <div class="spec-card">
     <div class="spec-card-header">
-      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="badge badge-moe">MoE 6/256</span>
+      <span class="spec-card-title">DeepSeek V4-Flash (Preview)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">13 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">284 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">6 aktiv / 256 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">43 (+1 MTP)</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">4.096</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">129.280</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid CSA + HCA, SWA 128</span></div>
+    <div class="spec-row"><span class="spec-label">Gewichte</span><span class="spec-value">Experten FP4, Rest FP8</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">24. Apr. 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 6/256</span>
+      <span class="spec-card-title">DeepSeek V4-Flash-0731</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">13 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">284 B (+ DSpark-Modul)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">6 aktiv / 256 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">43</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid CSA + HCA, SWA 128</span></div>
+    <div class="spec-row"><span class="spec-label">Reasoning</span><span class="spec-value">low / high / max</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Finale Version, löst Preview ab; DSpark-Spekulativ-Decoding</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">31. Juli 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 6/384</span>
+      <span class="spec-card-title">DeepSeek V4-Pro (Preview)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">49 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">1,6 T</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">6 aktiv / 384 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61 (+1 MTP)</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">129.280</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid CSA + HCA, SWA 128</span></div>
+    <div class="spec-row"><span class="spec-label">Gewichte</span><span class="spec-value">Experten FP4, Rest FP8</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">24. Apr. 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 6/384</span>
+      <span class="spec-card-title">DeepSeek V4-Pro-0813</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">49 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">1,6 T (+ DSpark-Modul)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">6 aktiv / 384 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">Hybrid CSA + HCA, SWA 128</span></div>
+    <div class="spec-row"><span class="spec-label">Reasoning</span><span class="spec-value">low / high / max</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Finale Version (GA), löst Preview ab; DSpark</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">13. Aug. 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 6/384</span>
+      <span class="spec-card-title">DeepSeek V4.1-Flash / -1017</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">8 B (Prefill) / 16 B (Decode)</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">552 B Backbone + 196 B Engram</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">6 aktiv / 384 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">40 (20 Encoder + 20 Decoder)</span></div>
+    <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">5.120</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">1M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">129.280</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">CSA2, FP4-KV (~890 Byte/Token)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Nativ multimodal (Bild + Text); Reasoning-Effort 1–100</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">10. Sep. 2026 · Update 1017: 17. Okt. 2026</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">Architektur &amp; Parameter — V3 / R1 (671 B)</h2>
+<div class="spec-grid">
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/256</span>
       <span class="spec-card-title">DeepSeek V3</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
-    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
     <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
     <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
@@ -49,12 +145,12 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
-      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="badge badge-moe">MoE 8/256</span>
       <span class="spec-card-title">DeepSeek V3 0324</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
-    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
     <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
     <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
@@ -66,12 +162,12 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
-      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="badge badge-moe">MoE 8/256</span>
       <span class="spec-card-title">DeepSeek V3.1</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
-    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
     <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
     <div class="spec-row"><span class="spec-label">Vokabular</span><span class="spec-value">129.280</span></div>
@@ -82,12 +178,28 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
-      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="badge badge-moe">MoE 8/256</span>
+      <span class="spec-card-title">DeepSeek V3.1-Terminus</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">MLA (Multi-head Latent)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Bugfix-Update von V3.1: weniger Sprachmix, bessere Code-/Search-Agenten</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Sep. 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/256</span>
       <span class="spec-card-title">DeepSeek V3.2-Exp</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
-    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
     <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
     <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">160k Token</span></div>
@@ -99,12 +211,28 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
-      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="badge badge-moe">MoE 8/256</span>
+      <span class="spec-card-title">DeepSeek V3.2 / V3.2-Speciale</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
+    <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">160k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Attention</span><span class="spec-value">DSA (DeepSeek Sparse Attention)</span></div>
+    <div class="spec-row"><span class="spec-label">Besonderheit</span><span class="spec-value">Finale V3.2; Thinking mit Tool-Nutzung. Speciale: nur Reasoning, kein Tool Calling</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Dez. 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-moe">MoE 8/256</span>
       <span class="spec-card-title">DeepSeek R1</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
-    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
     <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
     <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
@@ -117,12 +245,12 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
-      <span class="badge badge-moe">MoE 8/128</span>
+      <span class="badge badge-moe">MoE 8/256</span>
       <span class="spec-card-title">DeepSeek R1-0528</span>
     </div>
     <div class="spec-row"><span class="spec-label">Aktive Parameter</span><span class="spec-value">37 B</span></div>
     <div class="spec-row"><span class="spec-label">Parameter gesamt</span><span class="spec-value">671 B</span></div>
-    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 128 + 1 shared</span></div>
+    <div class="spec-row"><span class="spec-label">Experten</span><span class="spec-value">8 aktiv / 256 + 1 shared</span></div>
     <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">61</span></div>
     <div class="spec-row"><span class="spec-label">Hidden Dim</span><span class="spec-value">7.168</span></div>
     <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
@@ -179,6 +307,20 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
+      <span class="badge badge-arch">Dense · Qwen3</span>
+      <span class="spec-card-title">R1-0528-Qwen3-8B</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Parameter</span><span class="spec-value">8 B</span></div>
+    <div class="spec-row"><span class="spec-label">Basis</span><span class="spec-value">Qwen3-8B-Base</span></div>
+    <div class="spec-row"><span class="spec-label">Layer</span><span class="spec-value">36 (8 KV-Heads)</span></div>
+    <div class="spec-row"><span class="spec-label">Kontextfenster</span><span class="spec-value">128k Token</span></div>
+    <div class="spec-row"><span class="spec-label">Thinking</span><span class="spec-value">Ja (destilliert von R1-0528)</span></div>
+    <div class="spec-row"><span class="spec-label">Veröffentlicht</span><span class="spec-value">Mai 2025</span></div>
+    <div class="spec-row"><span class="spec-label">Lizenz</span><span class="spec-value">MIT</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
       <span class="badge badge-arch">Dense · Qwen2.5</span>
       <span class="spec-card-title">R1-Distill-Qwen-14B</span>
     </div>
@@ -218,7 +360,7 @@
 
 </div>
 
-<h2 class="section-title">VRAM-Kompatibilität — Vollmodelle (Q4)</h2>
+<h2 class="section-title">VRAM-Kompatibilität — Vollmodelle (Q4_K_M, V4: UD-Q4_K_XL)</h2>
 <div class="table-wrap">
 <table>
 <thead><tr>
@@ -233,8 +375,38 @@
 </tr></thead>
 <tbody>
   <tr>
+    <td class="col-name">DeepSeek V4-Flash / -0731 <span class="col-muted">(284 B)</span></td>
+    <td><span class="badge badge-moe">MoE 6/256</span></td>
+    <td class="col-mono">~155 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~26× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~13× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~10× größer als VRAM</span></td>
+    <td class="fit-detail fit-tight"><strong>Nur mit Experten-Offload</strong><span>~6× größer als VRAM; mit 96–128 GB RAM ab UD-IQ1_S (~83 GB) lauffähig</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (UD-IQ1_S) = 83 GB RAM</span></td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V4.1-Flash-1017 <span class="col-muted">(552 B + Engram)</span></td>
+    <td><span class="badge badge-moe">MoE 6/384</span></td>
+    <td class="col-mono">~500 GB<br><span class="col-muted">~298 GB ohne Engram</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~50× größer als VRAM (ohne Engram)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~25× größer als VRAM (ohne Engram)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~19× größer als VRAM (ohne Engram)</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~12× größer als VRAM; UD-IQ1_S braucht ~122 GB RAM + VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (UD-IQ1_S) = ~122 GB RAM, Engram auf SSD</span></td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V4-Pro / -0813 <span class="col-muted">(1,6 T)</span></td>
+    <td><span class="badge badge-moe">MoE 6/384</span></td>
+    <td class="col-mono">~850 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~140× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~70× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~53× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~35× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (Q2_K, Community) = ~574 GB RAM</span></td>
+  </tr>
+  <tr>
     <td class="col-name">DeepSeek V3 <span class="col-muted">(671 B)</span></td>
-    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
@@ -244,7 +416,7 @@
   </tr>
   <tr>
     <td class="col-name">DeepSeek V3 0324 <span class="col-muted">(671 B)</span></td>
-    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
@@ -254,7 +426,17 @@
   </tr>
   <tr>
     <td class="col-name">DeepSeek V3.1 <span class="col-muted">(671 B)</span></td>
-    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
+    <td class="col-mono">~400 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~25× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~17× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (IQ1_S) = 130+ GB RAM</span></td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V3.1-Terminus <span class="col-muted">(671 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
@@ -264,7 +446,17 @@
   </tr>
   <tr>
     <td class="col-name">DeepSeek V3.2-Exp <span class="col-muted">(671 B)</span></td>
-    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
+    <td class="col-mono">~400 GB</td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~25× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~17× größer als VRAM</span></td>
+    <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>Kleinste Quant (IQ1_S) = 130+ GB RAM</span></td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V3.2 / V3.2-Speciale <span class="col-muted">(671 B)</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
@@ -274,7 +466,7 @@
   </tr>
   <tr>
     <td class="col-name">DeepSeek R1 <span class="col-muted">(671 B)</span></td>
-    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
@@ -284,7 +476,7 @@
   </tr>
   <tr>
     <td class="col-name">DeepSeek R1-0528 <span class="col-muted">(671 B)</span></td>
-    <td><span class="badge badge-moe">MoE 8/128</span></td>
+    <td><span class="badge badge-moe">MoE 8/256</span></td>
     <td class="col-mono">~400 GB</td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~65× größer als VRAM</span></td>
     <td class="fit-detail fit-none"><strong>Nicht möglich</strong><span>~33× größer als VRAM</span></td>
@@ -345,6 +537,17 @@
   </tr>
 
   <tr>
+    <td class="col-name">R1-0528-Qwen3-8B</td>
+    <td><span class="badge badge-arch">Dense</span></td>
+    <td class="col-mono">~5 GB</td>
+    <td class="fit-detail fit-tight"><strong>Grenzbereich</strong><span>Passt knapp; nur ~4k Kontext frei (KV-Cache 144 KB/Token)</span></td>
+    <td class="fit-detail fit-good"><strong>Komfortabel</strong><span>~32k Thinking-Kontext passt</span></td>
+    <td class="fit-detail fit-good"><strong>Sehr komfortabel</strong><span>~64k Kontext; mit Q8-KV-Cache bis ~128k</span></td>
+    <td class="fit-detail fit-good"><strong>Ultra-komfortabel</strong><span>Ideal für produktive Nutzung</span></td>
+    <td class="fit-detail fit-good"><strong>Gut nutzbar</strong><span>~10–13 Tok/Sek · Passt komplett in RAM</span></td>
+  </tr>
+
+  <tr>
     <td class="col-name">R1-Distill-Qwen-14B</td>
     <td><span class="badge badge-arch">Dense</span></td>
     <td class="col-mono">~9 GB</td>
@@ -396,6 +599,36 @@
 </tr></thead>
 <tbody>
   <tr>
+    <td class="col-name">DeepSeek V4-Flash / -0731</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Schaltbar: Non-Think / High / Max">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">1M</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V4-Pro / -0813</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Schaltbar: Non-Think / High / Max">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">1M</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V4.1-Flash / -1017</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Reasoning-Effort 1–100">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">1M</td>
+    <td class="col-mono col-muted">Vollmodell · Vision</td>
+  </tr>
+  <tr>
     <td class="col-name">DeepSeek V3</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
@@ -426,11 +659,41 @@
     <td class="col-mono col-muted">Vollmodell</td>
   </tr>
   <tr>
+    <td class="col-name">DeepSeek V3.1-Terminus</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Hybrid: schaltbar">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
     <td class="col-name">DeepSeek V3.2-Exp</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-part" title="Hybrid: schaltbar">~</td>
     <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">160k</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V3.2</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-part" title="Hybrid: schaltbar">~</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">160k</td>
+    <td class="col-mono col-muted">Vollmodell</td>
+  </tr>
+  <tr>
+    <td class="col-name">DeepSeek V3.2-Speciale</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="col-mono">160k</td>
     <td class="col-mono col-muted">Vollmodell</td>
@@ -486,6 +749,16 @@
     <td class="col-mono col-muted">Distilled</td>
   </tr>
   <tr>
+    <td class="col-name">R1-0528-Qwen3-8B</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="cap-cell cap-no">✗</td>
+    <td class="cap-cell cap-yes">✓</td>
+    <td class="col-mono">128k</td>
+    <td class="col-mono col-muted">Distilled</td>
+  </tr>
+  <tr>
     <td class="col-name">R1-Distill-Qwen-14B</td>
     <td class="cap-cell cap-yes">✓</td>
     <td class="cap-cell cap-yes">✓</td>
@@ -519,7 +792,184 @@
 </table>
 </div>
 
-<h2 class="section-title">Quantisierungen — Vollmodelle (V3 / R1)</h2>
+<h2 class="section-title">Quantisierungen — V4-Flash-0731 (284 B)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Format</th>
+  <th>Variante</th>
+  <th style="white-space:nowrap">VRAM / RAM</th>
+  <th>Mindest-Hardware</th>
+  <th>Hinweis</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-IQ1_S</td>
+    <td class="col-mono">~83 GB</td>
+    <td class="col-muted">128 GB Unified RAM (Strix Halo, Mac) oder 96 GB RAM + GPU</td>
+    <td class="col-muted">Kleinstes GGUF; Experten-Offload in RAM</td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-IQ2_XXS</td>
+    <td class="col-mono">~91 GB</td>
+    <td class="col-muted">128 GB Unified RAM oder 96 GB RAM + 24-GB-GPU</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q2_K_XL</td>
+    <td class="col-mono">~97 GB</td>
+    <td class="col-muted">128 GB Unified RAM oder 128 GB RAM + GPU</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-IQ3_XXS</td>
+    <td class="col-mono">~104 GB</td>
+    <td class="col-muted">128 GB Unified RAM</td>
+    <td class="col-muted">Von Unsloth empfohlen (mind. 110 GB RAM)</td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q3_K_XL</td>
+    <td class="col-mono">~128 GB</td>
+    <td class="col-muted">192 GB RAM oder 2× 80 GB GPU</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-IQ4_XS</td>
+    <td class="col-mono">~137 GB</td>
+    <td class="col-muted">192 GB RAM oder 2× 80 GB GPU</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q4_K_XL</td>
+    <td class="col-mono">~155 GB</td>
+    <td class="col-muted">192 GB RAM, 256 GB Unified RAM oder 2× H100 80 GB</td>
+    <td class="col-muted">Experten unverändert in MXFP4, Rest Q8_0</td>
+  </tr>
+  <tr>
+    <td>GGUF · bartowski</td>
+    <td class="col-mono">MXFP4</td>
+    <td class="col-mono">~156 GB</td>
+    <td class="col-muted">wie UD-Q4_K_XL</td>
+    <td class="col-muted">Experten in nativem MXFP4</td>
+  </tr>
+  <tr>
+    <td>GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q8_K_XL</td>
+    <td class="col-mono">~162 GB</td>
+    <td class="col-muted">256 GB Unified RAM oder 3× H100 80 GB</td>
+    <td class="col-muted">Laut Unsloth verlustfrei; nur 7 GB größer als Q4</td>
+  </tr>
+  <tr>
+    <td>GGUF · DSpark-Drafter</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">+~11 GB</td>
+    <td class="col-muted">zusätzlich zum Hauptmodell</td>
+    <td class="col-muted">Spekulatives Decoding, laut Unsloth bis ~1,9× schneller</td>
+  </tr>
+  <tr>
+    <td>FP4 + FP8 (offiziell)</td>
+    <td class="col-mono">—</td>
+    <td class="col-mono">~160 GB</td>
+    <td class="col-muted">4× GB300 (Beispiel aus der Modellkarte)</td>
+    <td class="col-muted">Referenz-Precision; vLLM/SGLang</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Quantisierungen — V4-Pro-0813 (1,6 T) und V4.1-Flash-1017</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Modell · Format</th>
+  <th>Variante</th>
+  <th style="white-space:nowrap">VRAM / RAM</th>
+  <th>Mindest-Hardware</th>
+  <th>Hinweis</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td>V4-Pro · GGUF (Community)</td>
+    <td class="col-mono">Q2_K</td>
+    <td class="col-mono">~574 GB</td>
+    <td class="col-muted">768 GB RAM oder 8× H100 80 GB</td>
+    <td class="col-muted">teamblobfish; nicht von Unsloth</td>
+  </tr>
+  <tr>
+    <td>V4-Pro · GGUF (Community)</td>
+    <td class="col-mono">Q3_K_M</td>
+    <td class="col-mono">~749 GB</td>
+    <td class="col-muted">1 TB RAM oder 8× H200 141 GB</td>
+    <td class="col-muted">batiai</td>
+  </tr>
+  <tr>
+    <td>V4-Pro · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q4_K_XL</td>
+    <td class="col-mono">~850 GB</td>
+    <td class="col-muted">1 TB RAM oder 8× H200 141 GB</td>
+    <td class="col-muted">Experten in MXFP4</td>
+  </tr>
+  <tr>
+    <td>V4-Pro · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q8_K_XL</td>
+    <td class="col-mono">~873 GB</td>
+    <td class="col-muted">1 TB+ RAM oder 8× B200</td>
+    <td class="col-muted">Praktisch Original-Precision</td>
+  </tr>
+  <tr>
+    <td>V4.1-Flash · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-IQ1_S</td>
+    <td class="col-mono">~233 GB Datei · ~122 GB RAM</td>
+    <td class="col-muted">128 GB RAM/Unified RAM, Engram per mmap auf SSD</td>
+    <td class="col-muted">Engram-Tabelle (~111–203 GB) bleibt auf der SSD</td>
+  </tr>
+  <tr>
+    <td>V4.1-Flash · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q2_K_XL</td>
+    <td class="col-mono">~335 GB Datei · ~200 GB RAM</td>
+    <td class="col-muted">256 GB RAM + SSD</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>V4.1-Flash · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-IQ3_XXS</td>
+    <td class="col-mono">~395 GB Datei · ~234 GB RAM</td>
+    <td class="col-muted">256 GB RAM + SSD</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>V4.1-Flash · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q4_K_XL</td>
+    <td class="col-mono">~501 GB Datei · ~298 GB RAM</td>
+    <td class="col-muted">320 GB RAM + SSD</td>
+    <td class="col-muted">MXFP8-Engram: laut Unsloth Build aus PR #30817 nötig</td>
+  </tr>
+  <tr>
+    <td>V4.1-Flash · GGUF · Unsloth Dynamic</td>
+    <td class="col-mono">UD-Q8_K_XL</td>
+    <td class="col-mono">~508 GB Datei · ~306 GB RAM</td>
+    <td class="col-muted">320 GB RAM + SSD</td>
+    <td class="col-muted"></td>
+  </tr>
+  <tr>
+    <td>V4.1-Flash · GGUF</td>
+    <td class="col-mono">mmproj-F16</td>
+    <td class="col-mono">~1 GB</td>
+    <td class="col-muted">zusätzlich</td>
+    <td class="col-muted">Vision-Projektor</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Quantisierungen — Vollmodelle (V3 / V3.1 / V3.2 / R1)</h2>
 <div class="table-wrap">
 <table>
 <thead><tr>
@@ -630,6 +1080,20 @@
     <td></td>
   </tr>
   <tr>
+    <td class="col-name">R1-0528-Qwen3-8B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q4_K_M</td>
+    <td class="col-mono">~5 GB</td>
+    <td class="col-muted">Neuester Distill; ersetzt Llama-8B bei Ollama (deepseek-r1:8b)</td>
+  </tr>
+  <tr>
+    <td class="col-name">R1-0528-Qwen3-8B</td>
+    <td>GGUF</td>
+    <td class="col-mono">Q8_0</td>
+    <td class="col-mono">~8,7 GB</td>
+    <td></td>
+  </tr>
+  <tr>
     <td class="col-name">Qwen-14B</td>
     <td>GGUF</td>
     <td class="col-mono">Q4_K_M</td>
@@ -680,28 +1144,68 @@
 <table>
 <thead><tr>
   <th>Kontextlänge</th>
-  <th>KV-Cache (BF16)</th>
+  <th>KV-Cache (F16)</th>
   <th>KV-Cache (Q8)</th>
   <th style="white-space:nowrap">Gesamt VRAM ca.</th>
 </tr></thead>
 <tbody>
   <tr>
     <td class="col-mono">4 K Token</td>
+    <td class="col-mono">~0,3 GB</td>
+    <td class="col-mono">~0,15 GB</td>
+    <td class="col-mono">~400 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">16 K Token</td>
     <td class="col-mono">~1,2 GB</td>
     <td class="col-mono">~0,6 GB</td>
     <td class="col-mono">~401 GB</td>
   </tr>
   <tr>
-    <td class="col-mono">16 K Token</td>
-    <td class="col-mono">~4,8 GB</td>
-    <td class="col-mono">~2,4 GB</td>
-    <td class="col-mono">~405 GB</td>
+    <td class="col-mono">128 K Token</td>
+    <td class="col-mono">~9,2 GB</td>
+    <td class="col-mono">~4,9 GB</td>
+    <td class="col-mono">~409 GB</td>
   </tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="section-title">Kontextabhängiger VRAM-Bedarf (V4 UD-Q4_K_XL, Schätzung)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Kontextlänge</th>
+  <th>V4-Flash KV (FP8 / F16)</th>
+  <th style="white-space:nowrap">V4-Flash gesamt</th>
+  <th>V4-Pro KV (FP8 / F16)</th>
+  <th style="white-space:nowrap">V4-Pro gesamt</th>
+  <th>V4.1-Flash KV (FP4)</th>
+</tr></thead>
+<tbody>
   <tr>
     <td class="col-mono">128 K Token</td>
-    <td class="col-mono">~38 GB</td>
-    <td class="col-mono">~19 GB</td>
-    <td class="col-mono">~438 GB</td>
+    <td class="col-mono">~0,45 / ~0,9 GB</td>
+    <td class="col-mono">~156 GB</td>
+    <td class="col-mono">~0,65 / ~1,3 GB</td>
+    <td class="col-mono">~851 GB</td>
+    <td class="col-mono">~0,12 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">384 K Token</td>
+    <td class="col-mono">~1,35 / ~2,7 GB</td>
+    <td class="col-mono">~157–158 GB</td>
+    <td class="col-mono">~1,9 / ~3,9 GB</td>
+    <td class="col-mono">~852–854 GB</td>
+    <td class="col-mono">~0,35 GB</td>
+  </tr>
+  <tr>
+    <td class="col-mono">1 M Token</td>
+    <td class="col-mono">~3,6 / ~7,2 GB</td>
+    <td class="col-mono">~159–162 GB</td>
+    <td class="col-mono">~5,2 / ~10,3 GB</td>
+    <td class="col-mono">~855–860 GB</td>
+    <td class="col-mono">~0,93 GB</td>
   </tr>
 </tbody>
 </table>
@@ -713,13 +1217,15 @@
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">API</span>
-      <span class="spec-card-title">Vollmodell — Empfohlene Option</span>
+      <span class="spec-card-title">Vollmodell — Empfohlene Option (Stand Nov. 2026)</span>
     </div>
     <div class="spec-row"><span class="spec-label">Endpoint</span><span class="spec-value col-mono" style="font-size:0.8rem">api.deepseek.com</span></div>
-    <div class="spec-row"><span class="spec-label">V3 Modell-ID</span><span class="spec-value col-mono" style="font-size:0.8rem">deepseek-chat</span></div>
-    <div class="spec-row"><span class="spec-label">R1 Modell-ID</span><span class="spec-value col-mono" style="font-size:0.8rem">deepseek-reasoner</span></div>
-    <div class="spec-row"><span class="spec-label">Input-Preis</span><span class="spec-value">$0,27 / M Token</span></div>
-    <div class="spec-row"><span class="spec-label">Output-Preis</span><span class="spec-value">$1,10 / M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Flash (V4.1-Flash-1017)</span><span class="spec-value col-mono" style="font-size:0.8rem">deepseek-flash</span></div>
+    <div class="spec-row"><span class="spec-label">Pro (V4-Pro-0813)</span><span class="spec-value col-mono" style="font-size:0.8rem">deepseek-v4-pro</span></div>
+    <div class="spec-row"><span class="spec-label">Flash Input / Output</span><span class="spec-value">$0,15 / $0,60 pro M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Pro Input / Output</span><span class="spec-value">$0,66 / $1,98 pro M Token</span></div>
+    <div class="spec-row"><span class="spec-label">Preise</span><span class="spec-value">Off-Peak; zur Peak-Zeit doppelt</span></div>
+    <div class="spec-row"><span class="spec-label">Abgeschaltet</span><span class="spec-value col-mono" style="font-size:0.8rem">deepseek-chat, deepseek-reasoner (24.07.2026)</span></div>
   </div>
 
   <div class="spec-card">
@@ -729,7 +1235,7 @@
     </div>
     <div class="spec-row"><span class="spec-label">1.5B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:1.5b</span></div>
     <div class="spec-row"><span class="spec-label">7B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:7b</span></div>
-    <div class="spec-row"><span class="spec-label">8B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:8b</span></div>
+    <div class="spec-row"><span class="spec-label">8B (R1-0528-Qwen3)</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:8b</span></div>
     <div class="spec-row"><span class="spec-label">14B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:14b</span></div>
     <div class="spec-row"><span class="spec-label">32B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:32b</span></div>
     <div class="spec-row"><span class="spec-label">70B</span><span class="spec-value col-mono" style="font-size:0.8rem">ollama run deepseek-r1:70b</span></div>
@@ -758,6 +1264,19 @@
 
   <div class="spec-card">
     <div class="spec-card-header">
+      <span class="badge badge-arch">llama.cpp</span>
+      <span class="spec-card-title">V4 / V4.1 — GGUF mit Experten-Offload</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">V4 (Arch deepseek4)</span><span class="spec-value">ab Build b9840 (PR #24162)</span></div>
+    <div class="spec-row"><span class="spec-label">MTP + DSpark</span><span class="spec-value">ab Build b10228 (PR #25784)</span></div>
+    <div class="spec-row"><span class="spec-label">V4.1 (Arch deepseek41)</span><span class="spec-value">ab Build b11870 (PR #31086)</span></div>
+    <div class="spec-row"><span class="spec-label">Experten in RAM</span><span class="spec-value col-mono" style="font-size:0.8rem">-ngl 99 --cpu-moe</span></div>
+    <div class="spec-row"><span class="spec-label">DSpark-Drafter</span><span class="spec-value col-mono" style="font-size:0.8rem">-md dspark-…-Q8_0.gguf --spec-type draft-dspark --spec-draft-n-max 3</span></div>
+    <div class="spec-row"><span class="spec-label">V4.1 Engram auf SSD</span><span class="spec-value col-mono" style="font-size:0.8rem">--load-mode mmap --lazy-mode on</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
       <span class="badge badge-arch">vLLM</span>
       <span class="spec-card-title">Vollmodell — Multi-GPU (FP8)</span>
     </div>
@@ -770,9 +1289,21 @@
   <div class="spec-card">
     <div class="spec-card-header">
       <span class="badge badge-arch">vLLM</span>
+      <span class="spec-card-title">V4-Flash-0731 / V4-Pro-0813 (FP4 + FP8)</span>
+    </div>
+    <div class="spec-row"><span class="spec-label">Befehl</span><span class="spec-value col-mono" style="font-size:0.8rem">vllm serve deepseek-ai/DeepSeek-V4-Flash-0731 --trust-remote-code</span></div>
+    <div class="spec-row"><span class="spec-label">Parallelisierung</span><span class="spec-value col-mono" style="font-size:0.8rem">--data-parallel-size 4 --enable-expert-parallel</span></div>
+    <div class="spec-row"><span class="spec-label">KV-Cache</span><span class="spec-value col-mono" style="font-size:0.8rem">--kv-cache-dtype fp8 --block-size 256</span></div>
+    <div class="spec-row"><span class="spec-label">DSpark</span><span class="spec-value col-mono" style="font-size:0.8rem">--speculative-config '{"method":"dspark","num_speculative_tokens":7}'</span></div>
+    <div class="spec-row"><span class="spec-label">Referenz-Hardware</span><span class="spec-value">1 Node mit 4× GB300</span></div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-card-header">
+      <span class="badge badge-arch">vLLM</span>
       <span class="spec-card-title">Tool Use &amp; Reasoning</span>
     </div>
-    <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value col-mono" style="font-size:0.8rem">--enable-auto-tool-choice --tool-call-parser hermes</span></div>
+    <div class="spec-row"><span class="spec-label">Tool Calling</span><span class="spec-value col-mono" style="font-size:0.8rem">--enable-auto-tool-choice --tool-call-parser deepseek_v3 (V3.1: deepseek_v31)</span></div>
     <div class="spec-row"><span class="spec-label">R1 / V3.1 Thinking</span><span class="spec-value col-mono" style="font-size:0.8rem">--reasoning-parser deepseek_r1</span></div>
     <div class="spec-row"><span class="spec-label">FP8 KV-Cache</span><span class="spec-value col-mono" style="font-size:0.8rem">--kv-cache-dtype fp8 (−50 %)</span></div>
   </div>
@@ -782,18 +1313,28 @@
 <div class="note-box">
   <strong>Hinweise:</strong><br>
   · DeepSeek V3 / R1 (671 B) sind <strong>keine Consumer-Hardware-Modelle</strong>. Die kleinste GGUF-Quantisierung (IQ1_S ~130 GB) erfordert Multi-GPU oder Apple M3 Ultra 192 GB. Für Privatnutzung ist die <strong>offizielle API</strong> die praktikabelste Option.<br>
+  · <strong>V4-Flash</strong> (284 B, 13 B aktiv) ist das erste DeepSeek-Vollmodell, das auf einer Workstation läuft: UD-IQ1_S (~83 GB) bis UD-IQ3_XXS (~104 GB) passen in 128 GB Unified RAM (Strix Halo, Mac) oder in 96–128 GB System-RAM plus GPU, wenn die Experten mit <code>--cpu-moe</code> im RAM bleiben. Allein mit 6–24 GB VRAM läuft das Modell nicht.<br>
+  · V4 nutzt eine neue <strong>Hybrid-Attention</strong>: Compressed Sparse Attention (CSA, 4× komprimiert, mit Indexer) und Heavily Compressed Attention (HCA, 128× komprimiert) wechseln sich ab, dazu ein Sliding Window von 128 Token. Laut DeepSeek braucht V4-Pro bei 1M Kontext nur 10 % des KV-Caches von V3.2. Die KV-Werte in der V4-Tabelle oben sind aus der config.json abgeleitet (FP8 wie in vLLM, F16 doppelt) und nicht in llama.cpp gemessen.<br>
+  · V4-Experten liegen im Original schon in FP4. Deshalb ist UD-Q8_K_XL (~162 GB) kaum größer als UD-Q4_K_XL (~155 GB); bei Q4 werden nur die übrigen ~4 % der Gewichte kleiner.<br>
+  · <strong>V4.1-Flash</strong> (Sep. 2026) ist eine neue Architektur: Causal Encoder-Decoder mit 40 Layern, CSA2, FP4-KV-Cache (~890 Byte/Token) und einer 196 B großen Engram-Tabelle (n-gram-Speicher). Die Engram-Tabelle kann per mmap auf der SSD bleiben, deshalb braucht UD-IQ1_S trotz 233 GB Datei nur ~122 GB RAM. Ein V4.1-Pro gibt es bisher nicht.<br>
+  · llama.cpp: V4 läuft im Mainline-Build ab b9840 (GGUF-Architektur <code>deepseek4</code>), V4.1 ab b11870 (<code>deepseek41</code>). Für V4.1 sind noch mehrere Bugs offen (z. B. Vulkan mit Flash Attention, Prompt-Cache mit Engram). Unsloth verweist für die MXFP8-Engram-Quants (UD-Q3_K_XL und größer) auf einen Build aus PR #30817.<br>
+  · V4-Flash-Vision-Exp (Aug. 2026) ist ein experimentelles Vision-Modell auf V4-Flash-Basis mit gleicher GGUF-Größe plus ~1 GB mmproj. In der API ist es seit 10.09.2026 durch V4.1-Flash ersetzt.<br>
+  · API: <code>deepseek-chat</code> und <code>deepseek-reasoner</code> sind seit 24.07.2026 abgeschaltet. <code>deepseek-v4-flash</code> wird auf V4.1-Flash umgeleitet, <code>deepseek-v4-pro</code> bleibt mit V4-Pro-0813 erhalten.<br>
+  · Community-Distills wie „DeepSeek-V4-Pro-Qwen3.5-4B“ stammen nicht von DeepSeek. Offizielle V4-Distills gibt es nicht.<br>
   · Die <strong>Distilled-Modelle</strong> (1.5B bis 32B) sind hingegen vollständig Consumer-tauglich — sie beherrschen Thinking/Reasoning auf Niveau, das deutlich über ihren Parameterzahlen liegt, weil das Verhalten direkt aus R1 (671 B) destilliert wurde.<br>
   · Die aktiven Parameter der Vollmodelle betragen nur 37 B pro Forward-Pass (MoE-Routing) — bei ausreichend VRAM ermöglicht das eine vergleichsweise hohe Inferenzgeschwindigkeit trotz 671 B Gesamtparameter.<br>
-  · Multi-head Latent Attention (MLA) reduziert den KV-Cache-Footprint erheblich gegenüber klassischer Multi-Head-Attention — besonders vorteilhaft bei langen Reasoning-Chains und 128k-Kontext.<br>
+  · Multi-head Latent Attention (MLA) reduziert den KV-Cache-Footprint erheblich gegenüber klassischer Multi-Head-Attention: llama.cpp speichert pro Token und Layer nur einen komprimierten Vektor (512 + 64 Werte), bei V3/R1 also ~70 KB pro Token in F16 und ~9 GB bei 128k Kontext.<br>
   · DeepSeek R1 wurde <em>ausschließlich per Reinforcement Learning</em> (GRPO) trainiert, ohne überwachtes Fine-Tuning (SFT) in der ersten Phase — ein für Open-Source ungewöhnlicher Trainingsansatz.<br>
   · V3 0324 (März 2025): Drop-in-Update mit gleicher Architektur, deutlich verbesserten Coding- und Mathematik-Fähigkeiten.<br>
   · V3.1 (Aug. 2025): Hybridmodell — Thinking-Modus ist schaltbar, ohne zwei separate Modelle laden zu müssen.<br>
-  · V3.2-Exp (Sep. 2025): Führt DeepSeek Sparse Attention (DSA) als Nachfolger von MLA ein. Senkt die Inferenzkosten bei langem Kontext (bis 160k Token) spürbar, bei nahezu gleicher Ausgabequalität wie V3.1-Terminus.<br>
+  · V3.1-Terminus (Sep. 2025): Bugfix-Update von V3.1 mit gleicher Architektur; weniger Sprachmix (Chinesisch/Englisch), bessere Code- und Search-Agenten.<br>
+  · V3.2-Exp (Sep. 2025): Ergänzt MLA um DeepSeek Sparse Attention (DSA). Ein Lightning-Indexer wählt pro Token die relevanten 2.048 Kontext-Token aus. Senkt die Inferenzkosten bei langem Kontext (bis 160k Token) spürbar, bei nahezu gleicher Ausgabequalität wie V3.1-Terminus.<br>
+  · V3.2 (Dez. 2025): Finale Version auf Basis von V3.2-Exp mit Thinking während der Tool-Nutzung. V3.2-Speciale ist eine reine Reasoning-Variante ohne Tool Calling.<br>
   · R1-0528 (Mai 2025): Post-Training-Update von R1 mit gleicher Architektur, aber deutlich tieferen Reasoning-Chains (AIME 2025: 70 % → 87,5 %) sowie neu unterstütztem Function Calling und JSON-Output.<br>
   · Multi-Token Prediction (MTP) beschleunigt den Durchsatz bei Server-Deployments — nicht alle Inference-Engines unterstützen dies vollständig.<br>
-  · FP8 ist die von DeepSeek empfohlene Referenz-Precision (~671 GB VRAM, 8× H100 80 GB). vLLM unterstützt neben NVIDIA CUDA auch AMD ROCm (MI300X/MI325X) für Multi-GPU-Setups.<br>
+  · FP8 ist die von DeepSeek empfohlene Referenz-Precision für V3/R1 (~671 GB VRAM, z. B. 8× H200 141 GB; 8× H100 80 GB reichen nicht ganz). vLLM unterstützt neben NVIDIA CUDA auch AMD ROCm (MI300X/MI325X) für Multi-GPU-Setups.<br>
   · Distilled 32B (Qwen-Basis): Auf einer 16-GB-GPU läuft Q4_K_M (~20 GB) nur mit knappem Puffer — langer Reasoning-Kontext kann zum Überlauf führen; 24 GB empfohlen.<br>
-  · Lizenz: MIT — keine proprietären Nutzungsbeschränkungen für alle V3- und R1-Varianten (inkl. Distilled).
+  · Lizenz: MIT für alle V3-, V4-, V4.1- und R1-Varianten (inkl. Distilled), laut den Hugging-Face-Modellkarten auch für die Gewichte.
 </div>
 
 </div>
