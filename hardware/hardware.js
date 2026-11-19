@@ -1,8 +1,9 @@
 /*
  * Gemeinsame Render-/Sortier-Logik für alle hardware/<Gerät>/index.html Seiten.
  *
- * Erwartet vor dem Einbinden dieser Datei ein globales `MODELS`-Array mit Zeilen
- * in folgendem festen Schema:
+ * Erwartet vor dem Einbinden dieser Datei ../../common.js und ein globales
+ * `MODELS`-Array. Das Array erzeugt `uv run main.py hardware` aus
+ * hardware/<Gerät>/device.json und models_cache.json, Zeilen im festen Schema:
  *   [name, paramsB, type, quant, vramGb, vramPct, speedTs, ctxLabel, ctxNum,
  *    statusKey, statusText, grade, score]
  *
@@ -24,6 +25,8 @@
 (function () {
   "use strict";
 
+  const { esc, initSortableHeaders, markSorted } = window.VramCommon;
+
   const COL_INDEX = { name: 0, params: 1, type: 2, quant: 3, vram: 4, speed: 6, ctx: 8, status: 10, score: 12 };
 
   const tbody = document.getElementById("model-tbody");
@@ -33,10 +36,6 @@
   let sortCol = null;
   let sortDir = 1;
   let search = "";
-
-  function statusClass(key) {
-    return "status-" + key;
-  }
 
   function render() {
     const q = search.toLowerCase();
@@ -58,38 +57,35 @@
     rowCount.textContent = rows.length + " von " + MODELS.length + " Modellen";
 
     tbody.innerHTML = rows.map(r => {
-      const [name, params, type, quant, vram, vramPct, speed, ctxLabel, ctxNum, statusKey, statusText, grade, score] = r;
-      const types = type.split(", ").map(t => '<span class="type-tag">' + t + '</span>').join("");
+      const [name, params, type, quant, vram, vramPct, speed, ctxLabel, , statusKey, statusText, grade, score] = r;
+      const types = type.split(", ").map(t => '<span class="type-tag">' + esc(t) + '</span>').join("");
       const barColor = vramPct >= 90 ? "var(--red)" : vramPct >= 60 ? "var(--yellow)" : "var(--green)";
       return [
         "<tr>",
-        '<td class="col-name">' + name + "</td>",
-        '<td class="col-mono col-muted">' + params + " B</td>",
+        '<td class="col-name">' + esc(name) + "</td>",
+        '<td class="col-mono col-muted">' + esc(params) + " B</td>",
         "<td>" + types + "</td>",
-        '<td class="col-mono">' + quant + "</td>",
-        '<td><div class="vram-bar-wrap"><span class="col-mono">' + vram.toFixed(1) + ' GB</span><div class="vram-bar"><div class="vram-bar-fill" style="width:' + Math.min(vramPct, 100) + '%;background:' + barColor + '"></div></div><span class="col-mono col-muted">' + vramPct + '%</span></div></td>',
-        '<td class="col-mono">' + speed.toFixed(1) + " t/s</td>",
-        '<td class="col-mono col-muted">' + ctxLabel + "</td>",
-        '<td><span class="status-badge ' + statusClass(statusKey) + '">' + statusText + "</span></td>",
-        '<td><span class="grade-badge"><span class="grade-letter grade-' + grade + '">' + grade + '</span><span class="grade-score">' + score + "</span></span></td>",
+        '<td class="col-mono">' + esc(quant) + "</td>",
+        '<td><div class="vram-bar-wrap"><span class="col-mono">' + Number(vram).toFixed(1) + ' GB</span><div class="vram-bar"><div class="vram-bar-fill" style="width:' + Math.min(Number(vramPct), 100) + '%;background:' + barColor + '"></div></div><span class="col-mono col-muted">' + esc(vramPct) + '%</span></div></td>',
+        '<td class="col-mono">' + Number(speed).toFixed(1) + " t/s</td>",
+        '<td class="col-mono col-muted">' + esc(ctxLabel) + "</td>",
+        '<td><span class="status-badge status-' + esc(statusKey) + '">' + esc(statusText) + "</span></td>",
+        '<td><span class="grade-badge"><span class="grade-letter grade-' + esc(grade) + '">' + esc(grade) + '</span><span class="grade-score">' + esc(score) + "</span></span></td>",
         "</tr>",
       ].join("");
     }).join("");
   }
 
-  document.querySelectorAll("th.sortable").forEach(th => {
-    th.addEventListener("click", () => {
-      const col = COL_INDEX[th.dataset.col];
-      if (sortCol === col) {
-        sortDir *= -1;
-      } else {
-        sortCol = col;
-        sortDir = 1;
-      }
-      document.querySelectorAll("th[data-sorted]").forEach(t => t.removeAttribute("data-sorted"));
-      th.setAttribute("data-sorted", sortDir === 1 ? "asc" : "desc");
-      render();
-    });
+  initSortableHeaders(th => {
+    const col = COL_INDEX[th.dataset.col];
+    if (sortCol === col) {
+      sortDir *= -1;
+    } else {
+      sortCol = col;
+      sortDir = 1;
+    }
+    markSorted(th, sortDir);
+    render();
   });
 
   searchInput.addEventListener("input", () => {

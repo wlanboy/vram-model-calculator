@@ -442,3 +442,85 @@ tbody tr:hover { background: var(--surface); }
         max-width: 160px;
     }
 }
+
+/* ── Ergänzungen: Hinweise, eigene GPU-Größe, Aufschlüsselung ── */
+
+.control-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.overhead-input { width: 5rem; border-radius: 4px; }
+
+.pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gpu-custom-form {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.gpu-custom-form .ctx-input { width: 5rem; border-radius: 4px; }
+
+.pill-remove { padding-left: 0.5rem; padding-right: 0.5rem; margin-left: -0.3rem; }
+
+th.sortable:focus-visible,
+.row-toggle:focus-visible,
+.pill:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.row-toggle {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 12px;
+    width: 1.2rem;
+    margin-right: 0.25rem;
+}
+
+.row-toggle:hover { color: var(--text); }
+
+.badge-warn  { color: var(--yellow); background: var(--yellow-dim); margin-left: 0.3rem; }
+.badge-group { color: var(--accent); background: var(--surface-2); margin-left: 0.3rem; }
+
+.detail-row td {
+    background: var(--surface);
+    padding: 0.75rem 1rem 1rem 2rem;
+}
+
+.breakdown {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    gap: 0.15rem 1.5rem;
+    font-size: 13px;
+}
+
+.breakdown dt { color: var(--text-muted); }
+.breakdown dd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.cmd {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    user-select: all;
+}
+
+.detail-hint {
+    margin-top: 0.5rem;
+    font-size: 12px;
+    color: var(--text-muted);
+}

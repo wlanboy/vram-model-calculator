@@ -13,24 +13,26 @@
 <div class="page-header">
   <div class="page-header-left">
     <h1>VRAM Calculator</h1>
-    <p class="subtitle">Zeigt den VRAM-Bedarf (Modellgewichte&nbsp;+ KV-Cache) für LLM-Modelle in verschiedenen Quantisierungen und Kontextlängen.</p>
+    <p class="subtitle">Zeigt den VRAM-Bedarf (Modellgewichte&nbsp;+ KV-Cache&nbsp;+ Compute-Buffer&nbsp;+ Overhead) für LLM-Modelle in verschiedenen Quantisierungen und Kontextlängen. Alle Einstellungen stehen in der URL und lassen sich verlinken.</p>
   </div>
   <nav class="family-nav">
     <span class="family-nav-label">Hardware</span>
     <a href="hardware/index.html" class="family-link">Übersicht</a>
     <span class="family-nav-label">Modell-Familien</span>
-    <a href="modell-familien/gemma4.html" class="family-link">Gemma 4</a>
-    <a href="modell-familien/mistral.html" class="family-link">Mistral</a>
-    <a href="modell-familien/qwen35-38.html" class="family-link">Qwen 3.5 – 3.8</a>
-    <a href="modell-familien/deepseekv3.html" class="family-link">Deepseek V3</a>
-    <a href="modell-familien/phi4.html" class="family-link">Phi-4</a>
-    <a href="modell-familien/glm.html" class="family-link">GLM</a>
+    <!-- BEGIN FAMILIES (generiert: uv run main.py families) -->
     <a href="modell-familien/bonsai.html" class="family-link">Bonsai</a>
-    <a href="modell-familien/lfm.html" class="family-link">LFM</a>
-    <a href="modell-familien/olmo.html" class="family-link">OLMo / Tülu</a>
+    <a href="modell-familien/deepseekv3.html" class="family-link">Deepseek V3</a>
     <a href="modell-familien/ernie.html" class="family-link">ERNIE</a>
-    <a href="modell-familien/ling.html" class="family-link">Ling / Ring</a>
+    <a href="modell-familien/gemma4.html" class="family-link">Gemma 4</a>
+    <a href="modell-familien/glm.html" class="family-link">GLM</a>
     <a href="modell-familien/k2.html" class="family-link">K2 Horizon</a>
+    <a href="modell-familien/lfm.html" class="family-link">LFM</a>
+    <a href="modell-familien/ling.html" class="family-link">Ling / Ring</a>
+    <a href="modell-familien/mistral.html" class="family-link">Mistral</a>
+    <a href="modell-familien/olmo.html" class="family-link">OLMo / Tülu</a>
+    <a href="modell-familien/phi4.html" class="family-link">Phi-4</a>
+    <a href="modell-familien/qwen35-38.html" class="family-link">Qwen 3.5 – 3.8</a>
+    <!-- END FAMILIES -->
   </nav>
 </div>
 
@@ -43,7 +45,7 @@
     <div class="control-group">
       <label>&nbsp;</label>
       <label class="check-label vram-filter-red">
-      <input type="checkbox" id="filter-red"> filter red</label>
+      <input type="checkbox" id="filter-red"> Rote Modelle ausblenden</label>
     </div>
   </div>
   <div class="controls-main">
@@ -57,11 +59,24 @@
     </div>
     <div class="control-group">
       <label for="sessions-select">Sessions</label>
-      <select id="sessions-select"></select>
+      <select id="sessions-select" aria-describedby="sessions-hint"></select>
+      <span id="sessions-hint" class="control-hint" title="Der Kontext gilt pro Session. llama.cpp teilt -c auf die -np Slots auf."></span>
     </div>
     <div class="control-group">
       <label for="kv-type-select" title="llama.cpp: --cache-type-k / --cache-type-v. Quantisierter V-Cache braucht Flash Attention.">KV-Cache</label>
       <select id="kv-type-select"></select>
+    </div>
+    <div class="control-group">
+      <label for="gpu-count-select" title="Compute-Buffer und Overhead liegen auf jeder GPU einmal.">GPUs</label>
+      <select id="gpu-count-select"></select>
+    </div>
+    <div class="control-group">
+      <label for="overhead-input" title="Treiber-Kontext (CUDA/SYCL/Vulkan) und kleine llama.cpp-Puffer, pro GPU">Overhead (GB)</label>
+      <input type="number" id="overhead-input" class="ctx-input overhead-input" step="0.1" min="0" value="0.5">
+    </div>
+    <div class="control-group">
+      <label for="group-select" title="Quantisierungen desselben Modells zusammenfassen: gezeigt wird die größte, die in die gewählte GPU passt.">Quants gruppieren</label>
+      <select id="group-select"></select>
     </div>
     <div class="control-group">
       <label>Features</label>
@@ -74,14 +89,20 @@
   <div class="controls-vram-row">
     <div class="control-group control-group-fill">
       <label>Sichtbare VRAM-Spalten</label>
-      <div id="hide-vram-pills" class="pill-grid"></div>
+      <div class="pill-row">
+        <div id="hide-vram-pills" class="pill-grid"></div>
+        <form id="gpu-custom-form" class="gpu-custom-form">
+          <input type="number" id="gpu-custom-input" class="ctx-input" step="0.5" min="1" placeholder="GB" aria-label="Eigene GPU-Größe in GB">
+          <button type="submit" class="pill">+ eigene Größe</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="table-wrap">
 <table id="model-table">
-<thead><tr>
+<thead><tr id="model-thead-row">
   <th class="sortable" data-col="name">Modell</th>
   <th class="sortable" data-col="arch">Arch</th>
   <th class="sortable" data-col="quant">Quant</th>
@@ -89,16 +110,6 @@
   <th class="sortable" data-col="kv">KV-Cache</th>
   <th class="sortable" data-col="ctx">Max Ctx</th>
   <th class="sortable" data-col="total">VRAM Total</th>
-  <th class="fit-cell" data-vram="4">4 GB</th>
-  <th class="fit-cell" data-vram="6">6 GB</th>
-  <th class="fit-cell" data-vram="8">8 GB</th>
-  <th class="fit-cell" data-vram="12">12 GB</th>
-  <th class="fit-cell" data-vram="16">16 GB</th>
-  <th class="fit-cell" data-vram="24">24 GB</th>
-  <th class="fit-cell" data-vram="32">32 GB</th>
-  <th class="fit-cell" data-vram="48">48 GB</th>
-  <th class="fit-cell" data-vram="64">64 GB</th>
-  <th class="fit-cell" data-vram="80">80 GB</th>
 </tr></thead>
 <tbody id="model-tbody"></tbody>
 </table>
@@ -107,6 +118,7 @@
 <p id="row-count" class="row-count"></p>
 
 </div>
+<script src="common.js"></script>
 <script src="filter.js"></script>
 </body>
 </html>
